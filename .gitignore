@@ -1,0 +1,13 @@
+# data
+data/
+
+# Quarto
+.quarto
+_manuscript/
+
+##########################
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Jupyter Notebook
+.ipynb_checkpoints
