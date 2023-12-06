@@ -1,0 +1,18 @@
+---
+title: Energetic ion scattering by solar wind discontinuities
+abstract: Because solar wind plasma flow transports the entire spectrum of magnetic field fluctuations (from low-frequency inertial range to electron kinetic range), it is a natural laboratory for plasma turbulence investigation. Among the various wave modes and coherent plasma structures that contribute to this spectrum, one of the most important solar wind elements is ion-scale solar wind discontinuities. These structures, which carry very intense current, have been considered as a free energy source for plasma instabilities that contribute to solar wind heating. Investigations of such discontinuities have been mostly focused on their magnetic field signatures; much less is known about their role in scattering of energetic ions. In this studay, we consider observational-based model of ion dynamics and scattering in force-free rotational magnetic discontinuities. Focusing on quantification of the scattering effect, we demonstrate that background sheared magnetic field plays an important role in determining the efficiency of pitch angle scattering. We provide a model included statistical properties of solar wind discontinuities and providing estimates of ion scattering rate.
+author:
+  - name: Zijin Zhang
+    corresponding: true
+    email: zijin@ucla.edu
+    roles: [investigation, software, visualization]
+    affiliations:
+      - ref: ucla
+  - name: Anton Artemyev
+    orcid: 0000-0001-8823-4474
+    roles: [conceptualization, writing]
+    affiliations:
+      - ref: ucla
+draft: true
+bibliography: references.bib
+---
