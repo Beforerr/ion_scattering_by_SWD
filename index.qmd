@@ -14,5 +14,4 @@ author:
     affiliations:
       - ref: ucla
 draft: true
-bibliography: references.bib
 ---

@@ -7,8 +7,8 @@ manuscript:
 
 format:
   html: default
-  jats: default
-  pdf: default
+  # pdf: default
+  # jats: default
 
 execute:
   freeze: true
