@@ -1,3 +1,9 @@
+import 'files/quarto.just'
+import 'files/overleaf.just'
+
+default:
+   just --list
+
 env-install:
 	mamba env create --file environment.yml
 
