@@ -14,4 +14,16 @@ author:
     affiliations:
       - ref: ucla
 draft: true
+code-links:
+  - href: zotero://select/library/collections/XHVVKL3N
+    text: Zotero
+  - href: https://app.tana.inc?nodeid=3CspYXE465
+    text: Tana
+  - text: Overleaf
+    href: https://www.overleaf.com/project/66f2c8eb4064b5d2596a806e
 ---
+
+
+## References
+
+- @artemyevSuperfastIonScattering2020
