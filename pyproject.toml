@@ -1,0 +1,22 @@
+[project]
+name = "ion_scattering"
+version = "0.1.0"
+authors = [{ name = "Beforerr", email = "zzj956959688@gmail.com" }]
+requires-python = ">= 3.10"
+dependencies = [
+    # "discontinuitypy",
+]
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["osx-arm64"]
+
+[tool.pixi.dependencies]
+ipykernel = "*"
+netcdf4 = "*"
+numba = "*" # https://github.com/PlasmaPy/PlasmaPy/pull/2841 PlasmaPy issue
+# pytables = "*"
+
+[tool.pixi.pypi-dependencies]
+discontinuitypy = { path = "../discontinuitypy", editable = true, extras = ["plot"] }
+space_analysis = { path = "../../src/space-analysis.py", editable = true }
