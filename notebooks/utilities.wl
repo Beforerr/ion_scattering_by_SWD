@@ -275,7 +275,7 @@ arcLen[aTemp_, kmTemp_] := Block[{\[Alpha], c1, c2},
   tempSol = 
    NSolveValues[
     D[U, z] == 0 && D[U, {z, 2}] < 0 && rawH == 1/2 /. {z -> zc, 
-      pz -> 0, kx -> kxs, px -> pxs}, {kxs, pxs}, Reals];
+      pz -> 0}, {kx, px}, Reals];
   If[Length@tempSol > 0,
    tempSol = First@tempSol;
    zcCond = First[tempSol][[2]];
