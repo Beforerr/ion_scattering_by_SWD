@@ -1,0 +1,3 @@
+
+- The validality of small $κ$ in observations.
+- The validality of approximate Hamiltonian form for off-center scattering.
