@@ -16,8 +16,7 @@ l₀ = 6e8               # Length [m]
 Ω = abs(qᵢ) * B₀ / mᵢ # [1/s]
 t₀ = 1 / Ω
 
-# Step 1: Define the Magnetic Field B(x)
-z_init = -16
+z_init_0 = 16
 
 # Simulation Parameters
 alg = Vern9()
@@ -44,6 +43,8 @@ function sim(
     B_field = r -> RD_B_field(r, α, β)
 
     # Initial Phase Space (Position is common; Velocity will be set per ensemble member)
+    # TODO: check the initial position effect
+    z_init = -abs(z_init_0) - abs(v)
     r₀ = [0, 0, z_init]
 
     wϕs = w_ϕ_pairs(Nw, Nϕ)
