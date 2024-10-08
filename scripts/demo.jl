@@ -28,10 +28,13 @@ E_field(x) = SVector(0.0, 0.0, 0.0)
 
 ez = [0, 0, 1]
 
-function isoutofdomain(u, p, t)
+function isoutofdomain_v(u, p, t, v)
     z = u[3]
-    return abs(z) > 1.5 * abs(z_init) ? true : false
+    vmax = abs(z_init) + abs(v)
+    return abs(z) > 1.5 * abs(vmax) ? true : false
 end
+
+isoutofdomain_v(v) = (u, p, t) -> isoutofdomain_v(u, p, t, v)
 
 function sim(
     α, β, v;
@@ -53,7 +56,8 @@ function sim(
         [r₀..., v...]
     end
 
-    # Prepare the simulation parameters
+    # Prepare the simulation
+    isoutofdomain = isoutofdomain_v(v)
     param = prepare(E_field, B_field; species=User)
     prob = ODEProblem(trace_normalized!, u0s[1], tspan, param)
     ensemble_prob = EnsembleProblem(prob, u0s; safetycopy=false)
@@ -94,14 +98,13 @@ end
 
 Logging.disable_logging(Logging.Warn)
 
-dicts = [
-    Dict(:α => π / 4, :β => π / 2, :v => 1),
-    Dict(:α => π / 4, :β => π / 2, :v => 8),
-    Dict(:α => π / 4, :β => π / 2, :v => 64),
-    Dict(:α => π / 2 - 0.1, :β => π / 2, :v => 1),
-    Dict(:α => π / 2 - 0.1, :β => π / 2, :v => 8),
-    Dict(:α => π / 2 - 0.1, :β => π / 2, :v => 64),
-]
+allparams = Dict(
+    :α => [π / 4, π / 2 - 0.1],
+    :β => π / 2,
+    :v => [0.125, 1, 8, 64],
+)
+
+dicts = dict_list(allparams)
 
 
 for d in dicts
