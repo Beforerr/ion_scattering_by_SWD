@@ -10,9 +10,7 @@ ensure-env: install-julia-deps clone-overleaf
 install-julia-deps:
     #!/usr/bin/env -S julia --project
     using Pkg;
-    Beforerr = PackageSpec(url="https://github.com/Beforerr/beforerr.jl");
-    Pkg.develop([Beforerr]);
-    Pkg.instantiate();
+    Pkg.update();
 
 publish:
     nbqa isort notebooks/*.ipynb
