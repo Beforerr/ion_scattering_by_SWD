@@ -6,6 +6,7 @@ using StaticArrays
 using DrWatson
 using DataFrames
 using Logging
+using ProgressMeter
 
 include("../src/main.jl")
 
@@ -27,13 +28,12 @@ E_field(x) = SVector(0.0, 0.0, 0.0)
 
 ez = [0, 0, 1]
 
-function isoutofdomain_v(u, p, t, v)
+function isoutofdomain_z(u, p, t, z_max)
     z = u[3]
-    vmax = abs(z_init) + abs(v)
-    return abs(z) > 1.5 * abs(vmax) ? true : false
+    return abs(z) > abs(z_max) ? true : false
 end
 
-isoutofdomain_v(v) = (u, p, t) -> isoutofdomain_v(u, p, t, v)
+isoutofdomain_z(z_max) = (u, p, t) -> isoutofdomain_z(u, p, t, z_max)
 
 function sim(
     α, β, v;
@@ -45,6 +45,7 @@ function sim(
     # Initial Phase Space (Position is common; Velocity will be set per ensemble member)
     # TODO: check the initial position effect
     z_init = -abs(z_init_0) - abs(v)
+    z_max = 2 * z_init
     r₀ = [0, 0, z_init]
 
     wϕs = w_ϕ_pairs(Nw, Nϕ)
@@ -58,7 +59,7 @@ function sim(
     end
 
     # Prepare the simulation
-    isoutofdomain = isoutofdomain_v(v)
+    isoutofdomain = isoutofdomain_z(z_max)
     param = prepare(E_field, B_field; species=User)
     prob = ODEProblem(trace_normalized!, u0s[1], tspan, param)
     ensemble_prob = EnsembleProblem(prob, u0s; safetycopy=false)
@@ -72,9 +73,9 @@ function sim(
     end
 end
 
-function sim(d::Dict)
+function sim(d::Dict; kwargs...)
     @unpack α, β, v = d
-    return sim(α, β, v)
+    return sim(α, β, v; kwargs...)
 end
 
 
@@ -107,8 +108,8 @@ allparams = Dict(
 
 dicts = dict_list(allparams)
 
-
-for d in dicts
+@showprogress map(dicts) do d
     path = datadir("simulations")
+    @info "Running simulation" d
     produce_or_load(makesim, d, path; loadfile=false)
 end
