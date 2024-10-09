@@ -1,5 +1,10 @@
 
 - [ ] Order of magnitude of estimation of the scattering rate.
 
-- The validality of small $κ$ in observations.
+- The validality of small $κ$ in observations and its implications in quasi-adibatic approximation.
 - The validality of approximate Hamiltonian form for off-center scattering.
+
+
+# TODOs
+
+- [ ] Check the algorithm for energy conservation (Boris pusher)
