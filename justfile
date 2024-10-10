@@ -8,9 +8,7 @@ ensure-env: install-julia-deps clone-overleaf
     pixi install
     
 install-julia-deps:
-    #!/usr/bin/env -S julia --project
-    using Pkg;
-    Pkg.update();
+    julia --project -e 'using Pkg; Pkg.update();'
 
 publish:
     nbqa isort notebooks/*.ipynb
