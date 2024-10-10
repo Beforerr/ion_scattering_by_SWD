@@ -1,3 +1,4 @@
+using Revise
 using TestParticle
 using TestParticle: c, qᵢ, mᵢ
 using LinearAlgebra
@@ -8,7 +9,7 @@ using DataFrames
 using Logging
 using ProgressMeter
 
-include("../src/main.jl")
+includet("../src/main.jl")
 
 m = mᵢ
 
