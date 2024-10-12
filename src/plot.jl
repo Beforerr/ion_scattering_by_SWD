@@ -1,4 +1,39 @@
-using CairoMakie
+function get_ax(layout, idxs)
+    is3D = length(idxs) == 3
+    pos = layout[1,1]
+    ax = is3D ?  Axis3(pos) : Axis(pos)
+    is3D && (ax.protrusions = 50) # removes overlap of labels
+    return ax
+end
+
+function create_slider(parameters, layout)
+    tuples_for_slidergrid = map(collect(parameters)) do (label, range)
+        label = string(label)
+        (; label=label, range = range, startvalue = first(range))
+    end
+    sg = SliderGrid(layout[1,1], tuples_for_slidergrid...)
+    return sg.sliders
+end
+
+function plot_params(parameter_sliders, idxs)
+    fig = Figure()
+    layout = fig[1,1] = GridLayout()
+    paramlayout = fig[2, :] = GridLayout(tellheight = true, tellwidth = false)
+
+    sliders = create_slider(parameter_sliders, paramlayout)
+    sliders_values = map(s -> s.value, sliders)
+
+    ax = get_ax(layout, idxs)
+    
+    lift(sliders_values...) do vs...
+        empty!(ax)
+        sols = solve_params(α, β, vs...)
+        for sol in sols.u
+            lines!(ax,sol[idxs, :])
+        end
+    end
+    fig
+end
 
 function plot_trajectory(sol, sol_field=missing, sol_gc=missing)
     # Plot the actual trajectory

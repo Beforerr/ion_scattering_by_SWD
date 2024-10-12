@@ -1,116 +1,67 @@
 using Revise
 using TestParticle
-using TestParticle: c, qᵢ, mᵢ
 using LinearAlgebra
 using OrdinaryDiffEq
-using StaticArrays
-using DrWatson
-using DataFrames
-using Logging
-using ProgressMeter
+using DynamicalSystems
+using DataStructures
+include("../src/main.jl")
 
-includet("../src/main.jl")
+using GLMakie
+GLMakie.activate!()
 
-m = mᵢ
+α, β, ϕ = π / 4, π / 2, 0.125
 
-B₀ = 1e-8             # Magnetic field [T]
-l₀ = 6e8               # Length [m]
-Ω = abs(qᵢ) * B₀ / mᵢ # [1/s]
-t₀ = 1 / Ω
+vrange = logrange(64, 0.125, 8)
+wrange = 0:0.1:1
+v, w = 8, 0.5
 
-z_init_0 = 16
+parameter_sliders = OrderedDict(:v => vrange,:w => wrange)
+idxs = [1, 2, 3]
 
-# Simulation Parameters
-alg = Vern9()
-tspan = (0.0, 512)
+sols = solve_params(α, β, v, w)
+plot_params(parameter_sliders, idxs)
 
-# Step 3: Define the Electric Field (if any)
-E_field(x) = SVector(0.0, 0.0, 0.0)
+# ---------------------------
+# Dynamical system
+# ---------------------------
 
-ez = [0, 0, 1]
+B_field = r -> RD_B_field(r, α, β)
+param = prepare(E_field, B_field; species=User)
 
-function isoutofdomain_z(u, p, t, z_max)
-    z = u[3]
-    return abs(z) > abs(z_max) ? true : false
+u0s = init_state(α, β, v, w; Nϕ = 64)
+
+isoutofdomain = isoutofdomain_params(v)
+diffeq = (; alg = alg, isoutofdomain)
+
+total_time = 100
+Y, t = trajectory(ds, total_time)
+
+
+fig = Figure()
+ax = Axis(fig[1, 1]; xlabel = "time", ylabel = "variable")
+for var in columns(Y)
+    lines!(ax, t, var)
 end
+fig
 
-isoutofdomain_z(z_max) = (u, p, t) -> isoutofdomain_z(u, p, t, z_max)
+# compute the Lyapunov spectrum
+steps = 10_000
+lyapunovspectrum(ds, steps)
+# As expected, there is at least one positive Lyapunov exponent, because the system is chaotic, and at least one zero Lyapunov exponent, because the system is continuous time.
 
-function sim(
-    α, β, v;
-    Nw=100, Nϕ=100,
-    solve_field=false
+observables = [3, 6 ,Eₖ, pa]
+z_max = 2 * init_z_pos(v) |> abs
+timeseries_ylims = [(-z_max, z_max), (-v, v), missing, (-1, 1)]
+
+lims = ((-z_max, z_max), (-v, v))
+idxs = [3, 6]
+
+fig, dsobs = interactive_trajectory_timeseries(
+    ds, observables, u0s;
+    lims, idxs,
+    timeseries_ylims
 )
-    B_field = r -> RD_B_field(r, α, β)
-
-    # Initial Phase Space (Position is common; Velocity will be set per ensemble member)
-    # TODO: check the initial position effect
-    z_init = -abs(z_init_0) - abs(v)
-    z_max = 2 * z_init
-    r₀ = [0, 0, z_init]
-
-    wϕs = w_ϕ_pairs(Nw, Nϕ)
-
-    vs = map(wϕs) do wϕ
-        v_init(v, wϕ..., r₀, B_field)
-    end
-
-    u0s = map(vs) do v
-        [r₀..., v...]
-    end
-
-    # Prepare the simulation
-    isoutofdomain = isoutofdomain_z(z_max)
-    param = prepare(E_field, B_field; species=User)
-    prob = ODEProblem(trace_normalized!, u0s[1], tspan, param)
-    ensemble_prob = EnsembleProblem(prob, u0s; safetycopy=false)
-    # Solve the ODE
-    sols = solve(ensemble_prob, alg, EnsembleThreads(); trajectories=length(u0s), isoutofdomain)
-    if !solve_field
-        return sols
-    else
-        sol_field = solve_fl(r₀, B_field)
-        return sols, sol_field
-    end
-end
-
-function sim(d::Dict; kwargs...)
-    @unpack α, β, v = d
-    return sim(α, β, v; kwargs...)
-end
+fig
 
 
-svec(x) = SVector(x...)
-
-function extract_info(sol; add_info=(;))
-    u0 = sol.prob.u0 |> svec
-    t = sol.t |> svec
-    u = sol.u
-    u = map(svec, u)
-
-    return Dict(:u0 => u0, :u => u, :t => t, add_info...)
-end
-
-function makesim(d::Dict)
-    sol = sim(d)
-    results = extract_info.(sol.u; add_info=d)
-    df = DataFrame(results)
-    return Dict(d..., :result => df)
-end
-
-
-Logging.disable_logging(Logging.Warn)
-
-allparams = Dict(
-    :α => [π / 4, π / 2 - 0.1],
-    :β => π / 2,
-    :v => [0.125, 1, 8, 64],
-)
-
-dicts = dict_list(allparams)
-
-@showprogress map(dicts) do d
-    path = datadir("simulations")
-    @info "Running simulation" d
-    produce_or_load(makesim, d, path; loadfile=false)
-end
+figure, oddata = interactive_orbitdiagram(ds, 3)

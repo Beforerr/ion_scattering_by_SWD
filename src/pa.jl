@@ -7,9 +7,14 @@ function cos_pitch_angle(u, B)
 end
     
 function cos_pitch_angle(sol::ODESolution, i)
-    B_field = r -> RD_B_field(r, α, β)
     B_func = sol.prob.p[3]
     u = sol.u[i]
     B = B_func(u)
     return cos_pitch_angle(u, B)
 end
+
+cos_pitch_angle(u, B::Function) = cos_pitch_angle(u, B(u))
+
+const pa = cos_pitch_angle
+
+export cos_pitch_angle
