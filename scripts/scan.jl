@@ -1,12 +1,19 @@
 using Revise
-includet("../src/CurrentSheetTestParticle.jl")
+using CurrentSheetTestParticle
 using DrWatson
-using LinearAlgebra
-using OrdinaryDiffEq
 using DataFrames
-using Logging
+using Logging, LoggingExtras
 using ProgressMeter
 using StaticArrays
+using SciMLBase
+using DifferentialEquations
+
+logger = ActiveFilteredLogger(global_logger()) do args
+    # filter "you passed a key as a symbol instead of a string"
+    re_JLD2 = r"you passed a key"
+    re_SCIML = r"dt was forced below floating point"
+    return !occursin(re_JLD2, args.message) && !occursin(re_SCIML, args.message)
+end
 
 svec(x) = SVector(x...)
 
@@ -20,20 +27,27 @@ function extract_info(sol)
     return @dict u0 u1 t1
 end
 
+function sym2ins(alg)
+    if alg == :AutoVern9
+        return AutoVern9(Rodas4P())
+    else
+        return Vern9()
+    end
+end
+
 function makesim(d::Dict; save_everystep = false, kwargs...)
-    @unpack α, β, v, alg, init_kwargs, sign = d
-    alg = eval(alg)()
+    @unpack α, β, v, alg_sym, init_kwargs, sign, tspan = d
     B = r -> RD_B_field(r, α, β; sign)
     wϕs = w_ϕ_pairs(; init_kwargs...)
     u0s = init_state(B, v, wϕs)
 
-    sol = solve_params(B, v, u0s; alg, save_everystep)
+    isoutofdomain = CurrentSheetTestParticle.isoutofdomain_params(v)
+    alg = sym2ins(alg_sym)
+    sol = solve_params(B, u0s; alg, tspan, save_everystep, isoutofdomain)
     results = extract_info.(sol.u) |> DataFrame
     results.wϕ0 = wϕs
-    return @dict results α β sign v alg
+    return @dict results α β sign v alg_sym
 end
-
-Logging.disable_logging(Logging.Warn)
 
 function main()
     dα = π / 16
@@ -45,7 +59,7 @@ function main()
         :β => βs,
         :sign => [-1, 1],
         :v => vs,
-        :alg => [:Vern9],
+        :alg_sym => [:AutoVern9],
         :init_kwargs => (;Nw=64, Nϕ=128),
         :tspan => (0, 256),
     )
@@ -53,16 +67,17 @@ function main()
     dicts = dict_list(allparams)
 
     @showprogress map(dicts) do d
-        path = "./data/simulations"
-        @info "Running simulation" d
-        produce_or_load(makesim, d, path; loadfile=false)
+        path = datadir("simulations")
+        with_logger(logger) do
+            produce_or_load(makesim, d, path; loadfile=false)
+        end
     end
 end
 
 (@main)(ARGS) = main()
 
 function test_save_efficiency(;test_dict = first(dicts))
-    path = "./data/simulations"
+    path = datadir("simulations")
     @info "Running simulation" test_dict
     result, file = produce_or_load(makesim, test_dict, path)
     # Check the filesize

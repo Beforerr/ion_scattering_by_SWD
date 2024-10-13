@@ -1,10 +1,9 @@
 using DrWatson
 using AlgebraOfGraphics
-using CairoMakie
 using DataFrames
 using DataFramesMeta
-using Revise
-include("../src/CurrentSheetTestParticle.jl")
+using CurrentSheetTestParticle
+
 set_aog_theme!()
 theme = (;colormap = :deep)
 update_theme!(; theme...)
@@ -36,26 +35,25 @@ function split_results(df)
 end
 
 subset_v(df) = @subset(df, :v .<= 128)
-subset_β(df; βs=βs[2:2:end]) = @rsubset(df, :β ∈ βs)
+subset_β(df::AbstractDataFrame, βs) = @rsubset(df, :β ∈ βs)
+subset_β(βs) = df -> subset_β(df, βs)
 
 #%%
-subset_leave(df; tmax=tspan[2]) = @subset(df, :t1 .!= tmax)
+const DEFAULT_TMAX = CurrentSheetTestParticle.DEFAULT_TSPAN[2]
+subset_leave(df; tmax=DEFAULT_TMAX) = @subset(df, :t1 .!= tmax)
 
-rename_value_deg(v, s; kwargs...) = rename_value(v, s; kwargs...) * "°"
-rename_value(v, s::Symbol; kwargs...) = "$(s) = $(round(v, kwargs...))"
-
-rename_value_pair(v, s; r = rename_value, kwargs...) = v => r(v, s; kwargs...)
-rename_value_pair_deg(v, s; r = rename_value_deg, kwargs...) = v => r(v, s; kwargs...)
 vals(df, s) = unique(df[!, s]) |> sort
+rename_sym(s, v) = "$(s) = $(round(v))"
+rename_sym(s) = v -> rename_sym(s, v)
+rename_sym_deg(s) = v -> (rename_sym(s, v) * "°")
+get_map(s; renamer = rename_sym) = s => renamer(s)
 
+α_map = get_map(:α; renamer = rename_sym_deg)
+β_map = get_map(:β; renamer = rename_sym_deg)
+v_map = get_map(:v)
 
 sign_map = :sign => renamer([1 => "Left-handed", -1 => "Right-handed"])
 Δw_map = :Δw
-
-function get_map(df, s; rename_func = rename_value_pair_deg)
-
-    s => renamer(rename_func.(vals(df, s), s))
-end
 
 #%%
 function pa_pair_plot(layer; axis=(;), kwargs...)
@@ -71,16 +69,13 @@ pa_pair_plot(df::AbstractDataFrame) = pa_pair_plot(data(df))
 # Function to plot one figure per column
 function pa_pair_plot_by_col!(df::AbstractDataFrame, s, axs, layer; scale=scales(), axis=w_axis, kwargs...)
     vs = (sort ∘ unique)(df[!, s])  # Get unique velocity values
-    for (fg, v) in zip(axs, vs)
+    return map(zip(axs, vs)) do (fg, v)
         df_s = @subset(df, $s .== v)
         plt = data(df_s) * mapping(:w0, :w1) * layer
         grids = draw!(fg, plt, scale; axis, kwargs...)
-
-        r =  s == :v ? rename_value : rename_value_deg
-
-        Label(fg[0, :], r(v, s))
-        colorbar_pos = fg[1:size(grids, 1), size(grids, 2)+1]
-        colorbar!(colorbar_pos, grids; scale=log10)
+        r =  s == :v ? rename_sym : rename_sym_deg
+        Label(fg[0, :], r(s, v))
+        grids
     end
 end
 
@@ -112,7 +107,6 @@ pa_diff_plot(df::AbstractDataFrame; kwargs...) = pa_diff_plot(data(df) * mapping
 begin
     density_layer = AlgebraOfGraphics.density(npoints=32)
     scale = scales(Color=(;
-        colormap=:deep,
         nan_color=:transparent,
         lowclip=:transparent,
         colorrange=(0.001, 10)

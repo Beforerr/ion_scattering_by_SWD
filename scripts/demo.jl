@@ -1,10 +1,8 @@
 using Revise
 using TestParticle
-using LinearAlgebra
 using OrdinaryDiffEq
 using DynamicalSystems
-using DataStructures
-include("../src/main.jl")
+using CurrentSheetTestParticle
 
 using GLMakie
 GLMakie.activate!()
