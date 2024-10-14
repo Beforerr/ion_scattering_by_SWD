@@ -45,8 +45,7 @@ init_v(v, w, ϕ, r, B; e1=ez) = init_v(v, w, ϕ, B(r); e1=e1)
 Generate a grid of w and phi pairs for the particles.
 """
 function w_ϕ_pairs(; Nw=8, Nϕ=8)
-    # Generate Grid Points
-    ws = range(0, 1, length=Nw) # 0:
+    ws = range(-1, 1, length=Nw)
     ϕs = range(0, 2π, length=Nϕ + 1)[1:end-1]
     # Flatten the grid to create lists of w0 and phi0 for each particle
     w_all = repeat(ws, inner=Nϕ)
@@ -64,3 +63,16 @@ function w_ϕ_pairs(w; Nϕ=8)
 end
 
 w_ϕ_pairs(w, ϕ) = [(w, ϕ)]
+
+"""
+Filter pitch angle corresponding to particles moving toward the current sheet
+"""
+function filter_wϕs!(wϕs, θ)
+    if θ == pi/2
+        return wϕs
+    elseif θ < pi/2
+        return filter!(wϕ -> wϕ[1] > 0, wϕs)
+    elseif θ > pi/2
+        return filter!(wϕ -> wϕ[1] < 0, wϕs)
+    end
+end

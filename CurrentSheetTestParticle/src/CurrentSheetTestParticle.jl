@@ -7,7 +7,7 @@ using StaticArrays
 
 export RD_B_field
 export solve_params, dsolve_params
-export w_ϕ_pairs, init_state
+export w_ϕ_pairs, init_state, filter_wϕs!
 
 include("field.jl")
 include("state.jl")
