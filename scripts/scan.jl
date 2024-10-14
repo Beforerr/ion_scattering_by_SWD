@@ -36,9 +36,10 @@ function sym2ins(alg)
 end
 
 function makesim(d::Dict; save_everystep = false, kwargs...)
-    @unpack α, β, v, alg_sym, init_kwargs, sign, tspan = d
+    @unpack θ, β, v, alg_sym, init_kwargs, sign, tspan = d
     B = r -> RD_B_field(r, α, β; sign)
     wϕs = w_ϕ_pairs(; init_kwargs...)
+    filter_wϕs!(wϕs, θ)
     u0s = init_state(B, v, wϕs)
 
     isoutofdomain = CurrentSheetTestParticle.isoutofdomain_params(v)
@@ -50,12 +51,13 @@ function makesim(d::Dict; save_everystep = false, kwargs...)
 end
 
 function main()
-    dα = π / 16
-    αs = collect(π / 4 : dα : π / 2 - dα)
-    βs = collect(π / 12 : π / 12 : π / 2)
+    dθ = π / 18
+    dβ = π / 36
+    θs = collect(dθ : dθ : π - dθ)
+    βs = collect(π / 12 : dβ : π / 2) # PDF is reliable at β > 15°
     vs = [1, 8, 64, 128, 1024, 8192]
     allparams = Dict(
-        :α => αs,
+        :θ => θs,
         :β => βs,
         :sign => [-1, 1],
         :v => vs,

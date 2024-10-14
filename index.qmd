@@ -35,6 +35,17 @@ Figure 8, 9-10: these will be results of mapping technique for which we can use 
 -->
 
 
+# Notations
+
+- $B_0$: background magnetic field
+- $α$: pitch angle, $w = \cos(α)$ is the pitch angle cosine
+- $ψ$: gryo phase
+
+- θ : azimuthal angle, angle between $B_N$ and $B_0$
+- φ : polar angle
+- β : rotation angle / 2
+
+
 ## References
 
 - @artemyevSuperfastIonScattering2020
