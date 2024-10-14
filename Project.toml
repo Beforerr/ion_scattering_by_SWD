@@ -8,8 +8,10 @@ CurrentSheetTestParticle = "70b924fa-544d-466c-bf9c-e2ef4b9a84d3"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
 DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 DrWatson = "634d3b9d-ee7a-5ddf-bec9-22491ea816e1"
 DynamicalSystems = "61744808-ddfa-5f27-97ff-6e42cc95d634"
+Expectations = "2fe49d83-0758-5602-8f54-1f90ad0d522b"
 GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 LoggingExtras = "e6f89c97-d47a-5376-807f-9c37f3926c36"
@@ -21,4 +23,4 @@ StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 TestParticle = "953b605b-f162-4481-8f7f-a191c2bb40e3"
 
 [sources]
-CurrentSheetTestParticle = { path = "CurrentSheetTestParticle" }
+CurrentSheetTestParticle = {path = "CurrentSheetTestParticle"}

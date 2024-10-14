@@ -46,6 +46,12 @@ Figure 8, 9-10: these will be results of mapping technique for which we can use 
 - β : rotation angle / 2
 
 
+# TODO
+
+The independence of the parameters from discontinuities observations
+
+multivariate discrete non-parametric distribution
+
 ## References
 
 - @artemyevSuperfastIonScattering2020
