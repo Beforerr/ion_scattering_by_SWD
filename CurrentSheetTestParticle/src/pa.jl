@@ -1,9 +1,13 @@
+function cos_rotation_angle(v1, v2)
+    return v1 ⋅ v2 / (norm(v1) * norm(v2))
+end
+
 """
 Cos pitch angle
 """
 function cos_pitch_angle(u, B)
     v = @view u[4:6]
-    return B ⋅ v / norm(v) / norm(B)
+    return cos_rotation_angle(v, B)
 end
     
 function cos_pitch_angle(sol::ODESolution, i)
