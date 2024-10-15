@@ -16,15 +16,17 @@ function get_results()
 
     for r in eachrow(dfs)
         α, β, sign = r[:α], r[:β], r[:sign]
+        θ = α # backward compatibility
         insertcols!(r[:results], Pair.(params, Array(r[params]))...; makeunique=true)
-        insertcols!(r[:results], :B => RD_B_field(; α, β, sign))
+        insertcols!(r[:results], :B => RD_B_field(; θ, β, sign))
     end
 
     @chain begin
         vcat(dfs[!, :results]...)
         @rename!(:θ = :α)
         @rtransform!(:w0 = :wϕ0[1], :ϕ0 = :wϕ0[2], :w1 = cos_pitch_angle(:u1, :B))
-        @transform!(:Δα = :w1 .- :w0,)
+        @transform!(:α0 = acosd.(:w0), :α1 = acosd.(:w1))
+        @transform!(:Δα = :α1 .- :α0)
         transform!([:θ, :β] .=> ByRow(rad2deg), renamecols=false)
         select!(Not(:wϕ0))
     end
@@ -43,6 +45,7 @@ subset_β(itr) = df -> @rsubset(df, :β ∈ itr)
 #%%
 const DEFAULT_TMAX = CurrentSheetTestParticle.DEFAULT_TSPAN[2]
 subset_leave(df; tmax=DEFAULT_TMAX) = @subset(df, :t1 .!= tmax)
+subset_trap(df; tmax=DEFAULT_TMAX) = @subset(df, :t1 .== tmax)
 
 vals(df, s) = unique(df[!, s]) |> sort
 rename_sym(s, v) = "$(s) = $(round(Int, v))"
@@ -54,10 +57,14 @@ get_map(s; renamer = rename_sym) = s => renamer(s)
 β_map = get_map(:β; renamer = rename_sym_deg)
 v_map = get_map(:v)
 sign_map = :sign => renamer([1 => "Left-handed", -1 => "Right-handed"])
+w0 = :w0 => "w₀"
+w1 = :w1 => "w₁"
+α0 = :α0 => "α₀"
+α1 = :α1 => "α₁"
 Δα = :Δα
-w0 = :w0 => "α₀"
-w1 = :w1 => "α₁"
 ϕ0 = :ϕ0 => "ϕ₀"
+xyα = (α0, α1)
+xyw = (w0, w1)
 
 #%%
 function pa_pair_plot(layer; axis=(;), kwargs...)
@@ -67,15 +74,16 @@ function pa_pair_plot(layer; axis=(;), kwargs...)
 end
 
 w_axis = (; limits=((0, 1), (-1, 1)))
+α_axis = (; limits=((0, 180), (0, 180)))
 
 pa_pair_plot(df::AbstractDataFrame) = pa_pair_plot(data(df))
 
 # Function to plot one figure per column
-function pa_pair_plot_by_col!(df::AbstractDataFrame, s, axs, layer; scale=scales(), axis=w_axis, kwargs...)
+function pa_pair_plot_by_col!(df::AbstractDataFrame, s, axs, layer; xy = xyw, scale=scales(), axis=w_axis, kwargs...)
     vs = (sort ∘ unique)(df[!, s])  # Get unique velocity values
     return map(zip(axs, vs)) do (fg, v)
         df_s = @subset(df, $s .== v)
-        plt = data(df_s) * mapping(w0, w1) * layer
+        plt = data(df_s) * mapping(xy...) * layer
         grids = draw!(fg, plt, scale; axis, kwargs...)
         r =  s == :v ? rename_sym : rename_sym_deg
         Label(fg[0, :], r(s)(v))
@@ -86,7 +94,24 @@ end
 pa_pair_plot_by_v!(df, axs) = pa_pair_plot_by_col!(df, :v, axs, mapping(col=θ_map, row=β_map) * density_layer; scale)
 pa_pair_plot_by_β!(df, axs) = pa_pair_plot_by_col!(df, :β, axs, mapping(col=θ_map, row=v_map) * density_layer; scale)
 
-colorbar!
+function pa_pair_plot(ldf, rdf; s = :v, func = identity, figure = (;size=(1200, 800)))
+    fig = Figure(;figure...)
+
+    ldf, rdf = func.([ldf, rdf])
+    plot_func = eval(Symbol("pa_pair_plot_by_$(s)!"))
+
+    imax = length(vals(ldf, s))
+    axsl = [fig[1,i] for i in 1:imax]
+    axsr = [fig[3,i] for i in 1:imax]
+
+    grids = plot_func(ldf, axsl)
+    grids = plot_func(rdf, axsr)
+    sign_label(fig)
+    colorbar_pos = fig[1:end,end+1]
+    colorbar!(colorbar_pos, grids[1]; scale=log10)
+    fig
+end
+
 
 """
 Plot the distribution of pitch-angle cosine variation
