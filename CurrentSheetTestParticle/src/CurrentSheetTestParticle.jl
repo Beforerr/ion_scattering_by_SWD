@@ -16,8 +16,9 @@ include("pa.jl")
 
 abstol = 1e-7 # Defaults to 1e-5
 reltol = 1e-7 # Defaults to 1e-3
+maxiters = 1e6 # Defaults to 1e5
 const DEFAULT_SOLVER = AutoVern9(Rodas4P())
-const DEFAULT_DIFFEQ_KWARGS = (; abstol, reltol)
+const DEFAULT_DIFFEQ_KWARGS = (; abstol, reltol, maxiters)
 const DEFAULT_TSPAN = (0, 256)
 diffeq = (; abstol, reltol)
 ez = [0, 0, 1]
