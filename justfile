@@ -14,3 +14,7 @@ publish:
     nbqa isort notebooks/*.ipynb
     nbqa black notebooks/*.ipynb
     quarto publish gh-pages --no-prompt
+
+exec-scripts:
+    julia --project scripts/scan.jl
+    # include("scripts/scan.jl")
