@@ -1,6 +1,5 @@
 module CurrentSheetTestParticle
 using TestParticle
-using DynamicalSystems
 using OrdinaryDiffEq
 using LinearAlgebra
 using StaticArrays
@@ -8,6 +7,7 @@ using StaticArrays
 export RD_B_field
 export solve_params, dsolve_params
 export w_ϕ_pairs, init_state, filter_wϕs!
+export isoutofdomain_params
 
 include("field.jl")
 include("state.jl")
@@ -57,21 +57,5 @@ end
 function solve_params(B, v, args...; init_kwargs=(;), kwargs...)
     u0s = init_state(B, v, args...; init_kwargs...)
     solve_params(B, u0s; kwargs...)
-end
-
-"""
-Using DynamicalSystems.jl to solve the system of ODEs.
-"""
-function dsolve_params(B, v, args...; alg=alg, saveat=0.25, reltol=reltol)
-    u0s = init_state(B, v, args...; init_kwargs...)
-    param = prepare(E_field, B; species=User)
-
-    isoutofdomain = isoutofdomain_params(v)
-    diffeq = (; alg, isoutofdomain, reltol)
-
-    Threads.@threads for u0 in u0s
-        ds = CoupledODEs(trace_normalized!, u0, param; diffeq)
-        step!(ds, tspan[2])
-    end
 end
 end

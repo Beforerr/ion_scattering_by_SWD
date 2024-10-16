@@ -1,16 +1,16 @@
-function _init_state(v, w, ϕ, B)
+function _init_state(v, w, ϕ, B::Function)
     r₀ = init_pos(v)
     v₀ = init_v(v, w, ϕ, B(r₀))
     return [r₀..., v₀...]
 end
 
-function init_state(B, v, wϕs::Vector)
+function init_state(B::Function, v, wϕs::Vector)
     return map(wϕs) do wϕ
         _init_state(v, wϕ..., B)
     end
 end
 
-function init_state(B, v, args...; kwargs...)
+function init_state(B::Function, v, args...; kwargs...)
     wϕs = w_ϕ_pairs(args...; kwargs...)
     return init_state(B, v, wϕs)
 end
