@@ -5,7 +5,6 @@ using DataFrames
 using Logging, LoggingExtras
 using ProgressMeter
 using StaticArrays
-using SciMLBase
 using DifferentialEquations
 
 logger = ActiveFilteredLogger(global_logger()) do args
@@ -37,12 +36,12 @@ end
 
 function makesim(d::Dict; save_everystep = false, kwargs...)
     @unpack θ, β, v, alg_sym, init_kwargs, sign, tspan = d
-    B = r -> RD_B_field(r, α, β; sign)
+    B = RD_B_field(; θ, β, sign)
     wϕs = w_ϕ_pairs(; init_kwargs...)
     filter_wϕs!(wϕs, θ)
     u0s = init_state(B, v, wϕs)
 
-    isoutofdomain = CurrentSheetTestParticle.isoutofdomain_params(v)
+    isoutofdomain = isoutofdomain_params(v)
     alg = sym2ins(alg_sym)
     sol = solve_params(B, u0s; alg, tspan, save_everystep, isoutofdomain)
     results = extract_info.(sol.u) |> DataFrame
@@ -51,21 +50,21 @@ function makesim(d::Dict; save_everystep = false, kwargs...)
 end
 
 function main()
-    dθ = π / 18
-    dβ = π / 36
-    θs = collect(dθ : dθ : π - dθ)
-    βs = collect(π / 12 : dβ : π / 2) # PDF is reliable at β > 15°
-    vs = [1, 8, 64, 128, 1024, 8192]
+    θs = deg2rad.(5 : 10 : 175) # from 5° to 175° in 10° steps
+    ws = 25:10:175 # PDF is reliable at β > 15°, corresponding to rotation angle $w$ from 30° to 180° 
+    βs = deg2rad.(ws ./ 2)
+    vs = 2. .^ (-2:8)
+
     allparams = Dict(
         :θ => θs,
         :β => βs,
         :sign => [-1, 1],
         :v => vs,
         :alg_sym => [:AutoVern9],
-        :init_kwargs => (;Nw=64, Nϕ=128),
-        :tspan => (0, 256),
+        :init_kwargs => (;Nw=90, Nϕ=120),
+        :tspan => (0, 512),
     )
-       
+
     dicts = dict_list(allparams)
 
     @showprogress map(dicts) do d
