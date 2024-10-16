@@ -8,3 +8,11 @@
 # TODOs
 
 - [ ] Check the algorithm for energy conservation (Boris pusher)
+- [x] GPU acceleration
+
+
+DynamicalSystems.jl
+- Currently, the limits can not be changed with time.
+
+
+- Saving as a DataFrame is more space-efficient than saving as a vector of dictionaries

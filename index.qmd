@@ -41,25 +41,35 @@ Figure 8, 9-10: these will be results of mapping technique for which we can use 
 We assume the following expression:
 
 $$
- \mathbf{B} = B_0 (\cos α \ e_z + \sin α ( \sin ψ(z) \ e_z + \cos ψ (z) \ e_y))
+ \mathbf{B} = B_0 (\cos θ \ e_z + \sin θ ( \sin φ(z) \ e_z + \cos φ (z) \ e_y))
 $$
 
-with ψ (x) = β tanh(x),
+with $φ(z) = β \tanh(z)$,
 
+We normalize the magnetic field $\mathbf{B}$ to the background magnetic field magnitude $B_0$, the position $\mathbf{r}$ to the thickness of the discontinuity $L$, time $t$ to $1/Ω_0$, with $Ω_0 = q B_0/m_p$, and the velocity $v$ to $v_0$ $Ω_0 L$. And the dimensionless form of the motion equation can be written as follows:
 
+$$
+\frac{d\mathbf{v}}{dt} = \mathbf{v} \times \mathbf{B} ,
+\frac{d\mathbf{r}}{dt} = \mathbf{v}
+$$
 
+And therefore, the parameters important for our investigation of the ion scattering is $α$, $β$, and $v_0$.
 
+Scan the parameter with angle difference by 10 degree and velocity by ...
 
 # Notations
 
-- $B_0$: background magnetic field
-- $α$: pitch angle, $w = \cos(α)$ is the pitch angle cosine
-- $ψ$: gryo phase
+-   $B_0$: background magnetic field
 
-- θ : azimuthal angle, angle between $B_N$ and $B_0$
-- φ : polar angle
-- β : rotation angle / 2
+-   $α$: pitch angle, $w = \cos(α)$ is the pitch angle cosine
 
+-   $ψ$: gryo phase
+
+-   θ : azimuthal angle, angle between $B_0$ and $B_N = B_0 \cos()$
+
+-   φ : polar angle
+
+-   β : rotation angle / 2
 
 # TODO
 
@@ -69,4 +79,4 @@ multivariate discrete non-parametric distribution
 
 ## References
 
-- @artemyevSuperfastIonScattering2020
+-   @artemyevSuperfastIonScattering2020
