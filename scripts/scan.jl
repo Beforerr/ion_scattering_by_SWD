@@ -14,6 +14,8 @@ logger = ActiveFilteredLogger(global_logger()) do args
     return !occursin(re_JLD2, args.message) && !occursin(re_SCIML, args.message)
 end
 
+error_only_logger = MinLevelLogger(current_logger(), Logging.Error);
+
 svec(x) = SVector(x...)
 
 function extract_info(sol)
@@ -72,10 +74,10 @@ end
 
 function test()
     dicts = test_params()
+    path = datadir("test")
 
-    @showprogress map(dicts) do d
-        path = datadir("test")
-        with_logger(logger) do
+    with_logger(logger) do
+        @showprogress map(dicts) do d
             produce_or_load(makesim, d, path; loadfile=false)
         end
     end
@@ -98,10 +100,10 @@ function main()
     )
 
     dicts = dict_list(allparams)
-
-    @showprogress map(dicts) do d
-        path = datadir("simulations")
-        with_logger(logger) do
+    
+    path = datadir("simulations")
+    with_logger(error_only_logger) do
+        @showprogress map(dicts) do d
             produce_or_load(makesim, d, path; loadfile=false)
         end
     end
