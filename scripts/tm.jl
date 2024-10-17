@@ -3,8 +3,7 @@ using DrWatson
 @quickactivate
 using Revise
 using FHist
-using CurrentSheetTestParticle
-using JLD2
+using ArgParse
 includet("../src/io.jl")
 
 """
@@ -21,22 +20,33 @@ function transition_matrix_w(df, w_range)
 end
 
 function produce(d::Dict)
-    @unpack dir, w_range = d
-    df = collect_results(datadir(dir))
+    @unpack dir, bins = d
+    w_range = range(-1, 1, length=bins+1)
+    df = get_result_dfs(; dir)
     df.tm = map(eachrow(df)) do r
-        transition_matrix_w(subset_leave(get_result(r)), w_range)
+        transition_matrix_w(get_result(r), w_range)
     end
     select!(df, Not(:results, :diffeq))
     @dict df w_range
 end
 
-
-path = datadir()
-params = dict_list(Dict(
-    :dir => ["test_alg"],
-    :w_range => range(-1, 1, length=46)
-))
-
-param_dicts = map(params) do d
-    produce_or_load(produce, d, path; prefix = "tm")
+function main(; path=datadir(), prefix="tm")
+    parsed_args = parse_commandline()
+    produce_or_load(produce, parsed_args, path; prefix)
 end
+
+function parse_commandline(; dir = "test_alg", bins = 45)
+    s = ArgParseSettings()
+    @add_arg_table! s begin
+        "--dir", "-d"
+        help = "directory to read the results from"
+        default = dir
+        "--bins", "-b"
+        help = "Number of bins for the transition matrix"
+        arg_type = Int
+        default = bins
+    end
+    return parse_args(s)
+end
+
+main()
