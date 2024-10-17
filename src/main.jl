@@ -59,15 +59,6 @@ function sign_label(fig; i1=0, i2=2)
     Label(fig[i2, :], "Right-hand rotation", font = :bold, tellwidth=false)
 end
 
-
-# Define the colors for the colormap
-using ColorSchemes
-
-cmap0 = :BrBg
-cs = colorschemes[cmap0]
-Δw_cmap = cgrad([cs[1], get(cs, 0.5), get(cs, 0.75)], [0.0, 0.67, 1.0])
-Δw_scale = scales(Color=(; colormap=Δw_cmap))
-
 # Create Two-dimensional maps of the final value w1 are plotted as functions of the initial pitch-angle cosine w0 and gyrophase φ0, for α = 45◦ and β = 15◦ (upper panel), β = 45◦ (middle panel), β = 90◦ (lower panel).
 function w1_map_plot(l; color = w1, scale= scales(;), kwargs...)
     plt = l * mapping(w0, ϕ0, color=color)
