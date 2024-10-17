@@ -17,4 +17,5 @@ publish:
 
 exec-scripts:
     julia --project scripts/scan.jl
+    julia --project scripts/tm.jl
     # include("scripts/scan.jl")
