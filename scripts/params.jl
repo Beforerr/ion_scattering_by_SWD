@@ -1,6 +1,6 @@
 function test_params()
-    θs = 45:20:85
-    ws = 60:60:180
+    θs = 45:20:85 |> collect
+    ws = 60:60:180 |> collect
     βs = ws ./ 2
     vs = 8.0 .^ (0:2)
     diffeq = (; abstol=1e-5, reltol=1e-5, maxiters=1e6)
@@ -23,8 +23,8 @@ end
 Test parameters for the simulation with different algorithms
 """
 function test_params_alg()
-    θs = 45:20:85
-    ws = 60:60:180
+    θs = 45:20:85 |> collect
+    ws = 60:60:180 |> collect
     βs = ws ./ 2
     vs = 8.0 .^ (0:2)
     diffeq = (; abstol=1e-5, reltol=1e-5, maxiters=1e5)

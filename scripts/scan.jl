@@ -49,8 +49,8 @@ function makesim(d::Dict; save_everystep=false, kwargs...)
 end
 
 function scan_params()
-    θs = 5:10:85 # from 5° to 85 in 10° steps
-    ws = 25:10:175 # PDF is reliable at β > 15°, corresponding to rotation angle $w$ from 30° to 180° 
+    θs = 5:10:85 |> collect # from 5° to 85 in 10° steps
+    ws = 25:10:175 |> collect # PDF is reliable at β > 15°, corresponding to rotation angle $w$ from 30° to 180° 
     βs = ws ./ 2
     vs = 2.0 .^ (-2:8)
     diffeq = CurrentSheetTestParticle.DEFAULT_DIFFEQ_KWARGS
