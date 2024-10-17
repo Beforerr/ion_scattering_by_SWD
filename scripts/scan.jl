@@ -36,6 +36,7 @@ end
 
 function makesim(d::Dict; save_everystep=false, kwargs...)
     @unpack θ, β, v, sign, alg_sym, init_kwargs, diffeq, tspan = d
+    θ, β = deg2rad.([θ, β])
     B = RD_B_field(; θ, β, sign)
     u0s, wϕs = init_states_pm(B, v; init_kwargs...)
 
@@ -48,9 +49,9 @@ function makesim(d::Dict; save_everystep=false, kwargs...)
 end
 
 function scan_params()
-    θs = deg2rad.(5:10:85) # from 5° to 85 in 10° steps
+    θs = 5:10:85 # from 5° to 85 in 10° steps
     ws = 25:10:175 # PDF is reliable at β > 15°, corresponding to rotation angle $w$ from 30° to 180° 
-    βs = deg2rad.(ws ./ 2)
+    βs = ws ./ 2
     vs = 2.0 .^ (-2:8)
     diffeq = CurrentSheetTestParticle.DEFAULT_DIFFEQ_KWARGS
 
@@ -61,7 +62,7 @@ function scan_params()
         :v => vs,
         :alg_sym => [:AutoVern9],
         :init_kwargs => (; Nw=90, Nϕ=120),
-        :tspan => (0, 512),
+        :tspan => (0, 1024),
         :diffeq => diffeq
     )
     return dict_list(allparams)
