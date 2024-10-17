@@ -1,18 +1,31 @@
-function _init_state(v, w, ϕ, B::Function)
-    r₀ = init_pos(v)
+# TODO: check the initial position effect
+"""
+Particle with `pos=1/-1` is initialized above/below the current sheet
+"""
+init_z_pos(v; pos=-1, z_init_0=5) = pos * (abs(z_init_0) + 2 * abs(v))
+init_pos(v; kw...) = [0, 0, init_z_pos(v; kw...)]
+
+function init_state(v, w, ϕ, B::Function; kw...)
+    r₀ = init_pos(v; kw...)
     v₀ = init_v(v, w, ϕ, B(r₀))
     return [r₀..., v₀...]
 end
 
-function init_state(B::Function, v, wϕs::Vector)
+function init_states(B::Function, v, wϕs::Vector; kw...)
     return map(wϕs) do wϕ
-        _init_state(v, wϕ..., B)
+        init_state(v, wϕ..., B; kw...)
     end
 end
 
-function init_state(B::Function, v, args...; kwargs...)
-    wϕs = w_ϕ_pairs(args...; kwargs...)
-    return init_state(B, v, wϕs)
+function init_states_pm(B::Function, v; kw...)
+    wϕs = w_ϕ_pairs(; kw...)
+
+    wϕs_below = filter(wϕ -> wϕ[1] > 0, wϕs)
+    u0s_below = init_states(B, v, wϕs_below; pos=-1)
+
+    wϕs_above = filter(wϕ -> wϕ[1] < 0, wϕs)
+    u0s_above = init_states(B, v, wϕs_above; pos=1)
+    return vcat(u0s_below, u0s_above), vcat(wϕs_below, wϕs_above)
 end
 
 function local_B_coord(B; e1=ez)
@@ -25,7 +38,7 @@ end
 """
     init_v(v, w, ϕ, ...)
 
-Initialize the velocity vector of the particle with magnitude `v`, pitch angle `w`, and azimuthal angle `ϕ` at position `r`.
+Initialize the velocity vector of the particle with magnitude `v`, cosine pitch angle `w`, and azimuthal angle `ϕ` at position `r`.
 """
 function init_v(v, w, ϕ)
     v_para = v * w
@@ -68,11 +81,11 @@ w_ϕ_pairs(w, ϕ) = [(w, ϕ)]
 Filter pitch angle corresponding to particles moving toward the current sheet
 """
 function filter_wϕs!(wϕs, θ)
-    if θ == pi/2
+    if θ == pi / 2
         return wϕs
-    elseif θ < pi/2
+    elseif θ < pi / 2
         return filter!(wϕ -> wϕ[1] > 0, wϕs)
-    elseif θ > pi/2
+    elseif θ > pi / 2
         return filter!(wϕ -> wϕ[1] < 0, wϕs)
     end
 end

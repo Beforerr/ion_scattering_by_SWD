@@ -6,7 +6,7 @@ using StaticArrays
 
 export RD_B_field
 export solve_params, dsolve_params
-export w_ϕ_pairs, init_state, filter_wϕs!
+export w_ϕ_pairs, init_state, init_states, init_states_pm, filter_wϕs!
 export isoutofdomain_params
 
 include("field.jl")
@@ -19,17 +19,13 @@ reltol = 1e-7 # Defaults to 1e-3
 maxiters = 1e6 # Defaults to 1e5
 const DEFAULT_SOLVER = AutoVern9(Rodas4P())
 const DEFAULT_DIFFEQ_KWARGS = (; abstol, reltol, maxiters)
+const DEFAULT_BORIS_KWARGS = (; dt=1e-2, savestepinterval=1)
 const DEFAULT_TSPAN = (0, 256)
-diffeq = (; abstol, reltol)
 ez = [0, 0, 1]
 
 # Step 3: Define the Electric Field (if any)
 const E0 = SVector(0.0, 0.0, 0.0)
 E(x) = E0
-
-# TODO: check the initial position effect
-init_z_pos(v; z_init_0=16) = -abs(z_init_0) - 2 * abs(v)
-init_pos(v, kwargs...) = [0, 0, init_z_pos(v; kwargs...)]
 
 isoutofdomain_z(u, p, t, z_max) = abs(u[3]) > abs(z_max) ? true : false
 isoutofdomain_z(z_max) = (u, p, t) -> isoutofdomain_z(u, p, t, z_max)
@@ -51,12 +47,22 @@ function solve_params(B, u0s::Vector; E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSP
     param = prepare(E, B; species=User)
     prob = ODEProblem(trace_normalized!, u0s[1], tspan, param)
 
-    ensemble_prob = EnsembleProblem(prob, u0s; safetycopy=false)
+    ensemble_prob = EnsembleProblem(prob, u0s)
     solve(ensemble_prob, alg, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
 end
 
 function solve_params(B, v, args...; init_kwargs=(;), kwargs...)
     u0s = init_state(B, v, args...; init_kwargs...)
     solve_params(B, u0s; kwargs...)
+end
+
+function solve_params_boris(B, u0s::Vector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_BORIS_KWARGS, kwargs...)
+    solve_kwargs = merge(diffeq, kwargs)
+
+    param = prepare(E, B; species=User)
+    prob_func = (prob, i, repeat = nothing) -> remake(prob, u0 = u0s[i])
+    prob = TraceProblem(u0s[1], tspan, param; prob_func)
+
+    TestParticle.solve(prob, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
 end
 end
