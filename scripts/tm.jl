@@ -37,7 +37,7 @@ Calculate the transition matrix for each simulation result and save it in a file
 - `-b, --bins`: Number of bins for the transition matrix
 - `--dir`: directory to read the results from
 """
-@main function main(; bins::Int = 45, dir::String = "test_alg", path=datadir(), prefix="tm")
+@main function main(; bins::Int = 45, dir::String = "simulations", path=datadir(), prefix="tm")
     d = @dict bins dir
     produce_or_load(produce, d, path; prefix)
 end
