@@ -12,8 +12,6 @@ function get_result_dfs(; dir="simulations")
             :B = RD_B_field(; θ=:θ, β=:β, sign=:sign)
         )
         @transform!(
-            :θ = round.(rad2deg.(:θ)), 
-            :β = round.(rad2deg.(:β)),
             :tmax = last.(:tspan)
         )
         select!(Not(:tspan))
