@@ -6,6 +6,8 @@ using CurrentSheetTestParticle
 include("io.jl")
 include("plot.jl")
 
+figure_dir = projectdir("figures")
+
 params = [:θ, :β, :v, :sign]
 
 subset_v(df) = @subset(df, :v .<= 128)
@@ -14,23 +16,6 @@ subset_β(itr) = df -> @rsubset(df, :β ∈ itr)
 
 #%%
 vals(df, s) = unique(df[!, s]) |> sort
-rename_sym(s, v) = "$(s) = $(round(Int, v))"
-rename_sym(s) = v -> rename_sym(s, v)
-rename_sym_deg(s) = v -> (rename_sym(s, v) * "°")
-get_map(s; renamer = rename_sym) = s => renamer(s)
-
-θ_map = get_map(:θ; renamer = rename_sym_deg)
-β_map = get_map(:β; renamer = rename_sym_deg)
-v_map = get_map(:v)
-sign_map = :sign => renamer([1 => "Left-handed", -1 => "Right-handed"])
-w0 = :w0 => "w₀"
-w1 = :w1 => "w₁"
-α0 = :α0 => "α₀"
-α1 = :α1 => "α₁"
-Δα = :Δα
-ϕ0 = :ϕ0 => "ϕ₀"
-xyα = (α0, α1)
-xyw = (w0, w1)
 
 
 """

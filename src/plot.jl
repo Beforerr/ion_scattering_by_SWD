@@ -6,6 +6,29 @@ theme = (;colormap = Reverse(:viridis))
 update_theme!(; theme...)
 
 begin
+    w0 = :w0 => "w₀"
+    w1 = :w1 => "w₁"
+    α0 = :α0 => "α₀"
+    α1 = :α1 => "α₁"
+    Δα = :Δα
+    ϕ0 = :ϕ0 => "ϕ₀"
+    xyα = (α0, α1)
+    xyw = (w0, w1)
+end
+
+begin
+    rename_sym(s, v) = "$(s) = $(round(Int, v))"
+    rename_sym(s) = v -> rename_sym(s, v)
+    rename_sym_deg(s) = v -> (rename_sym(s, v) * "°")
+    get_map(s; renamer = rename_sym) = s => renamer(s)
+    sign_map = :sign => renamer([1 => "Left-handed", -1 => "Right-handed"])
+    θ_map = get_map(:θ; renamer = rename_sym_deg)
+    β_map = get_map(:β; renamer = rename_sym_deg)
+    v_map = get_map(:v)
+end
+
+
+begin
     # density_layer = AlgebraOfGraphics.density(npoints=32)
     density_layer = histogram(; bins=64, normalization=:pdf)
     scale = scales(Color=(;
