@@ -1,5 +1,6 @@
 using AlgebraOfGraphics
 using CairoMakie
+using DataFrames, DataFramesMeta
 
 set_aog_theme!()
 theme = (;colormap = Reverse(:viridis))
@@ -96,7 +97,7 @@ end
 #%%
 
 function get_ax(layout, idxs)
-    is3D = length(idxs) == 3
+    is3D = length(idxs) >= 3
     pos = layout[1, 1]
     ax = is3D ? Axis3(pos) : Axis(pos)
     is3D && (ax.protrusions = 50) # removes overlap of labels
