@@ -1,10 +1,9 @@
 # output the results as transition matrix
 using DrWatson
 @quickactivate
-using Revise
 using FHist
-using ArgParse
-includet("../src/io.jl")
+using Comonicon: @main, @cast
+include("../src/io.jl")
 
 """
 right stochastic matrix, with each row summing to 1., m〚i,j〛 = Probability[x[k+1]=j|x[k]=i]
@@ -30,23 +29,15 @@ function produce(d::Dict)
     @dict df w_range
 end
 
-function main(; path=datadir(), prefix="tm")
-    parsed_args = parse_commandline()
-    produce_or_load(produce, parsed_args, path; prefix)
-end
+"""
+Calculate the transition matrix for each simulation result and save it in a file
 
-function parse_commandline(; dir = "test_alg", bins = 45)
-    s = ArgParseSettings()
-    @add_arg_table! s begin
-        "--dir", "-d"
-        help = "directory to read the results from"
-        default = dir
-        "--bins", "-b"
-        help = "Number of bins for the transition matrix"
-        arg_type = Int
-        default = bins
-    end
-    return parse_args(s)
-end
+# Options
 
-main()
+- `-b, --bins`: Number of bins for the transition matrix
+- `--dir`: directory to read the results from
+"""
+@main function main(; bins::Int = 45, dir::String = "test_alg", path=datadir(), prefix="tm")
+    d = @dict bins dir
+    produce_or_load(produce, d, path; prefix)
+end

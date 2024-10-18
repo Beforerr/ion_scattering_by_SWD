@@ -1,7 +1,7 @@
 [deps]
 AlgebraOfGraphics = "cbdf2221-f076-402e-a563-3d30da359d67"
-ArgParse = "c7e460c6-2fb9-53a9-8c5b-16f535851c63"
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
+Comonicon = "863f3e99-da2a-4334-8734-de3dacbe5542"
 CurrentSheetTestParticle = "70b924fa-544d-466c-bf9c-e2ef4b9a84d3"
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 DataFramesMeta = "1313f7d8-7da2-5740-9ea0-a2ca25f37964"
