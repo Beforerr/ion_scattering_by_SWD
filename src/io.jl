@@ -28,7 +28,7 @@ end
 
 function get_result(r::DataFrameRow)
     params = [:θ, :β, :sign, :v, :alg_sym, :tmax, :B]
-    @chain df begin
+    @chain r[:results] begin
         insertcols!(
             Pair.(params, Array(r[params]))...; makeunique=true
         )
