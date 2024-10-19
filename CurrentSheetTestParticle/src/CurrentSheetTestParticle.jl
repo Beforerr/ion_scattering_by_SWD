@@ -3,6 +3,7 @@ using TestParticle
 using OrdinaryDiffEq
 using LinearAlgebra
 using StaticArrays
+using UnPack
 
 export RD_B_field
 export solve_params, dsolve_params
