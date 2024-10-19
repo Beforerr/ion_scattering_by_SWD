@@ -23,7 +23,6 @@ code-links:
     href: https://www.overleaf.com/project/66f2c8eb4064b5d2596a806e
 ---
 
-```{=html}
 <!-- 
 Figure 1: two examples of discontinuity observations in ARTEMIS data (gse magnetic field, solar wind speed in gse, lmn magnetic field, ion omnidirection spectrum) with hodographs and fitting Bm(Bl)
 Figure 2: distribution of kappa_m, thickness L/di, distributions of energies estimated from L=\rhoi equation
@@ -34,7 +33,6 @@ Figure 6: several examples of (px_init, px_final) matrix for different km and al
 Figure 7: (km, alpha) space with color showing averaged over 10% variance of pitch-angle maximum (over initial px).
 Figure 8, 9-10: these will be results of mapping technique for which we can use your maxtrixes. Let us discuss what do with this figures, as they should show the effective scattering rate that is more universal than pitch-angle variance 
 -->
-```
 
 # Test particle simulations of ion scattering by solar wind discontinuities
 
@@ -57,9 +55,7 @@ And therefore, the parameters important for our investigation of the ion scatter
 
 Scan the parameter with angle difference by 10 degree and velocity by ...
 
-
-
-# [](figures/tm_stats_vPs.png)
+![Transition matrix for different particle energies](figures/tm_stats_vPs.png)
 
 # Notations
 
@@ -83,4 +79,5 @@ multivariate discrete non-parametric distribution
 
 ## References
 
+-   @malaraChargedparticleChaoticDynamics2021
 -   @artemyevSuperfastIonScattering2020
