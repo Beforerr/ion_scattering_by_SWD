@@ -9,7 +9,7 @@ function get_result_dfs(; dir="simulations")
     @chain begin
         collect_results(datadir(dir))
         @rtransform(
-            :B = RD_B_field(; θ=:θ, β=:β, sign=:sign)
+            :B = RD_B_field(; θ=:θ, β=:β)
         )
         @transform!(
             :tmax = last.(:tspan)
@@ -24,16 +24,23 @@ function get_result(; dir="simulations")
     vcat(results...)
 end
 
+function process_result!(df::AbstractDataFrame)
+    @chain df begin
+        @rtransform!(:w0 = :wϕ0[1], :ϕ0 = :wϕ0[2], :w1 = cos_pitch_angle(:u1, :B))
+        @transform!(:w0 = clamp.(:w0, -1, 1), :w1 = clamp.(:w1, -1, 1))
+        @transform!(:α0 = acosd.(:w0), :α1 = acosd.(:w1))
+        @transform!(:Δα = :α1 .- :α0, :Δw = :w1 .- :w0)
+        select!(Not(:wϕ0))
+    end
+end
+
 function get_result(r::DataFrameRow)
-    params = [:θ, :β, :sign, :v, :alg_sym, :tmax, :B]
+    params = [:θ, :β, :v, :tmax, :B]
     @chain r[:results] begin
         insertcols!(
             Pair.(params, Array(r[params]))...; makeunique=true
         )
-        @rtransform!(:w0 = :wϕ0[1], :ϕ0 = :wϕ0[2], :w1 = cos_pitch_angle(:u1, :B))
-        @transform!(:α0 = acosd.(:w0), :α1 = acosd.(:w1))
-        @transform!(:Δα = :α1 .- :α0)
-        select!(Not(:wϕ0))
+        process_result!
     end
 end
 
