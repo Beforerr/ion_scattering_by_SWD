@@ -34,7 +34,6 @@ function test_params_alg()
         :v => vs,
         :alg => [:ImplicitMidpoint, :AutoVern9],
         :init_kwargs => (; Nw=90, Nϕ=120),
-        :tspan => (0, 512),
         :diffeq => diffeq
     )
 
