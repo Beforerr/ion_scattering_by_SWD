@@ -72,11 +72,6 @@ function solve_params(B, u0s::Vector; E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSP
     solve(ensemble_prob, alg, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
 end
 
-function solve_params(B, v, args...; init_kwargs=(;), kwargs...)
-    u0s = init_state(B, v, args...; init_kwargs...)
-    solve_params(B, u0s; kwargs...)
-end
-
 function solve_params_boris(B, u0s::Vector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_BORIS_KWARGS, kwargs...)
     solve_kwargs = merge(diffeq, kwargs)
 
@@ -87,13 +82,20 @@ function solve_params_boris(B, u0s::Vector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEF
     TestParticle.solve(prob, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
 end
 
-function solve_params(d; init_f = init_states_pm, kwargs...)
+function solve_params(d; kwargs...)
     @unpack θ, β, v, sign, alg, init_kwargs, diffeq, tspan = d
     B = RD_B_field(; θ, β, sign)
-    u0s, wϕs = init_f(B, v; init_kwargs...)
+    u0s, wϕs = init_states_pm(B, v; init_kwargs...)
 
     isoutofdomain = isoutofdomain_params(v)
     sol = solve_params(B, u0s; alg, tspan, diffeq, isoutofdomain, kwargs...)
     return sol, (wϕs, B)
+end
+
+function solve_params(B, v::Number, args...; init_kwargs=(;), kwargs...)
+    u0s, wϕs = init_states_pm(B, v, args...; init_kwargs...)
+    isoutofdomain = isoutofdomain_params(v)
+    sol = solve_params(B, u0s; isoutofdomain, kwargs...)
+    return sol, (wϕs, )
 end
 end
