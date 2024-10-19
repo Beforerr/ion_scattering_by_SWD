@@ -1,0 +1,101 @@
+# Compare the effect of coherent structures on test particle dynamics (surrogate testing)
+
+[JuliaDynamics/TimeseriesSurrogates.jl: A Julia package for generating timeseries surrogates](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl)
+
+```{julia}
+using CurrentSheetTestParticle
+using TestParticle
+using StaticArrays
+using TimeseriesSurrogates, CairoMakie
+include("../src/io.jl")
+include("../src/plot.jl")
+include("../src/utils.jl")
+```
+
+```{julia}
+v = 8
+β = 47.5 # CurrentSheetTestParticle.DEFAULT_β
+θ = 85 # CurrentSheetTestParticle.DEFAULT_θ
+init_kwargs = (; Nw=90, Nϕ=120)
+save_everystep = false
+# start = CurrentSheetTestParticle.init_z_pos(v) |> abs
+z = range(-3, 3; length=4086)
+φ = β * tanh.(z)
+d = ProblemParams(; v, β, θ, init_kwargs)
+```
+
+```{julia}
+method = RandomFourier(true)
+method = RelativePartialRandomization()
+method = IAAFT()
+s = surrogate(φ, method)
+surroplot(φ, s)
+```
+
+```{julia}
+Bx = sind(θ) .* sind.(φ)
+Bx_s = sind(θ) .* sind.(s)
+```
+
+```{julia}
+By = sind(θ) .* cosd.(φ)
+By_s = sind(θ) .* cosd.(s)
+# surroplot(By, By_s)
+```
+
+```{julia}
+B_s = let B = zeros(3, length(z))
+    B[1, :] .= Bx_s
+    B[2, :] .= By_s
+    B[3, :] .= cosd(θ)
+    E(x) = SVector(0.0, 0.0, 0.0)
+    param = prepare(z, E, B; species=User, i=3)
+    param[3].field_function
+end
+```
+
+```{julia}
+sols_s, (wϕs,) = solve_params(B_s, v; init_kwargs, save_everystep);
+result_s = process_sols(sols_s, B_s, wϕs)
+sols, (wϕs, B) = solve_params(d; save_everystep);
+result = process_sols(sols, B, wϕs)
+
+result.tmax .= CurrentSheetTestParticle.DEFAULT_TSPAN[2]
+result_s.tmax .= CurrentSheetTestParticle.DEFAULT_TSPAN[2]
+```
+
+```{julia}
+using GLMakie
+using AlgebraOfGraphics
+GLMakie.activate!()
+```
+
+```{julia}
+let v = histogram(; bins=64), dfs = subset_leave(result_s), df0 = subset_leave(result)
+    fig = Figure()
+    
+    ps = fig[1, 1]
+    plts = data(dfs) * mapping(xyw...) * v
+    fg = draw!(ps, plts; axis=w_axis)
+    colorbar!(ps[1,2], fg)
+    Label(ps[0, 1], "Surrogate"; tellwidth=false)
+
+    p0 = fig[1, 2]
+    plt0 = data(df0) * mapping(xyw...) * v
+    draw!(p0, plt0; axis=w_axis)
+    colorbar!(p0[1,2], fg)
+    Label(p0[0, 1], "Original"; tellwidth=false)
+
+    Label(fig[0, 1:end], "θ = $(d.θ)°, β = $(d.β)°")
+
+    surroplot!(fig[2, 1], φ, s)
+    surroplot!(fig[2, 2], Bx, Bx_s)
+    surroplot!(fig[2, 3], By, By_s)
+
+    Label(fig[2, 1][0, 1], "φ"; tellwidth=false)
+    Label(fig[2, 2][0, 1], "Bx"; tellwidth=false)
+    Label(fig[2, 3][0, 1], "By"; tellwidth=false)
+
+    fig
+end
+```
