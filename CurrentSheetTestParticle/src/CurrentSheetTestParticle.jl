@@ -8,6 +8,7 @@ export RD_B_field
 export solve_params, dsolve_params
 export w_ϕ_pairs, init_state, init_states, init_states_pm, filter_wϕs!
 export isoutofdomain_params
+export ProblemParams
 
 include("field.jl")
 include("state.jl")
@@ -23,6 +24,17 @@ const DEFAULT_BORIS_KWARGS = (; dt=1e-2, savestepinterval=1)
 const DEFAULT_TSPAN = (0, 256)
 ez = [0, 0, 1]
 
+@kwdef struct ProblemParams
+    θ = 45
+    β = 90
+    sign = 1
+    v = 1
+    alg = :AutoVern9
+    init_kwargs = (; Nw=8, Nϕ=8)
+    tspan = DEFAULT_TSPAN
+    diffeq = DEFAULT_DIFFEQ_KWARGS
+end
+
 # Step 3: Define the Electric Field (if any)
 const E0 = SVector(0.0, 0.0, 0.0)
 E(x) = E0
@@ -36,6 +48,16 @@ function isoutofdomain_params(v)
     return isoutofdomain_z(z_max)
 end
 
+function _alg(alg)
+    if alg == :AutoVern9
+        return AutoVern9(Rodas4P())
+    elseif alg == :Boris
+        @warn "Boris algorithm is not implemented yet"
+    else
+        return alg
+    end
+end
+
 """
 Solve the system of ODEs.
 
@@ -43,6 +65,7 @@ Notes: `v` is needed here for domain checking.
 """
 function solve_params(B, u0s::Vector; E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_DIFFEQ_KWARGS, kwargs...)
     solve_kwargs = merge(diffeq, kwargs)
+    alg = _alg(alg)
 
     param = prepare(E, B; species=User)
     prob = ODEProblem(trace_normalized!, u0s[1], tspan, param)
@@ -64,5 +87,15 @@ function solve_params_boris(B, u0s::Vector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEF
     prob = TraceProblem(u0s[1], tspan, param; prob_func)
 
     TestParticle.solve(prob, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
+end
+
+function makesim(d; kwargs...)
+    @unpack θ, β, v, sign, alg, init_kwargs, diffeq, tspan = d
+    B = RD_B_field(; θ, β, sign)
+    u0s, wϕs = init_states_pm(B, v; init_kwargs...)
+
+    isoutofdomain = isoutofdomain_params(v)
+    sol = solve_params(B, u0s; alg, tspan, diffeq, isoutofdomain, kwargs...)
+    return sol, (wϕs, B)
 end
 end
