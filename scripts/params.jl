@@ -10,7 +10,6 @@ function test_params()
         :β => βs,
         :sign => [-1, 1],
         :v => vs,
-        :alg_sym => [:AutoVern9],
         :init_kwargs => (; Nw=90, Nϕ=120),
         :tspan => (0, 1024),
         :diffeq => diffeq
@@ -32,9 +31,8 @@ function test_params_alg()
     allparams = Dict(
         :θ => θs,
         :β => βs,
-        :sign => [-1, 1],
         :v => vs,
-        :alg_sym => [:ImplicitMidpoint, :AutoVern9],
+        :alg => [:ImplicitMidpoint, :AutoVern9],
         :init_kwargs => (; Nw=90, Nϕ=120),
         :tspan => (0, 512),
         :diffeq => diffeq
