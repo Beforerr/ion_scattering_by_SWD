@@ -9,7 +9,7 @@ function get_result_dfs(; dir="simulations")
     df = collect_results(datadir(dir))
 
     if "tspan" in names(df)
-        @transform!(df, tmax = last.(:tspan))
+        @transform!(df, :tmax = last.(:tspan))
         select!(df, Not(:tspan))
     else
         insertcols!(df, :tmax => CurrentSheetTestParticle.DEFAULT_TSPAN[2])

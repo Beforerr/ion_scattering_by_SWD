@@ -6,6 +6,8 @@ set_aog_theme!()
 theme = (;colormap = Reverse(:viridis))
 update_theme!(; theme...)
 
+vals(df, s) = unique(df[!, s]) |> sort
+
 begin
     w0 = :w0 => "w₀"
     w1 = :w1 => "w₁"
