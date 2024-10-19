@@ -24,12 +24,12 @@ const DEFAULT_SOLVER = AutoVern9(Rodas4P())
 const DEFAULT_DIFFEQ_KWARGS = (; abstol, reltol, maxiters)
 const DEFAULT_BORIS_KWARGS = (; dt=1e-2, savestepinterval=1)
 const DEFAULT_TSPAN = (0, 256)
-ez = [0, 0, 1]
+const ez = [0, 0, 1]
 
 @kwdef struct ProblemParams
-    θ = 45
-    β = 90
-    sign = 1
+    θ = DEFAULT_θ
+    β = DEFAULT_β
+    sign = DEFAULT_SIGN
     v = 1
     alg = :AutoVern9
     init_kwargs = (; Nw=8, Nϕ=8)
@@ -87,10 +87,10 @@ function solve_params_boris(B, u0s::Vector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEF
     TestParticle.solve(prob, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
 end
 
-function solve_params(d; kwargs...)
+function solve_params(d; init_f = init_states_pm, kwargs...)
     @unpack θ, β, v, sign, alg, init_kwargs, diffeq, tspan = d
     B = RD_B_field(; θ, β, sign)
-    u0s, wϕs = init_states_pm(B, v; init_kwargs...)
+    u0s, wϕs = init_f(B, v; init_kwargs...)
 
     isoutofdomain = isoutofdomain_params(v)
     sol = solve_params(B, u0s; alg, tspan, diffeq, isoutofdomain, kwargs...)
