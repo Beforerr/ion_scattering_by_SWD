@@ -6,16 +6,18 @@ subset_leave(df) = @subset(df, :t1 .!= :tmax)
 subset_trap(df) = @subset(df, :t1 .== :tmax)
 
 function get_result_dfs(; dir="simulations")
-    @chain begin
-        collect_results(datadir(dir))
-        @rtransform(
-            :B = RD_B_field(; θ=:θ, β=:β)
-        )
-        @transform!(
-            :tmax = last.(:tspan)
-        )
-        select!(Not(:tspan))
-    end 
+    df = collect_results(datadir(dir))
+
+    if "tspan" in names(df)
+        @transform!(df, tmax = last.(:tspan))
+        select!(df, Not(:tspan))
+    else
+        insertcols!(df, :tmax => CurrentSheetTestParticle.DEFAULT_TSPAN[2])
+    end
+
+    @chain df begin
+        @rtransform!(:B = RD_B_field(; θ=:θ, β=:β))
+    end
 end
 
 function get_result(; dir="simulations")
@@ -35,7 +37,7 @@ function process_result!(df::AbstractDataFrame)
 end
 
 function get_result(r::DataFrameRow)
-    params = [:θ, :β, :v, :tmax, :B]
+    params = [:θ, :β, :v, :tmax, :B, :alg]
     @chain r[:results] begin
         insertcols!(
             Pair.(params, Array(r[params]))...; makeunique=true
