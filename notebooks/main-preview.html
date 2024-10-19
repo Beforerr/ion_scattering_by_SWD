@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
     <meta charset="utf-8">
-    <meta name="generator" content="quarto-1.4.518">
+    <meta name="generator" content="quarto-1.6.8">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-    <title>Example Event</title>
+    <title>main</title>
     <style>
       code{white-space: pre-wrap;}
       span.smallcaps{font-variant: small-caps;}
@@ -32,7 +32,7 @@
       }
       @media print {
       pre > code.sourceCode { white-space: pre-wrap; }
-      pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+      pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
       }
       pre.numberSource code
         { counter-reset: source-line 0; }
@@ -152,10 +152,10 @@
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-79bb3942e891885f9f7af119cd221462.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-850c21a7640ad2e41df711bd78f69926.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
 <link href="../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
 <link href="../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
@@ -173,52 +173,20 @@
             <a href="../notebooks/main.ipynb" class="btn btn-primary quarto-download-embed" download="main.ipynb">Download Notebook</a>
           </div>
 
-     <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Example Event</h1>
-          </div>
-
-    
-    <div class="quarto-title-meta-container">
-      <div class="quarto-title-meta-column-start">
-            <div class="quarto-title-meta-author">
-          <div class="quarto-title-meta-heading">Authors</div>
-          <div class="quarto-title-meta-heading">Affiliation</div>
-          
-              </div>
-        
-        <div class="quarto-title-meta">
-
-                      
-          
-                
-              </div>
-      </div>
-      <div class="quarto-title-meta-column-end quarto-other-formats-target">
-      </div>
-    </div>
-
-
-
-    <div class="quarto-other-links-text-target">
-    </div>  </div>
-</header><div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+     <div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
 <div id="quarto-sidebar-toc-left" class="sidebar toc-left">
   <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#statistical-analysis" id="toc-statistical-analysis" class="nav-link active" data-scroll-target="#statistical-analysis">Statistical analysis</a></li>
-  <li><a href="#esa" id="toc-esa" class="nav-link" data-scroll-target="#esa">ESA</a></li>
+  <li><a href="#example-event" id="toc-example-event" class="nav-link active" data-scroll-target="#example-event">Example Event</a></li>
+  <li><a href="#statistical-analysis" id="toc-statistical-analysis" class="nav-link" data-scroll-target="#statistical-analysis">Statistical analysis</a></li>
   </ul>
 </nav>
 </div>
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
 </div>
-<main class="content quarto-banner-title-block" id="quarto-document-content">      
-
-       <div class="cell-container"><div class="cell-decorator"><pre>In [2]:</pre></div><div id="cell-1" class="cell" data-execution_count="2">
+<main class="content quarto-banner-title-block" id="quarto-document-content">      <div class="cell-container"><div class="cell-decorator"><pre>In [2]:</pre></div><div id="cell-0" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hvplot.pandas</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hvplot.xarray</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -664,23 +632,23 @@ if (window.Jupyter !== undefined) {
 </style>
 </div>
 </div></div>
-<div id="cell-2" class="cell markdown">
+<div id="cell-1" class="cell markdown">
 <ul>
 <li>Figure 1: two examples of discontinuity observations in ARTEMIS data (gse magnetic field, solar wind speed in gse, lmn magnetic field, ion omnidirection spectrum) with hodographs and fitting <span class="math inline">\(B_m\)</span> (<span class="math inline">\(B_l\)</span>)</li>
 <li>Figure 2: distribution of <span class="math inline">\(\kappa_m\)</span>, thickness <span class="math inline">\(L\)</span>, <span class="math inline">\(d_i\)</span>, distributions of energies estimated from L=equation</li>
 </ul>
 </div>
-<div id="cell-3" class="cell markdown">
+<div id="cell-2" class="cell markdown">
 <p>For theoretical self-consistent model, the magnetic field is given by Bl=B0<em>tanh(z/L) And we define the thickness <strong>tanh</strong>(1)=0.76 z=L, Bl=0.46</em>B0</p>
 </div>
-<div id="cell-4" class="cell markdown">
+<div id="cell-3" class="cell markdown">
 <p>Using the solar wind velocity projected onto the normal direction to the SWD surface, that of the minimum variance, <span class="math inline">\(n\)</span>, we transform time to space <span class="math inline">\(r_n\)</span></p>
 </div>
-<div id="cell-5" class="cell markdown">
+<div id="cell-4" class="cell markdown">
 <p>Averaged ion velocity in mn direction (more reliable than n direction)</p>
 <p>$v_{mn} = | - ( ) | = |v_m + v_n | = $</p>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div id="cell-6" class="cell" data-execution_count="3">
+<div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div id="cell-5" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_RD_parameter(Bl, Bm, Bn<span class="op">=</span><span class="va">None</span>, num_avg_points<span class="op">=</span><span class="dv">8</span>):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Calculate magnetic field parameters for rotation discontinuity (RD) identification.</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -716,7 +684,7 @@ if (window.Jupyter !== undefined) {
 <span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> Bl_max.values, Bm0.values</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div id="cell-7" class="cell" data-execution_count="4">
+<div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div id="cell-6" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> hodographs(B1, B2):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Hodograms of the magnetic field components.</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -770,7 +738,7 @@ if (window.Jupyter !== undefined) {
 <span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> fig, ax</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div id="cell-8" class="cell" data-execution_count="5">
+<div class="cell-container"><div class="cell-decorator"><pre>In [5]:</pre></div><div id="cell-7" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_thx_density(probe, trange, datatype<span class="op">=</span><span class="st">"peem"</span>):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""get plasma density</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Note: better to get from electron mom data, peem_density, ion density is not as accurate</span></span>
@@ -808,7 +776,7 @@ if (window.Jupyter !== undefined) {
 <span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co"># DEBUG</span></span>
 <span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co"># get_data('thc_peem_density', xarray=True).hvplot()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="cell-9" class="cell" data-execution_count="6">
+<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="cell-8" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prcess_mva(event, plot<span class="op">=</span><span class="va">False</span>, save<span class="op">=</span><span class="va">False</span>, detail<span class="op">=</span><span class="va">True</span>):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Define variables</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    tstart, tstop, probe <span class="op">=</span> event[<span class="st">"tstart"</span>], event[<span class="st">"tstop"</span>], event[<span class="st">"probe"</span>]</span>
@@ -903,7 +871,7 @@ if (window.Jupyter !== undefined) {
 <span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result_dict</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div id="cell-10" class="cell" data-execution_count="14">
+<div class="cell-container"><div class="cell-decorator"><pre>In [14]:</pre></div><div id="cell-9" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>raw_events <span class="op">=</span> [</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    {</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"probe"</span>: <span class="st">"c"</span>,</span>
@@ -1731,7 +1699,7 @@ if (window.Jupyter !== undefined) {
 </div>
 </div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [36]:</pre></div><div id="cell-11" class="cell" data-execution_count="36">
+<div class="cell-container"><div class="cell-decorator"><pre>In [36]:</pre></div><div id="cell-10" class="cell" data-execution_count="36">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> test():</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    event <span class="op">=</span> events[<span class="dv">0</span>]</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    tstart, tstop, probe <span class="op">=</span> event[<span class="st">"tstart"</span>], event[<span class="st">"tstop"</span>], event[<span class="st">"probe"</span>]</span>
@@ -1756,10 +1724,12 @@ if (window.Jupyter !== undefined) {
 <span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a><span class="co"># test()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div id="cell-12" class="cell markdown">
-
+<div id="cell-11" class="cell markdown">
+<section id="example-event" class="level2">
+<h2 class="anchored" data-anchor-id="example-event">Example Event</h2>
+</section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="cell-13" class="cell">
+<div class="cell-container"><div class="cell-decorator"><pre>In [6]:</pre></div><div id="cell-12" class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>event <span class="op">=</span> {</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"probe"</span>: <span class="st">"c"</span>,</span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tstart"</span>: <span class="st">"2021-04-03T04:57:40"</span>,</span>
@@ -1779,12 +1749,12 @@ if (window.Jupyter !== undefined) {
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot_mva(event, backend="matplotlib",detail=True, save=True)</span></span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># plot_mva(event, save=True)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div id="cell-14" class="cell markdown">
+<div id="cell-13" class="cell markdown">
 <section id="statistical-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="statistical-analysis">Statistical analysis</h2>
 </section>
 </div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [47]:</pre></div><div id="cell-15" class="cell" data-execution_count="47">
+<div class="cell-container"><div class="cell-decorator"><pre>In [47]:</pre></div><div id="cell-14" class="cell" data-execution_count="47">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>events <span class="op">=</span> [</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    {</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"probe"</span>: <span class="st">"c"</span>,</span>
@@ -1897,10 +1867,10 @@ if (window.Jupyter !== undefined) {
 <span id="cb11-110"><a href="#cb11-110" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> e:</span>
 <span id="cb11-111"><a href="#cb11-111" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Error processing event </span><span class="sc">{</span>event<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [48]:</pre></div><div id="cell-16" class="cell" data-execution_count="48">
+<div class="cell-container"><div class="cell-decorator"><pre>In [48]:</pre></div><div id="cell-15" class="cell" data-execution_count="48">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(events)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [42]:</pre></div><div id="cell-17" class="cell" data-execution_count="42">
+<div class="cell-container"><div class="cell-decorator"><pre>In [42]:</pre></div><div id="cell-16" class="cell" data-execution_count="42">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> astropy <span class="im">import</span> units <span class="im">as</span> u</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plasmapy.formulary.lengths <span class="im">import</span> inertial_length</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1912,13 +1882,59 @@ if (window.Jupyter !== undefined) {
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"L/d_i"</span>] <span class="op">=</span> df[<span class="st">"L"</span>] <span class="op">/</span> df[<span class="st">"d_i"</span>]</span>
 <span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>df.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>KeyError: 'n_p'</code></pre>
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
+File <span class="ansi-green-fg">~/mambaforge/envs/cool_solar_wind/lib/python3.10/site-packages/pandas/core/indexes/base.py:3653</span>, in <span class="ansi-cyan-fg">Index.get_loc</span><span class="ansi-blue-fg">(self, key)</span>
+<span class="ansi-green-fg ansi-bold">   3652</span> try:
+<span class="ansi-green-fg">-&gt; 3653</span>     return self._engine.get_loc(casted_key)
+<span class="ansi-green-fg ansi-bold">   3654</span> except KeyError as err:
+
+File <span class="ansi-green-fg">~/mambaforge/envs/cool_solar_wind/lib/python3.10/site-packages/pandas/_libs/index.pyx:147</span>, in <span class="ansi-cyan-fg">pandas._libs.index.IndexEngine.get_loc</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">~/mambaforge/envs/cool_solar_wind/lib/python3.10/site-packages/pandas/_libs/index.pyx:176</span>, in <span class="ansi-cyan-fg">pandas._libs.index.IndexEngine.get_loc</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">pandas/_libs/hashtable_class_helper.pxi:7080</span>, in <span class="ansi-cyan-fg">pandas._libs.hashtable.PyObjectHashTable.get_item</span><span class="ansi-blue-fg">()</span>
+
+File <span class="ansi-green-fg">pandas/_libs/hashtable_class_helper.pxi:7088</span>, in <span class="ansi-cyan-fg">pandas._libs.hashtable.PyObjectHashTable.get_item</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-red-fg">KeyError</span>: 'n_p'
+
+The above exception was the direct cause of the following exception:
+
+<span class="ansi-red-fg">KeyError</span>                                  Traceback (most recent call last)
+<span class="ansi-green-fg ansi-bold">/Users/zijin/projects/solar_wind_discontinuities/notebooks/main.ipynb Cell 17</span> in <span class="ansi-cyan-fg">&lt;cell line: 8&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-fg ansi-bold">      &lt;a href='vscode-notebook-cell:/Users/zijin/projects/solar_wind_discontinuities/notebooks/main.ipynb#X22sZmlsZQ%3D%3D?line=5'&gt;6&lt;/a&gt;</span> df["k_m"] = np.abs(df["Bm0"] / df["Bl_max"])
+<span class="ansi-green-fg ansi-bold">      &lt;a href='vscode-notebook-cell:/Users/zijin/projects/solar_wind_discontinuities/notebooks/main.ipynb#X22sZmlsZQ%3D%3D?line=6'&gt;7&lt;/a&gt;</span> df["k_n"] = np.abs(df["Bn0"] / df["Bl_max"])
+<span class="ansi-green-fg">----&gt; &lt;a href='vscode-notebook-cell:/Users/zijin/projects/solar_wind_discontinuities/notebooks/main.ipynb#X22sZmlsZQ%3D%3D?line=7'&gt;8&lt;/a&gt;</span> df["d_i"] = inertial_length(df["n_p"].to_numpy() * u.cm ** -3, particle='proton').to(u.km).value
+<span class="ansi-green-fg ansi-bold">      &lt;a href='vscode-notebook-cell:/Users/zijin/projects/solar_wind_discontinuities/notebooks/main.ipynb#X22sZmlsZQ%3D%3D?line=8'&gt;9&lt;/a&gt;</span> df["L/d_i"] = df["L"] / df["d_i"]
+<span class="ansi-green-fg ansi-bold">     &lt;a href='vscode-notebook-cell:/Users/zijin/projects/solar_wind_discontinuities/notebooks/main.ipynb#X22sZmlsZQ%3D%3D?line=9'&gt;10&lt;/a&gt;</span> df.describe()
+
+File <span class="ansi-green-fg">~/mambaforge/envs/cool_solar_wind/lib/python3.10/site-packages/pandas/core/frame.py:3761</span>, in <span class="ansi-cyan-fg">DataFrame.__getitem__</span><span class="ansi-blue-fg">(self, key)</span>
+<span class="ansi-green-fg ansi-bold">   3759</span> if self.columns.nlevels &gt; 1:
+<span class="ansi-green-fg ansi-bold">   3760</span>     return self._getitem_multilevel(key)
+<span class="ansi-green-fg">-&gt; 3761</span> indexer = self.columns.get_loc(key)
+<span class="ansi-green-fg ansi-bold">   3762</span> if is_integer(indexer):
+<span class="ansi-green-fg ansi-bold">   3763</span>     indexer = [indexer]
+
+File <span class="ansi-green-fg">~/mambaforge/envs/cool_solar_wind/lib/python3.10/site-packages/pandas/core/indexes/base.py:3655</span>, in <span class="ansi-cyan-fg">Index.get_loc</span><span class="ansi-blue-fg">(self, key)</span>
+<span class="ansi-green-fg ansi-bold">   3653</span>     return self._engine.get_loc(casted_key)
+<span class="ansi-green-fg ansi-bold">   3654</span> except KeyError as err:
+<span class="ansi-green-fg">-&gt; 3655</span>     raise KeyError(key) from err
+<span class="ansi-green-fg ansi-bold">   3656</span> except TypeError:
+<span class="ansi-green-fg ansi-bold">   3657</span>     # If we have a listlike key, _check_indexing_error will raise
+<span class="ansi-green-fg ansi-bold">   3658</span>     #  InvalidIndexError. Otherwise we fall through and re-raise
+<span class="ansi-green-fg ansi-bold">   3659</span>     #  the TypeError.
+<span class="ansi-green-fg ansi-bold">   3660</span>     self._check_indexing_error(key)
+
+<span class="ansi-red-fg">KeyError</span>: 'n_p'</pre>
+</div>
 </div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [265]:</pre></div><div id="cell-18" class="cell" data-execution_count="265">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of k_m, with values larger than 1 belonging to the same group</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"k_m"</span>].plot(kind<span class="op">=</span><span class="st">"hist"</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df["k_n"].plot(kind="hist")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [265]:</pre></div><div id="cell-17" class="cell" data-execution_count="265">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of k_m, with values larger than 1 belonging to the same group</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df[<span class="st">"k_m"</span>].plot(kind<span class="op">=</span><span class="st">"hist"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># df["k_n"].plot(kind="hist")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div class="">
 <figure class="figure">
@@ -1927,38 +1943,38 @@ if (window.Jupyter !== undefined) {
 </div>
 </div>
 </div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [267]:</pre></div><div id="cell-19" class="cell" data-execution_count="267">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of k_m, with values larger than 1 belonging to the same group</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># np.abs(df["k_m"]).plot(kind="hist")</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots()</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>bin_space <span class="op">=</span> <span class="fl">0.25</span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>bins <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> bin_space, bin_space)</span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>ticks <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">+</span> bin_space, bin_space).tolist()</span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>ticks.append(<span class="st">"1+"</span>)</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Modify k_m so all values larger than 1 are set to 2</span></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>k_m_grouped <span class="op">=</span> [x <span class="cf">if</span> x <span class="op">&lt;=</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span> <span class="op">+</span> bin_space <span class="op">/</span> <span class="dv">2</span> <span class="cf">for</span> x <span class="kw">in</span> np.<span class="bu">abs</span>(df[<span class="st">"k_m"</span>])]</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Then, define bins from 0 to 1 in steps of 0.25, and an additional bin for all values &gt;1</span></span>
-<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>axs.hist(k_m_grouped, bins<span class="op">=</span>bins)</span>
-<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>axs.set_xlabel(<span class="vs">r"$\kappa_m$"</span>)</span>
-<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>axs.set_ylabel(<span class="st">"Count"</span>)</span>
-<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co"># axs.format(</span></span>
-<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     xlabel=r"$\kappa_m$",</span></span>
-<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="co">#     ylabel="Count",</span></span>
-<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
-<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust x-axis labels to reflect the actual bins in the data</span></span>
-<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>plt.xticks(bins, ticks)</span>
-<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a><span class="co"># fig.savefig("../figures/k_m_hist.svg")</span></span>
-<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-container"><div class="cell-decorator"><pre>In [267]:</pre></div><div id="cell-18" class="cell" data-execution_count="267">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># histogram of k_m, with values larger than 1 belonging to the same group</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># np.abs(df["k_m"]).plot(kind="hist")</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots()</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>bin_space <span class="op">=</span> <span class="fl">0.25</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>bins <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> bin_space, bin_space)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>ticks <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">1</span> <span class="op">+</span> bin_space, bin_space).tolist()</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>ticks.append(<span class="st">"1+"</span>)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Modify k_m so all values larger than 1 are set to 2</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>k_m_grouped <span class="op">=</span> [x <span class="cf">if</span> x <span class="op">&lt;=</span> <span class="dv">1</span> <span class="cf">else</span> <span class="dv">1</span> <span class="op">+</span> bin_space <span class="op">/</span> <span class="dv">2</span> <span class="cf">for</span> x <span class="kw">in</span> np.<span class="bu">abs</span>(df[<span class="st">"k_m"</span>])]</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Then, define bins from 0 to 1 in steps of 0.25, and an additional bin for all values &gt;1</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>axs.hist(k_m_grouped, bins<span class="op">=</span>bins)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>axs.set_xlabel(<span class="vs">r"$\kappa_m$"</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>axs.set_ylabel(<span class="st">"Count"</span>)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co"># axs.format(</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="co">#     xlabel=r"$\kappa_m$",</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co">#     ylabel="Count",</span></span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a><span class="co"># )</span></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Adjust x-axis labels to reflect the actual bins in the data</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>plt.xticks(bins, ticks)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co"># fig.savefig("../figures/k_m_hist.svg")</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div class="">
 <figure class="figure">
@@ -1966,28 +1982,6 @@ if (window.Jupyter !== undefined) {
 </figure>
 </div>
 </div>
-</div></div>
-<div id="cell-20" class="cell markdown">
-<section id="esa" class="level2">
-<h2 class="anchored" data-anchor-id="esa">ESA</h2>
-</section>
-</div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div id="cell-21" class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> hvplot.xarray</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> xr.open_dataarray(<span class="st">"data/event02_df.nc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [10]:</pre></div><div id="cell-22" class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.colors <span class="im">as</span> colors</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>df.plot(yscale<span class="op">=</span><span class="st">"log"</span>, norm<span class="op">=</span>colors.LogNorm())</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>df.mean(dim<span class="op">=</span><span class="st">"time"</span>).plot(xscale<span class="op">=</span><span class="st">"log"</span>, yscale<span class="op">=</span><span class="st">"log"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div></div>
-<div class="cell-container"><div class="cell-decorator"><pre>In [11]:</pre></div><div id="cell-23" class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df.hvplot.quadmesh(x<span class="op">=</span><span class="st">"time"</span>, y<span class="op">=</span><span class="st">"energy"</span>, logy<span class="op">=</span><span class="va">True</span>, logz<span class="op">=</span><span class="va">True</span>) <span class="op">+</span> df.mean(</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    dim<span class="op">=</span><span class="st">"time"</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>).hvplot(logx<span class="op">=</span><span class="va">True</span>, logy<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div>
      </main>
 <!-- /main column -->  <script id="quarto-html-after-body" type="application/javascript">
@@ -2025,18 +2019,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -2068,7 +2051,47 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -2103,7 +2126,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -2118,27 +2145,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
     stripColumnClz(note)
-    const typesetMath = (el) => {
-      if (window.MathJax) {
-        // MathJax Typeset
-        window.MathJax.typeset([el]);
-      } else if (window.katex) {
-        // KaTeX Render
-        var mathElements = el.getElementsByClassName("math");
-        var macros = [];
-        for (var i = 0; i < mathElements.length; i++) {
-          var texText = mathElements[i].firstChild;
-          if (mathElements[i].tagName == "SPAN") {
-            window.katex.render(texText.data, mathElements[i], {
-              displayMode: mathElements[i].classList.contains('display'),
-              throwOnError: false,
-              macros: macros,
-              fleqn: false
-            });
-          }
-        }
-      }
-    }
     if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
@@ -2153,10 +2159,14 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             break;
           }
         }
-        typesetMath(container);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
         return container.innerHTML
       } else {
-        typesetMath(note);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
@@ -2165,8 +2175,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (anchorLink) {
         anchorLink.remove();
       }
-      typesetMath(note);
-      return note.innerHTML;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
     }
   }
   for (var i=0; i<xrefs.length; i++) {
@@ -2386,6 +2403,37 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>  </div> <!-- /content -->  <script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","loop":false,"closeEffect":"zoom"});</script> 
+</script>  </div> <!-- /content -->  <script>var lightboxQuarto = GLightbox({"openEffect":"zoom","loop":false,"selector":".lightbox","closeEffect":"zoom","descPosition":"bottom"});
+(function() {
+  let previousOnload = window.onload;
+  window.onload = () => {
+    if (previousOnload) {
+      previousOnload();
+    }
+    lightboxQuarto.on('slide_before_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      const href = trigger.getAttribute('href');
+      if (href !== null) {
+        const imgEl = window.document.querySelector(`a[href="${href}"] img`);
+        if (imgEl !== null) {
+          const srcAttr = imgEl.getAttribute("src");
+          if (srcAttr && srcAttr.startsWith("data:")) {
+            slideConfig.href = srcAttr;
+          }
+        }
+      } 
+    });
+  
+    lightboxQuarto.on('slide_after_load', (data) => {
+      const { slideIndex, slideNode, slideConfig, player, trigger } = data;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(slideNode);
+      }
+    });
+  
+  };
+  
+})();
+          </script> 
   
 </body></html>
