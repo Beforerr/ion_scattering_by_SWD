@@ -1,8 +1,20 @@
 using Revise
-using TestParticle
-using OrdinaryDiffEq
+using DrWatson
 using CurrentSheetTestParticle
 include("../src/plot.jl")
+include("../src/utils.jl")
+
+# ---------------------------
+# Minimal working example
+# ---------------------------
+d = ProblemParams(
+    θ=85,
+    β=47.5,
+    v=2,
+    init_kwargs=(; Nw=90, Nϕ=120)
+)
+
+sol, (wϕs, B) = makesim(d);
 
 using GLMakie
 GLMakie.activate!()
@@ -12,18 +24,6 @@ const pa = cos_pitch_angle
 ku(x) = cos(θ) * x
 ku(t, x) = (t, ku(x))
 ku(x, y, z) = (cos(θ) * x, cos(θ) * y, z)
-
-# ---------------------------
-# Minimal working example
-# ---------------------------
-v = 8
-θ = 85
-β = 47.5
-θ, β = deg2rad.([θ, β])
-B = RD_B_field(; θ, β)
-u0s, wϕs = init_states_pm(B, v)
-isoutofdomain = isoutofdomain_params(v)
-sols = solve_params(B, u0s; isoutofdomain)
 
 function plot_sols(sols, idxs)
     fig = Figure()
@@ -50,6 +50,19 @@ let sols = sols.u[1:8:end]
         scatterlines!(sol.t, sol[3, :], alpha=0.5)
     end
     fig
+end
+
+let
+    results = extract_info.(sol.u) |> DataFrame
+    results.wϕ0 = wϕs
+    results.B .= B
+    process_result!(results)
+
+    v = histogram(; bins=64)
+    plt0 = data(results) * mapping(xyw...) * v
+    fg = draw(plt0; axis=w_axis)
+    Label(fg.figure[0, 1:end], "θ = $(d.θ)°, β = $(d.β)°")
+    fg
 end
 
 # ---------------------------

@@ -5,7 +5,6 @@ using DataFrames
 using Logging, LoggingExtras
 using ProgressMeter
 using StaticArrays
-using OrdinaryDiffEq
 include("./params.jl")
 include("../src/utils.jl")
 

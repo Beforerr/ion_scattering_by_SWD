@@ -57,6 +57,10 @@ And therefore, the parameters important for our investigation of the ion scatter
 
 Scan the parameter with angle difference by 10 degree and velocity by ...
 
+
+
+# [](figures/tm_stats_vPs.png)
+
 # Notations
 
 -   $B_0$: background magnetic field
@@ -65,7 +69,7 @@ Scan the parameter with angle difference by 10 degree and velocity by ...
 
 -   $ψ$: gryo phase
 
--   θ : azimuthal angle, angle between $B_0$ and $B_N = B_0 \cos()$
+-   θ : azimuthal angle, angle between $B_0$ and $B_N = B_0 \cos(θ)$
 
 -   φ : polar angle
 

@@ -8,6 +8,8 @@ using StatsBase: mean, midpoints
 using Beforerr
 
 BINS = 45
+w_edges = range(-1, 1, length=BINS + 1)
+w_centers = midpoints(w_edges)
 
 function load_obs_hist(; file=datadir("obs/") * "wind_hist3d.h5")
     h = h5readhist(file, "hist")
@@ -17,9 +19,6 @@ function load_obs_hist(; file=datadir("obs/") * "wind_hist3d.h5")
     θs = bc[3]
     return DimArray(bincounts(h), (v=vs, β=βs, θ=θs))
 end
-
-w_edges = range(-1, 1, length=BINS + 1)
-w_centers = midpoints(w_edges)
 
 tm_file(; bins=BINS, dir="simulations") = datadir() * "/tm_" * savename(@dict bins dir) * ".jld2"
 load_tm_df(; kw...) = load(tm_file(; kw...))["df"]
