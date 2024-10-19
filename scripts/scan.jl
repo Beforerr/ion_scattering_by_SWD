@@ -18,8 +18,8 @@ end
 error_only_logger = MinLevelLogger(current_logger(), Logging.Error);
 
 function makesim(d; save_everystep=false, kwargs...)
-    d = ProblemParams(; d...)
-    sol, (wϕs, B) = solve_params(d; save_everystep, kwargs...)
+    p = ProblemParams(; d...)
+    sol, (wϕs, B) = solve_params(p; save_everystep, kwargs...)
     results = extract_info.(sol.u) |> DataFrame
     results.wϕ0 = wϕs
     return merge(d, @dict results)
