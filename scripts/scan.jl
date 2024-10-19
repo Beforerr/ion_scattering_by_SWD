@@ -18,12 +18,8 @@ end
 error_only_logger = MinLevelLogger(current_logger(), Logging.Error);
 
 function makesim(d; save_everystep=false, kwargs...)
-    @unpack θ, β, v, sign, alg, init_kwargs, diffeq, tspan = ProblemParams(; d...)
-    B = RD_B_field(; θ, β, sign)
-    u0s, wϕs = init_states_pm(B, v; init_kwargs...)
-
-    isoutofdomain = isoutofdomain_params(v)
-    sol = solve_params(B, u0s; alg, tspan, diffeq, save_everystep, isoutofdomain)
+    d = ProblemParams(; d...)
+    sol, (wϕs, B) = solve_params(d; save_everystep, kwargs...)
     results = extract_info.(sol.u) |> DataFrame
     results.wϕ0 = wϕs
     return merge(d, @dict results)

@@ -14,7 +14,7 @@ d = ProblemParams(
     init_kwargs=(; Nw=90, Nϕ=120)
 )
 
-sol, (wϕs, B) = makesim(d);
+sol, (wϕs, B) = solve_params(d);
 
 using GLMakie
 GLMakie.activate!()
