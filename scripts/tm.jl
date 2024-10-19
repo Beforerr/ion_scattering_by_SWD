@@ -25,7 +25,7 @@ function produce(d::Dict)
     df.tm = map(eachrow(df)) do r
         transition_matrix_w(get_result(r), w_range)
     end
-    select!(df, Not(:results, :diffeq))
+    select!(df, Not(:results))
     @dict df w_range
 end
 

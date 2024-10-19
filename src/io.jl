@@ -36,12 +36,10 @@ function process_result!(df::AbstractDataFrame)
     end
 end
 
-function get_result(r::DataFrameRow)
-    params = [:θ, :β, :v, :tmax, :B, :alg]
+function get_result(r::DataFrameRow, params = [:θ, :β, :v, :tmax, :B, :alg])
+    params = string.(params) ∩ names(r)
     @chain r[:results] begin
-        insertcols!(
-            Pair.(params, Array(r[params]))...; makeunique=true
-        )
+        insertcols!(Pair.(params, Array(r[params]))...; makeunique=true)
         process_result!
     end
 end
