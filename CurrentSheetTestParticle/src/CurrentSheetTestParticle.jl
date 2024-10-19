@@ -4,6 +4,7 @@ using OrdinaryDiffEq
 using LinearAlgebra
 using StaticArrays
 using UnPack
+using Moshi.Match: @match
 
 export RD_B_field
 export solve_params, dsolve_params
@@ -50,19 +51,15 @@ function isoutofdomain_params(v)
 end
 
 function _alg(alg)
-    if alg == :AutoVern9
-        return AutoVern9(Rodas4P())
-    elseif alg == :Boris
-        @warn "Boris algorithm is not implemented yet"
-    else
-        return alg
+    @match alg begin
+        :AutoVern9 => AutoVern9(Rodas4P())
+        :Boris => @warn "Boris algorithm is not implemented yet"
+        _ => alg
     end
 end
 
 """
 Solve the system of ODEs.
-
-Notes: `v` is needed here for domain checking.
 """
 function solve_params(B, u0s::Vector; E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_DIFFEQ_KWARGS, kwargs...)
     solve_kwargs = merge(diffeq, kwargs)
@@ -90,7 +87,7 @@ function solve_params_boris(B, u0s::Vector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEF
     TestParticle.solve(prob, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
 end
 
-function makesim(d; kwargs...)
+function solve_params(d; kwargs...)
     @unpack θ, β, v, sign, alg, init_kwargs, diffeq, tspan = d
     B = RD_B_field(; θ, β, sign)
     u0s, wϕs = init_states_pm(B, v; init_kwargs...)
