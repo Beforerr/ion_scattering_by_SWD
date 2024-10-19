@@ -1,6 +1,7 @@
 ---
 execute: 
   eval: false
+  freeze: true
 ---
 # Compare the effect of coherent structures on test particle dynamics (surrogate testing)
 
