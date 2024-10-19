@@ -4,9 +4,13 @@ using HDF5
 using JLD2
 using DataFrames
 using DimensionalData
+using DimensionalData: dims
 using StatsBase: mean, midpoints
 using Beforerr
+include("../src/plot.jl")
 
+VMIN = 0.25
+VMAX = 256
 BINS = 45
 w_edges = range(-1, 1, length=BINS + 1)
 w_centers = midpoints(w_edges)
@@ -26,22 +30,13 @@ load_tm_df(; kw...) = load(tm_file(; kw...))["df"]
 p = load_obs_hist()
 tm_df = load_tm_df()
 
-VMIN = 0.25
-VMAX = 256
-
 """
 vP is the velocity of the particle, v is the normalized velocity
 
 We find out that for vs smaller than 0.1 and larger than 200, the simulation results are the same as the closest value in the range [0.1, 200]. We filter out these values to save computation time.
 """
 function get_tm(v0, β, θ, vP; df=tm_df, vmin=VMIN, vmax=VMAX)
-    v = vP / v0
-    if v < vmin
-        v = vmin
-    elseif v > vmax
-        v = vmax
-    end
-
+    v = clamp(vP / v0, vmin, vmax)
     sdf = @subset(df, :v .== v, :β .== β, :θ .== θ)
     tms = sdf[:, :tm]
     if isempty(tms)
@@ -75,7 +70,7 @@ using Unitful: mp
 
 V_UNIT = u"km/s"
 
-function v2E(v; m =mp)
+function v2E(v; m=mp)
     E = 0.5m * v^2
     round(Int, u"eV", E)
 end
@@ -96,18 +91,21 @@ using AlgebraOfGraphics
 
 # Plot the transition matrix weighted by the observation data
 # As the observation data is dominated by θ->90° (small $B_n$) and β->45°, the allover transition matrix is dominated by these values
-
-vP_map = :v => (v -> "vₚ = $(v) (E = $(v2E(v)))") # particle velocity
-plt = data(tm_stats_vPs_df) * mapping(xyw..., :value, layout=vP_map) * visual(Heatmap)
-draw(plt; axis=w_axis, colorbar=(; scale=log10))
-easy_save("tm_stats_vPs")
-
-
-
-tm_stats_das = map([1, 2, 3, 4, 5]) do i
-    DimArray(tm_stats^i, (w₀=w_centers, w₁=w_centers))
+let cscale = log10
+    vP_map = :v => (v -> "vₚ = $(v) (E = $(v2E(v)))") # particle velocity
+    plt = data(tm_stats_vPs_df) * mapping(xyw..., :value, layout=vP_map) * visual(Heatmap; colorscale=cscale)
+    scale = scales(Color=(;
+        nan_color=:transparent,
+        lowclip=:transparent,
+        colorrange=(1e-4, 1e-1)
+    ))
+    draw(plt, scale; axis=w_axis, colorbar=(; scale=cscale))
+    easy_save("tm_stats_vPs")
 end
-using CairoMakie
-f, ax, hm = plot(tm_stats_das[5]; axis=w_axis, colorscale=log10)
-Colorbar(f[1, 2], hm)
-f
+
+let tm_stats = tm_stats_vPs[3], i = 1, colorscale=log10
+    tm_stats_da = DimArray(tm_stats^i, (w₀=w_centers, w₁=w_centers))
+    f, ax, hm = plot(tm_stats_da; axis=w_axis, colorscale)
+    Colorbar(f[1, 2], hm)
+    f
+end
