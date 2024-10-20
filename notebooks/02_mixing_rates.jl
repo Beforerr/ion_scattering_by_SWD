@@ -1,13 +1,16 @@
-using DrWatson
-using FHist
-using HDF5
-using JLD2
-using DataFrames
-using DimensionalData
-using DimensionalData: dims
-using StatsBase: mean, midpoints
-using Beforerr
-include("../src/plot.jl")
+begin
+    using DrWatson
+    using FHist
+    using HDF5
+    using JLD2
+    using DataFrames
+    using DimensionalData
+    using DimensionalData: dims
+    using StatsBase: mean, midpoints
+    using Beforerr
+    include("../src/plot.jl")
+    TM_OBS_FILE = "tm_obs.jld2"
+end
 
 VMIN = 0.25
 VMAX = 256
@@ -24,7 +27,7 @@ function load_obs_hist(; file=datadir("obs/") * "wind_hist3d.h5")
     return DimArray(bincounts(h), (v=vs, β=βs, θ=θs))
 end
 
-tm_file(; bins=BINS, dir="simulations") = datadir() * "/tm_" * savename(@dict bins dir) * ".jld2"
+tm_file(; prefix="tm", bins=BINS, dir="simulations") = datadir() * "/$(prefix)_" * savename(@dict bins dir) * ".jld2"
 load_tm_df(; kw...) = load(tm_file(; kw...))["df"]
 
 p = load_obs_hist()
@@ -82,10 +85,16 @@ tm_stats_vPs = map(vPs) do vP
     end
 end
 
-tm_stats_vPs_df = mapreduce(vcat, vPs, tm_stats_vPs) do v, tm_stats
-    df = DataFrame(DimArray(tm_stats, (w0=w_centers, w1=w_centers)))
-    insertcols!(df, :v => v * V_UNIT)
+begin
+    tm_stats_vPs_dfs = map(vPs, tm_stats_vPs) do v, tm_stats
+        df = DataFrame(DimArray(tm_stats, (w0=w_centers, w1=w_centers)))
+        insertcols!(df, :v => v * V_UNIT)
+    end
+    tm_stats_vPs_df = reduce(vcat, tm_stats_vPs_dfs)
+    # save the data
+    save(datadir(TM_OBS_FILE), Dict("df" => tm_stats_vPs_df))
 end
+
 
 using AlgebraOfGraphics
 
@@ -103,7 +112,21 @@ let cscale = log10
     easy_save("tm_stats_vPs")
 end
 
-let tm_stats = tm_stats_vPs[3], i = 1, colorscale=log10
+# Plot the transition matrix for Energy = 100 keV
+let cscale = log10, df = tm_stats_vPs_dfs[end]
+    vP_map = :v => (v -> "E = 100 keV") # particle velocity
+    plt = data(df) * mapping(xyw..., :value, layout=vP_map) * visual(Heatmap; colorscale=cscale)
+    scale = scales(Color=(;
+        nan_color=:transparent,
+        lowclip=:transparent,
+        colorrange=(1e-4, 1e-1)
+    ))
+    draw(plt, scale; axis=w_axis, colorbar=(; scale=cscale))
+    easy_save("tm/tm_stats_100keV")
+end
+
+
+let tm_stats = tm_stats_vPs[3], i = 1, colorscale = log10
     tm_stats_da = DimArray(tm_stats^i, (w₀=w_centers, w₁=w_centers))
     f, ax, hm = plot(tm_stats_da; axis=w_axis, colorscale)
     Colorbar(f[1, 2], hm)
