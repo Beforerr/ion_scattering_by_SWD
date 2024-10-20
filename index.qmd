@@ -57,6 +57,18 @@ Scan the parameter with angle difference by 10 degree and velocity by ...
 
 ![Transition matrix for different particle energies](figures/tm_stats_vPs.png)
 
+:::
+![](figures/pa_jump_history.png)
+
+Examples of ion pitch angle scattering by solar wind discontinuities for different energies.
+:::
+
+:::
+![](figures/tm/tm_stats_100keV.png)
+
+Transition matrix for 100 keV particles.
+:::
+
 # Notations
 
 -   $B_0$: background magnetic field
