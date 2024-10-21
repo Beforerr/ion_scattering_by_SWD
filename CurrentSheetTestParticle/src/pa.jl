@@ -21,4 +21,4 @@ cos_pitch_angle(u, B::Function) = cos_pitch_angle(u, B(u))
 
 const pa = cos_pitch_angle
 
-export cos_pitch_angle
+export cos_pitch_angle, pa

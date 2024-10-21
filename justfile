@@ -12,6 +12,10 @@ install-julia-deps:
 
 publish: quarto-publish
 
+render:
+    quarto render presentations/index.qmd --to pptx
+    cp _site/presentations/index.pptx presentations/index.pptx
+
 exec-scripts:
     julia --project scripts/scan.jl
     julia --project scripts/tm.jl
