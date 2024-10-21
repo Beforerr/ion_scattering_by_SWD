@@ -45,7 +45,7 @@ The most probable values in the 3D distribution are a characteristic velocity ($
 
 # Examples of Pitch angle scattering
 
-![Example of pitch angle scattering.](../figures/example_tp.png.png)
+![Example of pitch angle scattering.](../figures/example_tp.png)
 
 ---
 
@@ -58,6 +58,10 @@ The most probable values in the 3D distribution are a characteristic velocity ($
 ![](../figures/pa_layout=v_β=47.5_θ=85.png)
 
 With in-plane rotation angle ($ω_{in}$) about 90 degrees, and azimuthal angle ($θ$) of around 85 degrees.
+
+# Examples of transition matrix
+
+![Transition matrix for 100 keV particles.](../figures/tm/example.png)
 
 # Transition matrix
 
