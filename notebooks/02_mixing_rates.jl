@@ -27,11 +27,24 @@ function load_obs_hist(; file=datadir("obs/") * "wind_hist3d.h5")
     return DimArray(bincounts(h), (v=vs, β=βs, θ=θs))
 end
 
+function dargmax(p)
+    # Note: iteration is deliberately unsupported for CartesianIndex.
+    name.(dims(p)), map(getindex, dims(p), Tuple(argmax(p)))
+end
+
+function check_obs_hist(p)
+    # check the maxximum value of the observation data
+    @info maximum(p)
+    @info dargmax(p)
+end
+
 tm_file(; prefix="tm", bins=BINS, dir="simulations") = datadir() * "/$(prefix)_" * savename(@dict bins dir) * ".jld2"
 load_tm_df(; kw...) = load(tm_file(; kw...))["df"]
 
 p = load_obs_hist()
 tm_df = load_tm_df()
+
+check_obs_hist(p)
 
 """
 vP is the velocity of the particle, v is the normalized velocity
