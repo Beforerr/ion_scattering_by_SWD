@@ -61,7 +61,7 @@ With in-plane rotation angle ($ω_{in}$) about 90 degrees, and azimuthal angle (
 
 # Examples of transition matrix
 
-![Transition matrix for 100 keV particles.](../figures/tm/example.png)
+![](../figures/tm/example.png)
 
 # Transition matrix
 
