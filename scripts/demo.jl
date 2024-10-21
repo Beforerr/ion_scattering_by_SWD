@@ -1,6 +1,7 @@
 using Revise
 using DrWatson
 using CurrentSheetTestParticle
+using Beforerr
 include("../src/plot.jl")
 include("../src/utils.jl")
 
@@ -8,22 +9,28 @@ include("../src/utils.jl")
 # Minimal working example
 # ---------------------------
 d = ProblemParams(
-    θ=85,
-    β=47.5,
-    v=2,
-    init_kwargs=(; Nw=90, Nϕ=120)
+    θ=45,
+    β=90,
+    v=1,
+    init_kwargs = (; w=[-0.8,0.8])
 )
 
-sol, (wϕs, B) = solve_params(d);
+sols, (wϕs, B) = solve_params(d);
+
+Bx(z) = B([0, 0, z])[1]
+By(z) = B([0, 0, z])[2]
+Bz(z) = B([0, 0, z])[3]
 
 using GLMakie
 GLMakie.activate!()
 
-const pa = cos_pitch_angle
-
-ku(x) = cos(θ) * x
+θ = d.θ
+ku(x; θ=θ) = cosd(θ) * x
 ku(t, x) = (t, ku(x))
-ku(x, y, z) = (cos(θ) * x, cos(θ) * y, z)
+ku(x, y, z) = (ku(x), ku(y), z)
+ku_zx(z, x) = (z, ku(x))
+
+Eₖ(u) = 1/2 * sum(u[4:6].^2)
 
 function plot_sols(sols, idxs)
     fig = Figure()
@@ -34,8 +41,40 @@ function plot_sols(sols, idxs)
     end
     fig
 end
+
+# Plot trajectories of three particles projected onto the z-x plane.
+function plot_detail(sols; idxs = (3, 2))
+    fig = Figure(; size=(800, 400))
+    ax1 = Axis(fig[1, 1]; xlabel="z", ylabel="B", limits = (nothing, (-1, 1)))
+    ax2 = Axis(fig[2, 1]; xlabel="z", ylabel="y")
+    ax3 = Axis(fig[3, 1]; xlabel="z", ylabel="x")
+    # ax3 = Axis(fig[3, 1]; xlabel="x", ylabel="y")
+    ax4 = Axis(fig[1:end, 2]; xlabel = "t", ylabel = "Cos(α)")
+    # ax5 = Axis(fig[2, 2]; limits = (nothing, (0, 0.5)))
+
+    zmin, zmax = minimum(sols[1][3, :]), maximum(sols[1][3, :])
+    z = range(zmin, zmax, length=100)
+    lines!(ax1, z, Bx, label="Bx")
+    lines!(ax1, z, By, label="By")
+    lines!(ax1, z, Bz, label="Bz")
+    axislegend(ax1, orientation = :horizontal, position = :rb)
+
+    for sol in sols.u
+        # plot!(ax2, sol, idxs=(3, 2)) # this would smooth the trajectory
+        lines!(ax2, sol[3, :], sol[2, :])
+        lines!(ax3, sol[3, :], sol[1, :])
+        # plot!(ax3, sol, idxs=(1,2))
+        scatterlines!(ax4, sol.t, pa.(sol.u, B), alpha=0.5)
+        # scatterlines!(ax5, sol.t, Eₖ.(sol.u), alpha=0.5)
+    end
+    fig
+end
+
 idxs = (ku, 1, 2, 3)
-plot_sols(sols, idxs)
+plot_sols(sols[16:18], idxs)
+
+plot_detail(sols[[12,13]])
+easy_save("example_tp.png", plot_detail(sols[[12,13]]))
 
 observables = [3, 6, Eₖ, pa]
 
@@ -51,6 +90,14 @@ let sols = sols.u[1:8:end]
     end
     fig
 end
+
+# Histogram
+d = ProblemParams(
+    θ=85,
+    β=42.5,
+    v=2,
+    init_kwargs=(; Nw=90, Nϕ=120)
+)
 
 let
     results = extract_info.(sol.u) |> DataFrame
