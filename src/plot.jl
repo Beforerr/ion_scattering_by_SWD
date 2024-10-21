@@ -1,16 +1,20 @@
 using AlgebraOfGraphics
+using LaTeXStrings
 using CairoMakie
 using DataFrames, DataFramesMeta
+using Match
 
-set_aog_theme!()
-theme = (;colormap = Reverse(:viridis))
-update_theme!(; theme...)
+begin
+    set_aog_theme!()
+    theme = (; colormap=(:batlow))
+    update_theme!(; theme...)
+end
 
 vals(df, s) = unique(df[!, s]) |> sort
 
 begin
-    w0 = :w0 => "w₀"
-    w1 = :w1 => "w₁"
+    w0 = :w0 => "cos(α₀)"
+    w1 = :w1 => "cos(α₁)"
     α0 = :α0 => "α₀"
     α1 = :α1 => "α₁"
     Δα = :Δα
@@ -23,21 +27,20 @@ begin
     rename_sym(s, v) = "$(s) = $(round(Int, v))"
     rename_sym(s) = v -> rename_sym(s, v)
     rename_sym_deg(s) = v -> (rename_sym(s, v) * "°")
-    get_map(s; renamer = rename_sym) = s => renamer(s)
+    get_map(s; renamer=rename_sym) = s => renamer(s)
     sign_map = :sign => renamer([1 => "Left-handed", -1 => "Right-handed"])
-    θ_map = get_map(:θ; renamer = rename_sym_deg)
-    β_map = get_map(:β; renamer = rename_sym_deg)
+    θ_map = get_map(:θ; renamer=rename_sym_deg)
+    β_map = get_map(:β; renamer=rename_sym_deg)
     v_map = get_map(:v)
 end
 
 
 begin
     # density_layer = AlgebraOfGraphics.density(npoints=32)
-    density_layer = histogram(; bins=64, normalization=:pdf)
-    scale = scales(Color=(;
-        nan_color=:transparent,
-        lowclip=:transparent,
-        colorrange=(0.001, 10)
+    density_layer() = histogram(; bins=64, normalization=:pdf) * visual(; colorscale)
+    colorrange(; scale=colorscale) = scale == log10 ? (1e-2, 1e1) : (0, 5)
+    tm_scale() = scales(Color=(;
+        colorrange=colorrange()
     ))
 end
 
@@ -53,46 +56,37 @@ end
 pa_pair_plot(df::AbstractDataFrame) = pa_pair_plot(data(df))
 
 # Function to plot one figure per column
-function pa_pair_plot_by_col!(df::AbstractDataFrame, s, axs, layer; xy=xyw, scale=scales(), axis=w_axis, kwargs...)
-    vs = (sort ∘ unique)(df[!, s])  # Get unique velocity values
+pa_layer(s) = @match s begin
+    :v => mapping(col=θ_map, row=β_map)
+    :β => mapping(col=θ_map, row=v_map)
+end
+
+function pa_pair_hist!(df::AbstractDataFrame, layout, s=:v; layer=pa_layer(s) * density_layer(), xy=xyw, scales=tm_scale(), axis=w_axis, kwargs...)
+    vs = vals(df, s)  # Get unique velocity values
+    axs = [layout[1, i] for i in 1:length(vs)]
     return map(zip(axs, vs)) do (fg, v)
         df_s = @subset(df, $s .== v)
         plt = data(df_s) * mapping(xy...) * layer
-        grids = draw!(fg, plt, scale; axis, kwargs...)
+        grids = draw!(fg, plt, scales; axis, kwargs...)
         r = s == :v ? rename_sym : rename_sym_deg
         Label(fg[0, :], r(s)(v))
         grids
     end
 end
 
-pa_pair_plot_by_v!(df, axs) = pa_pair_plot_by_col!(df, :v, axs, mapping(col=θ_map, row=β_map) * density_layer; scale)
-pa_pair_plot_by_β!(df, axs) = pa_pair_plot_by_col!(df, :β, axs, mapping(col=θ_map, row=v_map) * density_layer; scale)
-
-function pa_pair_hist(df ; s=:v, figure=(; size=(1200, 400)))
+function pa_pair_hist(df; figure=(; size=(1200, 400)), scale=colorscale, kw...)
     fig = Figure(; figure...)
-    plot_func = eval(Symbol("pa_pair_plot_by_$(s)!"))
-    imax = length(vals(df, s))
-    axs = [fig[1, i] for i in 1:imax]
-    grids = plot_func(df, axs)
-    colorbar!(fig[1:end, end+1], grids[1]; scale=log10)
-    fig    
+    grids = pa_pair_hist!(df, fig[1, 1]; kw...)
+    colorbar!(fig[1:end, end+1], grids[1]; scale)
+    fig
 end
 
-function pa_pair_plot(ldf, rdf; s=:v, func=identity, figure=(; size=(1200, 800)))
+function pa_pair_hist(ldf, rdf; figure=(; size=(1200, 800)), scale=colorscale, kw...)
     fig = Figure(; figure...)
-
-    ldf, rdf = func.([ldf, rdf])
-    plot_func = eval(Symbol("pa_pair_plot_by_$(s)!"))
-
-    imax = length(vals(ldf, s))
-    axsl = [fig[1, i] for i in 1:imax]
-    axsr = [fig[3, i] for i in 1:imax]
-
-    grids = plot_func(ldf, axsl)
-    grids = plot_func(rdf, axsr)
+    grids = pa_pair_hist!(ldf, fig[1, 1]; kw...)
+    grids = pa_pair_hist!(rdf, fig[3, 1]; kw...)
     sign_label(fig)
-    colorbar_pos = fig[1:end, end+1]
-    colorbar!(colorbar_pos, grids[1]; scale=log10)
+    colorbar!(fig[1:end, end+1], grids[1]; scale)
     fig
 end
 
