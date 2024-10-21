@@ -13,7 +13,6 @@ author:
     roles: [conceptualization, writing]
     affiliations:
       - ref: ucla
-draft: true
 code-links:
   - href: zotero://select/library/collections/XHVVKL3N
     text: Zotero
@@ -34,6 +33,13 @@ Figure 7: (km, alpha) space with color showing averaged over 10% variance of pit
 Figure 8, 9-10: these will be results of mapping technique for which we can use your maxtrixes. Let us discuss what do with this figures, as they should show the effective scattering rate that is more universal than pitch-angle variance 
 -->
 
+
+# Introduction
+
+The transport of energetic particles within the heliosphere is significantly influenced by the turbulent magnetic field present in the solar wind. However, this turbulence should not be regarded merely as a collection of random magnetic field fluctuations. Instead, the nonlinear energy cascade process results in the formation of coherent structures. These coherent structures have been shown to act as efficient particle scatterers in non-collisional plasmas [@artemyevSuperfastIonScattering2020]. 
+
+We investigated the interaction of ions with rotational discontinuities by employing a simplified analytical model for the magnetic field configuration. Our study aimed to examine how the particle pitch angle is influenced by the parameters of the magnetic field configuration and the initial conditions of the particles.
+
 # Test particle simulations of ion scattering by solar wind discontinuities
 
 We assume the following expression:
@@ -44,14 +50,24 @@ $$
 
 with $φ(z) = β \tanh(z)$,
 
-We normalize the magnetic field $\mathbf{B}$ to the background magnetic field magnitude $B_0$, the position $\mathbf{r}$ to the thickness of the discontinuity $L$, time $t$ to $1/Ω_0$, with $Ω_0 = q B_0/m_p$, and the velocity $v$ to $v_0$ $Ω_0 L$. And the dimensionless form of the motion equation can be written as follows:
+We normalize the magnetic field $\mathbf{B}$ to the background magnetic field magnitude $B_0$, the position $\mathbf{r}$ to the thickness of the discontinuity $L$, time $t$ to $1/Ω_0$, with $Ω_0 = q B_0/m_p$, and the velocity $v$ to characteristic velocity $v_0 = Ω_0 L$. And the dimensionless form of the motion equation can be written as follows:
 
 $$
-\frac{d\mathbf{v}}{dt} = \mathbf{v} \times \mathbf{B} ,
+\frac{d (γ \mathbf{v})}{dt} = \mathbf{v} \times \mathbf{B} ,
 \frac{d\mathbf{r}}{dt} = \mathbf{v}
 $$
 
-And therefore, the parameters important for our investigation of the ion scattering is $α$, $β$, and $v_0$.
+And therefore, the parameters important for our investigation of the ion scattering is $θ$, $β$, and $v_0$.
+
+Using data from the Wind mission, we compiled a dataset of 100,000 discontinuities, with their orientations determined via the minimum variance analysis of the magnetic field (MVAB) method. The orientation of these discontinuities is critical for accurately determining both their thickness ($L$) and the in-plane magnetic field rotation ($ω_{in}$), which are key factors in the ion scattering process. To ensure the robustness of the analysis, we utilized a filtered dataset that includes only discontinuities where $Δ|B|/|B| > 0.05$ or $ω > 60°$. As noted by @liuFailuresMinimumVariance2023, the MVAB method yields acceptable accuracy for B_N when these conditions are met. Importantly, these two parameters, thickness and rotation, do not depend on the discontinuity normal and can be directly calculated from the magnetic field data.
+
+![](figures/wind_hist3d.png)
+
+The most probable values in the 3D distribution are a characteristic velocity ($v_0$) of approximately 250 km/s, a in-plane rotation angle ($ω_{in}$) about 90 degrees, and an azimuthal angle ($θ$) of around 85 degrees.
+
+# Results
+
+![](figures/example_tp.png.png)
 
 Scan the parameter with angle difference by 10 degree and velocity by ...
 
@@ -81,7 +97,7 @@ Transition matrix for 100 keV particles.
 
 -   φ : polar angle
 
--   β : rotation angle / 2
+-   β : half of in plnae rotation angle $ω_{in}$
 
 # TODO
 
