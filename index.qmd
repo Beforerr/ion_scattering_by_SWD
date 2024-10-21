@@ -67,7 +67,7 @@ The most probable values in the 3D distribution are a characteristic velocity ($
 
 # Results
 
-![](figures/example_tp.png.png)
+![](figures/example_tp.png)
 
 Scan the parameter with angle difference by 10 degree and velocity by ...
 

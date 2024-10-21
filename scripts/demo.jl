@@ -74,7 +74,7 @@ idxs = (ku, 1, 2, 3)
 plot_sols(sols[16:18], idxs)
 
 plot_detail(sols[[12,13]])
-easy_save("example_tp.png", plot_detail(sols[[12,13]]))
+easy_save("example_tp", plot_detail(sols[[12,13]]))
 
 observables = [3, 6, Eₖ, pa]
 
