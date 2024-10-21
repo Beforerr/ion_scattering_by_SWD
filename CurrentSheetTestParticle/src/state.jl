@@ -1,3 +1,4 @@
+using Base.Iterators: repeated
 # TODO: check the initial position effect
 """
 Particle with `pos=1/-1` is initialized above/below the current sheet
@@ -54,28 +55,21 @@ end
 init_v(v, w, ϕ, B0; e1=ez) = init_v(v, w, ϕ, local_B_coord(B0; e1=e1)...)
 init_v(v, w, ϕ, r, B; e1=ez) = init_v(v, w, ϕ, B(r); e1=e1)
 
-"""
-Generate a grid of w and phi pairs for the particles.
-"""
-function w_ϕ_pairs(; Nw=8, Nϕ=8)
-    ws = range(-1, 1, length=Nw)
-    ϕs = range(0, 2π, length=Nϕ + 1)[1:end-1]
-    # Flatten the grid to create lists of w0 and phi0 for each particle
-    w_all = repeat(ws, inner=Nϕ)
-    ϕ_all = repeat(ϕs, outer=Nw)
-    return collect(zip(w_all, ϕ_all))
-end
+
+init_range(::Nothing; start, stop, length=2) = range(; start, stop, length)
+init_range(x::AbstractArray; kw...) = x
+init_range(x::Number; kw...) = [x]
 
 """
 Generate a grid of w and phi pairs for the particles.
 """
-function w_ϕ_pairs(w; Nϕ=8)
-    # Generate Grid Points
-    ϕs = range(0, 2π, length=Nϕ + 1)[1:end-1]
-    return collect(zip(repeated(w), ϕs))
+function w_ϕ_pairs(; Nw=8, Nϕ=8, w=nothing, ϕ=nothing)
+    ws = init_range(w; start=-1, stop=1, length = Nw)
+    ϕs = init_range(ϕ; start=0, stop=2π-2π/Nϕ, length = Nϕ)
+    w_ϕ_pairs(ws, ϕs)
 end
 
-w_ϕ_pairs(w, ϕ) = [(w, ϕ)]
+w_ϕ_pairs(ws::AbstractArray, ϕs::AbstractArray) = [(w, ϕ) for w in ws for ϕ in ϕs]
 
 """
 Filter pitch angle corresponding to particles moving toward the current sheet
