@@ -1,5 +1,13 @@
 project:
-  type: manuscript
+  type: website
+
+website:
+  navbar:
+    left:
+      - text: "Home"
+        href: index.qmd
+      - text: "Presentation"
+        href: presentations/index.qmd
 
 manuscript:
   article: index.qmd

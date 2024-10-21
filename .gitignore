@@ -9,6 +9,7 @@ data/
 # Quarto
 .quarto
 _manuscript/
+_site/
 
 ##########################
 # Byte-compiled / optimized / DLL files
