@@ -1,9 +1,9 @@
-using Base.Iterators: repeated
+const DEFAULT_Z_INIT_0 = 5
 # TODO: check the initial position effect
 """
 Particle with `pos=1/-1` is initialized above/below the current sheet
 """
-init_z_pos(v; pos=-1, z_init_0=5) = pos * (abs(z_init_0) + 2 * abs(v))
+init_z_pos(v; pos=-1, z_init_0=DEFAULT_Z_INIT_0) = pos * (abs(z_init_0) + 2 * abs(v))
 init_pos(v; kw...) = [0, 0, init_z_pos(v; kw...)]
 
 function init_state(v, w, ϕ, B::Function; kw...)
