@@ -1,23 +1,20 @@
 using DataFramesMeta
 using CurrentSheetTestParticle
+using CurrentSheetTestParticle: DEFAULT_Z_INIT_0, DEFAULT_TSPAN, DEFAULT_SIGN
 
 #%%
+outside(u; z_init_0=DEFAULT_Z_INIT_0) = abs(u[3]) > z_init_0
 subset_leave(df) = @subset(df, :t1 .!= :tmax)
+subset_outside(df) = @subset(df, outside.(:u1))
 subset_trap(df) = @subset(df, :t1 .== :tmax)
 
 function get_result_dfs(; dir="simulations")
     df = collect_results(datadir(dir))
 
-    if "tspan" in names(df)
-        @transform!(df, :tmax = last.(:tspan))
-        select!(df, Not(:tspan))
-    else
-        insertcols!(df, :tmax => CurrentSheetTestParticle.DEFAULT_TSPAN[2])
-    end
+    "tspan" ∈ names(df) ? @transform!(df, :tmax = last.(:tspan)) : insertcols!(df, :tmax => DEFAULT_TSPAN[2])
+    "sign" ∈ names(df) || insertcols!(df, :sign => DEFAULT_SIGN)
 
-    @chain df begin
-        @rtransform!(:B = RD_B_field(; θ=:θ, β=:β))
-    end
+    @rtransform!(df, :B = RD_B_field(; θ=:θ, β=:β, sign=:sign))
 end
 
 function get_result(; dir="simulations")
@@ -36,7 +33,7 @@ function process_result!(df::AbstractDataFrame)
     end
 end
 
-function get_result(r::DataFrameRow, params = [:θ, :β, :v, :tmax, :B, :alg])
+function get_result(r::DataFrameRow, params=[:θ, :β, :v, :tmax, :B, :alg, :sign])
     params = string.(params) ∩ names(r)
     @chain r[:results] begin
         insertcols!(Pair.(params, Array(r[params]))...; makeunique=true)
