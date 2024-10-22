@@ -18,7 +18,7 @@ d = wload(datadir(TM_OBS_FILE))
 df = d["df"]
 vPs = d["vPs"]
 tms = d["tms"]
-ergs_approx = ["~10 eV", "~100 eV", "~5 keV", "~100 keV"]
+ergs_approx = ["~10 eV", "~100 eV", "~5 keV", "~100 keV", "~1 MeV"]
 
 @memoize matmul(tm, n::Int) =  n == 0 ? I : tm * matmul(tm, n-1)
 
@@ -77,17 +77,29 @@ end
 
 ws = unique(df.w0) |> sort
 vs = unique(df.v) |> sort
-v0s = vs
-w0s = sample(ws, length(vs))
 
-# Iterate the jump n times and plot the 
-n = 100
-w_hist = pa_jump.(w0s, v0s; n)
+begin
+    v0s = vs
+    w0s = sample(ws, length(vs))
+    n = 100
+    w_hist = pa_jump.(w0s, v0s; n)
+end
 
+
+# plot the history
 let labels = ergs_approx
     f = Figure()
     ax = Axis(f[1,1], xlabel="n", ylabel="Cos(α)")
     contents = stairs!.(w_hist)
     Legend(f[1, 2], contents, labels, "Energy")
     easy_save("pa_jump_history")
+end
+
+
+let labels = ergs_approx, idx = 4:5
+    f = Figure()
+    ax = Axis(f[1,1], xlabel="n", ylabel="Cos(α)")
+    contents = stairs!.(w_hist[idx])
+    Legend(f[1, 2], contents, labels[idx], "Energy")
+    easy_save("pa_jump_history_high")
 end
