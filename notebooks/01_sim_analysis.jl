@@ -12,11 +12,6 @@ df = get_result(; dir);
 θs = vals(df, :θ)
 βs = vals(df, :β)
 
-scale = scales(Color=(;
-    lowclip=:transparent,
-    colorrange=(0.01, 10),
-))
-
 d = (; θ=85, β=47.5, layout=:v)
 sdf = @subset(df, :θ .== d.θ, :β .== d.β)
 let v = histogram(; bins=64, normalization=:pdf)
@@ -28,11 +23,23 @@ end
 # ----
 # Test
 # ----
+colorscale = log10
+
 let dir = "test"
-    df = get_result(; dir);
-    ldf, rdf = split_results(df);
-    pa_pair_plot(ldf, rdf)
+    df = get_result(; dir)
+    ldf, rdf = split_results(df)
+    pa_pair_hist(ldf, rdf)
     easy_save("tm/example")
+end
+
+let dir = "test", figure=(; size=(800, 400))
+    pa_layer() = mapping(xyw...) * density_layer()
+    subset_outside(df) = @subset(df, outside.(:u1; z_init_0=3.5))
+
+    df = get_result(; dir)
+    sdf = @subset(df, :θ .== 85, :β .== 60, :v .!= 8) |> subset_outside
+    pa_pair_hist(sdf; figure, layer = pa_layer())
+    easy_save("tm/example_subset")
 end
 
 
