@@ -104,18 +104,21 @@ begin
         insertcols!(df, :v => v * V_UNIT)
     end
     tm_stats_vPs_df = reduce(vcat, tm_stats_vPs_dfs)
-    # save the data
-    save(datadir(TM_OBS_FILE), Dict("df" => tm_stats_vPs_df))
 end
+
+# save the data
+save(datadir(TM_OBS_FILE), Dict("df" => tm_stats_vPs_df, "tms" => tm_stats_vPs, "vPs" => vPs))
 
 
 using AlgebraOfGraphics
+
+prob = :value => "pdf"
 
 # Plot the transition matrix weighted by the observation data
 # As the observation data is dominated by θ->90° (small $B_n$) and β->45°, the allover transition matrix is dominated by these values
 let cscale = log10
     vP_map = :v => (v -> "vₚ = $(v) (E = $(v2E(v)))") # particle velocity
-    plt = data(tm_stats_vPs_df) * mapping(xyw..., :value, layout=vP_map) * visual(Heatmap; colorscale=cscale)
+    plt = data(tm_stats_vPs_df) * mapping(xyw..., prob, layout=vP_map) * visual(Heatmap; colorscale=cscale)
     scale = scales(Color=(;
         nan_color=:transparent,
         lowclip=:transparent,
@@ -125,16 +128,16 @@ let cscale = log10
     easy_save("tm_stats_vPs")
 end
 
+tm_stat_scales = scales(
+    Color=(; colorrange=(3e-4, 3e-1))
+)
+
 # Plot the transition matrix for Energy = 100 keV
 let cscale = log10, df = tm_stats_vPs_dfs[end]
-    vP_map = :v => (v -> "E = 100 keV") # particle velocity
-    plt = data(df) * mapping(xyw..., :value, layout=vP_map) * visual(Heatmap; colorscale=cscale)
-    scale = scales(Color=(;
-        nan_color=:transparent,
-        lowclip=:transparent,
-        colorrange=(1e-4, 1e-1)
-    ))
-    draw(plt, scale; axis=w_axis, colorbar=(; scale=cscale))
+    figure = (; title="E = 100 keV", titlealign=:center)
+    plt = data(df) * mapping(xyw..., prob) * visual(Heatmap; colorscale=cscale)
+
+    draw(plt, tm_stat_scales; figure, axis=w_axis, colorbar=(; scale=cscale))
     easy_save("tm/tm_stats_100keV")
 end
 
