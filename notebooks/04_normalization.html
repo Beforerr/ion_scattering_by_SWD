@@ -2,15 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.8">
+<meta name="generator" content="quarto-1.6.29">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Zijin Zhang">
-<meta name="author" content="Anton V. Artemyev">
-<meta name="author" content="Vassilis Angelopoulos">
 
-<title>Ion scattering by solar wind discontinuities</title>
+<title>normalization</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -58,10 +35,10 @@ div.csl-indent {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-79bb3942e891885f9f7af119cd221462.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-29a703985b9506ee1f3285ce059650bf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-82a2723a6d3b9471cdde89280c01fecf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-03d3ce69b05c6473b4f06dc23ce2b5ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -90,39 +67,10 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -139,7 +87,7 @@ window.Quarto = {
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../presentations/index.html" aria-current="page"> 
+    <a class="nav-link" href="../presentations/index.html"> 
 <span class="menu-text">Presentation</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -171,149 +119,110 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/04_normalization.html">Transition matrix</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/03_surrogate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Compare the effect of coherent structures on test particle dynamics (surrogate testing)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/04_normalization.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Transition matrix</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/main.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Example Event</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/sim_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Test the different algorithms for the problem</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pptx"><i class="bi bi-file-slides"></i>Powerpoint</a></li></ul></div></div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Ion scattering by solar wind discontinuities</h1>
-</div>
 
 
-<div class="quarto-title-meta-author">
-  <div class="quarto-title-meta-heading">Authors</div>
-  <div class="quarto-title-meta-heading">Affiliation</div>
-  
-    <div class="quarto-title-meta-contents">
-    <p class="author">Zijin Zhang </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-      </div>
-    <div class="quarto-title-meta-contents">
-    <p class="author">Anton V. Artemyev </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-      </div>
-    <div class="quarto-title-meta-contents">
-    <p class="author">Vassilis Angelopoulos </p>
-  </div>
-  <div class="quarto-title-meta-contents">
-      </div>
-  </div>
 
-<div class="quarto-title-meta">
+<pre class="{julia}"><code>using DrWatson
+using CurrentSheetTestParticle
+using Beforerr
+include("../src/utils.jl")
+include("../src/plot.jl")
 
-      
-  
-    
-  </div>
-  
+p = ProblemParams(
+    θ=85, β=45, v=8.0, init_kwargs=(; Nw=256, Nϕ=128)
+)
 
+sols, (wϕs, B) = solve_params(p);
+results = process_sols(sols, B, wϕs)</code></pre>
+<section id="transition-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="transition-matrix">Transition matrix</h2>
+<pre class="{julia}"><code>include("../src/tm.jl")
+weights = 1 ./ results.t1
+tm = transition_matrix_w(results)
+tm_w = transition_matrix_w(results; weights)
+let i = 5, lowclip = 1e-5, colorscale=log10, colorrange=(lowclip, 10)
+    kw = (; colorscale, colorrange)
+    f = Figure()
 
-</header>
+    tmi = tm^i
+    @show sum(tmi; dims=2)
+    @show sum(tmi; dims=1)
 
+    plot!(Axis(f[1,1]), tm; kw...)
+    plot!(Axis(f[2,1]), tmi; kw...)
+    plot!(Axis(f[1,2]), tm_w; kw...)
+    plot!(Axis(f[2,2]), tm_w ^i; kw...)
+    easy_save("tm/tm_weighted")
+end</code></pre>
+<pre class="{julia}"><code>let df = results, xy = (w0, ϕ0), figure = (; size=(1200, 600))
+    f = Figure(; figure...)
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
-<p>The transport of energetic particles within the heliosphere is significantly influenced by the turbulent magnetic field present in the solar wind. However, this turbulence should not be regarded merely as a collection of random magnetic field fluctuations. Instead, the nonlinear energy cascade process results in the formation of coherent structures. These coherent structures have been shown to act as efficient particle scatterers in non-collisional plasmas <span class="citation" data-cites="artemyevSuperfastIonScattering2020">(<a href="#ref-artemyevSuperfastIonScattering2020" role="doc-biblioref">Artemyev et al. 2020</a>)</span>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="./images/moraalCosmicRayModulationEquations2013-fig1.png" class="img-fluid figure-img"></p>
-<figcaption><span class="citation" data-cites="moraalCosmicRayModulationEquations2013">Moraal (<a href="#ref-moraalCosmicRayModulationEquations2013" role="doc-biblioref">2013</a>)</span></figcaption>
-</figure>
-</div>
-</section>
-<section id="test-particle-simulations" class="level1">
-<h1>Test particle simulations</h1>
-<p><span class="math display">\[
-\mathbf{B} = B_0 (\cos θ \ e_z + \sin θ ( \sin φ(z) \ e_z + \cos φ (z) \ e_y))
-\]</span></p>
-<p>with <span class="math inline">\(φ(z) = β \tanh(z)\)</span></p>
-<p>Dimensionless form of the motion equation:</p>
-<p><span class="math display">\[
-\frac{d (γ \mathbf{v})}{dt} = \mathbf{v} \times \mathbf{B} ,
-\frac{d\mathbf{r}}{dt} = \mathbf{v}
-\]</span></p>
-<ul>
-<li><span class="math inline">\(\mathbf{B} \rightarrow \mathbf{B} / B_0\)</span> : background magnetic field magnitude</li>
-<li><span class="math inline">\(\mathbf{r} \rightarrow \mathbf{r} / L\)</span> : discontinuity <span class="math inline">\(L\)</span></li>
-<li><span class="math inline">\(t \rightarrow t/Ω_0\)</span> : gyroperiod</li>
-<li><span class="math inline">\(v \rightarrow v/v_0\)</span> : characteristic velocity <span class="math inline">\(v_0 = Ω_0 L\)</span></li>
-</ul>
-</section>
-<section id="parameters" class="level1">
-<h1>Parameters</h1>
-<p><img src="../figures/wind_hist3d.png" class="img-fluid"></p>
-<p><span class="math inline">\(Δ|B|/|B| &gt; 0.05\)</span> or <span class="math inline">\(ω &gt; 60°\)</span></p>
-<p>The most probable values in the 3D distribution are a characteristic velocity (<span class="math inline">\(v_0\)</span>) of approximately 250 km/s, a in-plane rotation angle (<span class="math inline">\(ω_{in}\)</span>) about 90 degrees, and an azimuthal angle (<span class="math inline">\(θ\)</span>) of around 85 degrees.</p>
-</section>
-<section id="examples-of-pitch-angle-scattering" class="level1">
-<h1>Examples of Pitch angle scattering</h1>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../figures/example_tp.png" class="img-fluid figure-img"></p>
-<figcaption>Example of pitch angle scattering.</figcaption>
-</figure>
-</div>
-<hr>
-</section>
-<section id="example-of-multiple-pitch-angle-scattering-for-different-energies" class="level1">
-<h1>Example of multiple pitch angle scattering for different energies</h1>
-<p><img src="../figures/pa_jump_history.png" class="img-fluid"></p>
-</section>
-<section id="pitch-angle-scattering-by-typical-discontinuity" class="level1">
-<h1>Pitch angle scattering by typical discontinuity</h1>
-<p><img src="../figures/pa_layout=v_β=47.5_θ=85.png" class="img-fluid"></p>
-<p>With in-plane rotation angle (<span class="math inline">\(ω_{in}\)</span>) about 90 degrees, and azimuthal angle (<span class="math inline">\(θ\)</span>) of around 85 degrees.</p>
-</section>
-<section id="examples-of-transition-matrix" class="level1">
-<h1>Examples of transition matrix</h1>
-<p><img src="../figures/tm/example.png" class="img-fluid"></p>
-</section>
-<section id="transition-matrix" class="level1">
-<h1>Transition matrix</h1>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../figures/tm/tm_stats_100keV.png" class="img-fluid figure-img"></p>
-<figcaption>Transition matrix for 100 keV particles.</figcaption>
-</figure>
-</div>
-<hr>
-</section>
-<section id="transition-matrix-for-different-particle-energies" class="level1">
-<h1>Transition matrix for different particle energies</h1>
-<p><img src="../figures/tm_stats_vPs.png" class="img-fluid"></p>
-<hr>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../figures/mixing_rate.png" class="img-fluid figure-img"></p>
-<figcaption>Mixing rates</figcaption>
-</figure>
-</div>
-</section>
-<section id="references" class="level1">
+    spec = data(results) * mapping(xyw...) * density_layer()
+    cdraw!(f[1, 1], spec, tm_scale(); axis=w_axis)
 
+    gl = f[1,2]
+    l = data(df) * mapping(xy...)
+    cdraw!(gl[1, 1], l * (; color=Δw))
+    cdraw!(gl[2, 1], l * (; color=Δt))
+    cdraw!(gl[3, 1], l * (; color=(:Δw, :t1)=&gt;(x, y) -&gt; x/y))
 
+    easy_save("tm/Δw_Δt")
+end</code></pre>
 
 
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-artemyevSuperfastIonScattering2020" class="csl-entry" role="listitem">
-Artemyev, A. V., A. I. Neishtadt, A. A. Vasiliev, V. Angelopoulos, A. A. Vinogradov, and L. M. Zelenyi. 2020. <span>“Superfast Ion Scattering by Solar Wind Discontinuities.”</span> <em>Physical Review E</em> 102 (3): 033201. <a href="https://doi.org/10.1103/PhysRevE.102.033201">https://doi.org/10.1103/PhysRevE.102.033201</a>.
-</div>
-<div id="ref-moraalCosmicRayModulationEquations2013" class="csl-entry" role="listitem">
-Moraal, H. 2013. <span>“Cosmic-<span>Ray Modulation Equations</span>.”</span> <em>Space Science Reviews</em> 176 (1): 299–319. <a href="https://doi.org/10.1007/s11214-011-9819-3">https://doi.org/10.1007/s11214-011-9819-3</a>.
-</div>
-</div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
