@@ -1,3 +1,10 @@
+# Updates
+
+![](figures/tm/tm_weighted.png)
+
+![](figures/tm/%CE%94w_%CE%94t.png)
+
+# Questions
 
 - [ ] Order of magnitude of estimation of the scattering rate.
 

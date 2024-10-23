@@ -1,0 +1,62 @@
+---
+execute: 
+  eval: false
+---
+
+How would normalization affect the transition matrix?
+
+```{julia}
+using DrWatson
+using CurrentSheetTestParticle
+using Beforerr
+include("../src/utils.jl")
+include("../src/plot.jl")
+
+p = ProblemParams(
+    θ=85, β=45, v=8.0, init_kwargs=(; Nw=256, Nϕ=128)
+)
+
+sols, (wϕs, B) = solve_params(p);
+results = process_sols(sols, B, wϕs)
+```
+
+
+## Transition matrix
+
+```{julia}
+include("../src/tm.jl")
+weights = 1 ./ results.t1
+tm = transition_matrix_w(results)
+tm_w = transition_matrix_w(results; weights)
+let i = 5, lowclip = 1e-5, colorscale=log10, colorrange=(lowclip, 10)
+    kw = (; colorscale, colorrange)
+    f = Figure()
+
+    tmi = tm^i
+    @show sum(tmi; dims=2)
+    @show sum(tmi; dims=1)
+
+    plot!(Axis(f[1,1]), tm; kw...)
+    plot!(Axis(f[2,1]), tmi; kw...)
+    plot!(Axis(f[1,2]), tm_w; kw...)
+    plot!(Axis(f[2,2]), tm_w ^i; kw...)
+    easy_save("tm/tm_weighted")
+end
+```
+
+```{julia}
+let df = results, xy = (w0, ϕ0), figure = (; size=(1200, 600))
+    f = Figure(; figure...)
+
+    spec = data(results) * mapping(xyw...) * density_layer()
+    cdraw!(f[1, 1], spec, tm_scale(); axis=w_axis)
+
+    gl = f[1,2]
+    l = data(df) * mapping(xy...)
+    cdraw!(gl[1, 1], l * (; color=Δw))
+    cdraw!(gl[2, 1], l * (; color=Δt))
+    cdraw!(gl[3, 1], l * (; color=(:Δw, :t1)=>(x, y) -> x/y))
+
+    easy_save("tm/Δw_Δt")
+end
+```
