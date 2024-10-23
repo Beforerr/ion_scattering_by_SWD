@@ -16,6 +16,7 @@ include("field.jl")
 include("state.jl")
 include("fieldline.jl")
 include("pa.jl")
+include("equations.jl")
 
 abstol = 1e-7 # Defaults to 1e-5
 reltol = 1e-7 # Defaults to 1e-3
@@ -61,12 +62,12 @@ end
 """
 Solve the system of ODEs.
 """
-function solve_params(B, u0s::Vector; E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_DIFFEQ_KWARGS, kwargs...)
+function solve_params(B, u0s::Vector; f = trace_normalized_B!, E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_DIFFEQ_KWARGS, kwargs...)
     solve_kwargs = merge(diffeq, kwargs)
     alg = _alg(alg)
 
     param = prepare(E, B; species=User)
-    prob = ODEProblem(trace_normalized!, u0s[1], tspan, param)
+    prob = ODEProblem(f, u0s[1], tspan, param)
 
     ensemble_prob = EnsembleProblem(prob, u0s)
     solve(ensemble_prob, alg, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
@@ -76,7 +77,7 @@ function solve_params_boris(B, u0s::Vector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEF
     solve_kwargs = merge(diffeq, kwargs)
 
     param = prepare(E, B; species=User)
-    prob_func = (prob, i, repeat = nothing) -> remake(prob, u0 = u0s[i])
+    prob_func = (prob, i, repeat=nothing) -> remake(prob, u0=u0s[i])
     prob = TraceProblem(u0s[1], tspan, param; prob_func)
 
     TestParticle.solve(prob, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
@@ -96,6 +97,6 @@ function solve_params(B, v::Number, args...; init_kwargs=(;), kwargs...)
     u0s, wϕs = init_states_pm(B, v, args...; init_kwargs...)
     isoutofdomain = isoutofdomain_params(v)
     sol = solve_params(B, u0s; isoutofdomain, kwargs...)
-    return sol, (wϕs, )
+    return sol, (wϕs,)
 end
 end
