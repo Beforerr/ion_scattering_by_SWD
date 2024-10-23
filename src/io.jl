@@ -1,6 +1,7 @@
 using DataFramesMeta
 using CurrentSheetTestParticle
 using CurrentSheetTestParticle: DEFAULT_Z_INIT_0, DEFAULT_TSPAN, DEFAULT_SIGN
+include("utils.jl")
 
 #%%
 outside(u; z_init_0=DEFAULT_Z_INIT_0) = abs(u[3]) > z_init_0
@@ -21,16 +22,6 @@ function get_result(; dir="simulations")
     dfs = get_result_dfs(; dir)
     results = map(get_result, eachrow(dfs))
     vcat(results...)
-end
-
-function process_result!(df::AbstractDataFrame)
-    @chain df begin
-        @rtransform!(:w0 = :wϕ0[1], :ϕ0 = :wϕ0[2], :w1 = cos_pitch_angle(:u1, :B))
-        @transform!(:w0 = clamp.(:w0, -1, 1), :w1 = clamp.(:w1, -1, 1))
-        @transform!(:α0 = acosd.(:w0), :α1 = acosd.(:w1))
-        @transform!(:Δα = :α1 .- :α0, :Δw = :w1 .- :w0)
-        select!(Not(:wϕ0))
-    end
 end
 
 function get_result(r::DataFrameRow, params=[:θ, :β, :v, :tmax, :B, :alg, :sign])
