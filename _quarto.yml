@@ -8,6 +8,11 @@ website:
         href: index.qmd
       - text: "Presentation"
         href: presentations/index.qmd
+      - sidebar:notebooks
+  sidebar:
+    - title: Notebooks
+      id: notebooks
+      contents: "notebooks/**"
 
 manuscript:
   article: index.qmd
@@ -19,7 +24,7 @@ format:
   # jats: default
 
 execute:
-  freeze: true
+  freeze: auto
 
 affiliations:
   - id: ucla
