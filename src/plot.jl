@@ -1,5 +1,4 @@
 using AlgebraOfGraphics
-using LaTeXStrings
 using CairoMakie
 using DataFrames, DataFramesMeta
 using Match
@@ -15,12 +14,14 @@ vals(df, s) = unique(df[!, s]) |> sort
 begin
     w0 = :w0 => "cos(α₀)"
     w1 = :w1 => "cos(α₁)"
+    Δw = :Δw => "Δ cos α"
     α0 = :α0 => "α₀"
     α1 = :α1 => "α₁"
     Δα = :Δα
     ϕ0 = :ϕ0 => "ϕ₀"
     xyα = (α0, α1)
     xyw = (w0, w1)
+    Δt = :t1 => "Δt"
 end
 
 begin
@@ -36,6 +37,7 @@ end
 
 
 begin
+    colorscale = log10
     # density_layer = AlgebraOfGraphics.density(npoints=32)
     density_layer() = histogram(; bins=64, normalization=:pdf) * visual(; colorscale)
     colorrange(; scale=colorscale) = scale == log10 ? (1e-2, 1e1) : (0, 5)
@@ -56,20 +58,23 @@ end
 pa_pair_plot(df::AbstractDataFrame) = pa_pair_plot(data(df))
 
 # Function to plot one figure per column
-pa_layer(s) = @match s begin
-    :v => mapping(col=θ_map, row=β_map)
-    :β => mapping(col=θ_map, row=v_map)
+function pa_layer(s)
+    layout = @match s begin
+        :v => mapping(col=θ_map, row=β_map) 
+        :β => mapping(col=θ_map, row=v_map)
+    end
+    return mapping(xyw...) * density_layer() * layout
 end
 
-function pa_pair_hist!(df::AbstractDataFrame, layout, s=:v; layer=pa_layer(s) * density_layer(), xy=xyw, scales=tm_scale(), axis=w_axis, kwargs...)
+function pa_pair_hist!(df::AbstractDataFrame, layout, s=:v; layer=pa_layer(s), scales=tm_scale(), axis=w_axis, kwargs...)
     vs = vals(df, s)  # Get unique velocity values
-    axs = [layout[1, i] for i in 1:length(vs)]
-    return map(zip(axs, vs)) do (fg, v)
+    fgs = [layout[1, i] for i in 1:length(vs)]
+    return map(zip(fgs, vs)) do (fg, v)
         df_s = @subset(df, $s .== v)
-        plt = data(df_s) * mapping(xy...) * layer
+        plt = data(df_s)  * layer
         grids = draw!(fg, plt, scales; axis, kwargs...)
         r = s == :v ? rename_sym : rename_sym_deg
-        Label(fg[0, :], r(s)(v))
+        Label(fg[0, :], r(s)(v), tellwidth=false)
         grids
     end
 end
@@ -78,7 +83,7 @@ function pa_pair_hist(df; figure=(; size=(1200, 400)), scale=colorscale, kw...)
     fig = Figure(; figure...)
     grids = pa_pair_hist!(df, fig[1, 1]; kw...)
     colorbar!(fig[1:end, end+1], grids[1]; scale)
-    fig
+    fig, grids
 end
 
 function pa_pair_hist(ldf, rdf; figure=(; size=(1200, 800)), scale=colorscale, kw...)
@@ -88,6 +93,12 @@ function pa_pair_hist(ldf, rdf; figure=(; size=(1200, 800)), scale=colorscale, k
     sign_label(fig)
     colorbar!(fig[1:end, end+1], grids[1]; scale)
     fig
+end
+
+# Create Two-dimensional maps of the final value w1 are plotted as functions of the initial pitch-angle cosine w0 and gyrophase φ0
+function w1_map_plot(l; color = w1, scale= scales(;), kwargs...)
+    plt = l * mapping(w0, ϕ0, color=color)
+    draw(plt, scale; kwargs...)
 end
 
 #%%
