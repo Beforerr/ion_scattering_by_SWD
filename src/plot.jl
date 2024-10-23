@@ -86,6 +86,11 @@ function pa_pair_hist(df; figure=(; size=(1200, 400)), scale=colorscale, kw...)
     fig, grids
 end
 
+function sign_label(fig; i1=0, i2=2)
+    Label(fig[i1, :], "Left-hand rotation", font = :bold, tellwidth=false)
+    Label(fig[i2, :], "Right-hand rotation", font = :bold, tellwidth=false)
+end
+
 function pa_pair_hist(ldf, rdf; figure=(; size=(1200, 800)), scale=colorscale, kw...)
     fig = Figure(; figure...)
     grids = pa_pair_hist!(ldf, fig[1, 1]; kw...)
@@ -94,6 +99,29 @@ function pa_pair_hist(ldf, rdf; figure=(; size=(1200, 800)), scale=colorscale, k
     colorbar!(fig[1:end, end+1], grids[1]; scale)
     fig
 end
+
+# %%
+"""
+Plot the distribution of pitch-angle cosine variation
+"""
+function pa_diff_plot!(fig, layer; kwargs...)
+    v = AlgebraOfGraphics.density() * visual(Lines)
+    plt = layer * mapping(Δα) * v
+    axis = (; xlabel="Δα", ylabel="f (Δα)", limits=((-2, 1), (0, 4)))
+    draw!(fig, plt; axis, kwargs...)
+end
+
+function pa_diff_plot(layer; kwargs...)
+    v = AlgebraOfGraphics.density() * visual(Lines)
+    plt = layer * mapping(Δα) * v
+
+    axis = (; xlabel="Δα", ylabel="f (Δα)", limits=((-2, 1), (0, 4)))
+    draw(plt; axis, kwargs...)
+end
+
+pa_diff_plot!(fig, df::AbstractDataFrame; kwargs...) = pa_diff_plot!(fig, data(df) * mapping(col=θ_map, row=β_map, color=v_map); kwargs...)
+pa_diff_plot(df::AbstractDataFrame; kwargs...) = pa_diff_plot(data(df) * mapping(col=θ_map, row=β_map, color=v_map); kwargs...)
+
 
 # Create Two-dimensional maps of the final value w1 are plotted as functions of the initial pitch-angle cosine w0 and gyrophase φ0
 function w1_map_plot(l; color = w1, scale= scales(;), kwargs...)
