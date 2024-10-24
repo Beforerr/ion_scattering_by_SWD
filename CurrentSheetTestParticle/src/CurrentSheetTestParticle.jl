@@ -21,8 +21,9 @@ include("equations.jl")
 abstol = 1e-7 # Defaults to 1e-5
 reltol = 1e-7 # Defaults to 1e-3
 maxiters = 1e6 # Defaults to 1e5
+dtmin = 1e-4 # Reduce the computation for domain checking (as `isoutofdomain` will reject and reducd time step until a step is accepted)
 const DEFAULT_SOLVER = AutoVern9(Rodas4P())
-const DEFAULT_DIFFEQ_KWARGS = (; abstol, reltol, maxiters)
+const DEFAULT_DIFFEQ_KWARGS = (; abstol, reltol, maxiters, dtmin)
 const DEFAULT_BORIS_KWARGS = (; dt=1e-2, savestepinterval=1)
 const DEFAULT_TSPAN = (0, 256)
 const ez = SA[0, 0, 1]
@@ -42,8 +43,7 @@ end
 const E0 = SVector(0.0, 0.0, 0.0)
 E(x) = E0
 
-isoutofdomain_z(u, p, t, z_max) = abs(u[3]) > abs(z_max) ? true : false
-isoutofdomain_z(z_max) = (u, p, t) -> isoutofdomain_z(u, p, t, z_max)
+isoutofdomain_z(z_max) = (u, p, t) -> abs(u[3]) > abs(z_max)
 
 function isoutofdomain_params(v)
     z_init = init_z_pos(v)
