@@ -20,6 +20,29 @@ sols, (wϕs, B) = solve_params(p);
 results = process_sols(sols, B, wϕs)
 ```
 
+## Distribution
+
+```{julia}
+using DataFramesMeta
+@transform! results begin
+    s2α0 = sind.(:α0) .^ 2
+    s2α1 = sind.(:α1) .^ 2
+end
+```
+
+```{julia}
+w_bins = range(-1, 1, length=129)
+α_bins = range(0, 180, length=129)
+sinα_bins = range(0, 1, length=63)
+
+f = Figure(;size=(1200, 600))
+l = data(results) * mapping(row=dims(1)=> renamer(["Initial", "Final"]))
+normalization = :probability
+draw!(f[1, 1], l * mapping([w0, w1] .=> "cos(α)") * histogram(; bins=w_bins, normalization))
+draw!(f[1, 2], l * mapping([α0, α1] .=> "α") * histogram(; bins=α_bins, normalization))
+draw!(f[1, 3], l * mapping([:s2α0, :s2α1] .=> "sin(α)^2") * histogram(; bins=sinα_bins, normalization))
+f
+```
 
 ## Transition matrix
 
@@ -28,7 +51,10 @@ include("../src/tm.jl")
 weights = 1 ./ results.t1
 tm = transition_matrix_w(results)
 tm_w = transition_matrix_w(results; weights)
-let i = 5, lowclip = 1e-5, colorscale=log10, colorrange=(lowclip, 10)
+```
+
+```{julia}
+let i = 5, lowclip = 1e-5, colorscale = log10, colorrange = (lowclip, 10)
     kw = (; colorscale, colorrange)
     f = Figure()
 
@@ -36,10 +62,10 @@ let i = 5, lowclip = 1e-5, colorscale=log10, colorrange=(lowclip, 10)
     @show sum(tmi; dims=2)
     @show sum(tmi; dims=1)
 
-    plot!(Axis(f[1,1]), tm; kw...)
-    plot!(Axis(f[2,1]), tmi; kw...)
-    plot!(Axis(f[1,2]), tm_w; kw...)
-    plot!(Axis(f[2,2]), tm_w ^i; kw...)
+    plot!(Axis(f[1, 1]), tm; kw...)
+    plot!(Axis(f[2, 1]), tmi; kw...)
+    plot!(Axis(f[1, 2]), tm_w; kw...)
+    plot!(Axis(f[2, 2]), tm_w^i; kw...)
     easy_save("tm/tm_weighted")
 end
 ```
@@ -51,11 +77,11 @@ let df = results, xy = (w0, ϕ0), figure = (; size=(1200, 600))
     spec = data(results) * mapping(xyw...) * density_layer()
     cdraw!(f[1, 1], spec, tm_scale(); axis=w_axis)
 
-    gl = f[1,2]
+    gl = f[1, 2]
     l = data(df) * mapping(xy...)
     cdraw!(gl[1, 1], l * (; color=Δw))
     cdraw!(gl[2, 1], l * (; color=Δt))
-    cdraw!(gl[3, 1], l * (; color=(:Δw, :t1)=>(x, y) -> x/y))
+    cdraw!(gl[3, 1], l * (; color=(:Δw, :t1) => (x, y) -> x / y))
 
     easy_save("tm/Δw_Δt")
 end
