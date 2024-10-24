@@ -25,7 +25,7 @@ const DEFAULT_SOLVER = AutoVern9(Rodas4P())
 const DEFAULT_DIFFEQ_KWARGS = (; abstol, reltol, maxiters)
 const DEFAULT_BORIS_KWARGS = (; dt=1e-2, savestepinterval=1)
 const DEFAULT_TSPAN = (0, 256)
-const ez = [0, 0, 1]
+const ez = SA[0, 0, 1]
 
 @kwdef struct ProblemParams
     θ = DEFAULT_θ

@@ -17,7 +17,7 @@ Rotating magnetic field.
 φ = β * tanh(z) is the polar angle
 """
 function RD_B_field(r; dir=3, B=1, θ=DEFAULT_θ, β=DEFAULT_β, sign=DEFAULT_SIGN)
-    z = @view r[dir]
+    z = r[dir]
     φ = β * tanh(z)
     Bz = B * cosd(θ)
     Bx = B * sind(θ) * sind(φ)

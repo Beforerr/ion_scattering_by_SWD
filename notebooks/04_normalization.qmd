@@ -8,6 +8,7 @@ How would normalization affect the transition matrix?
 ```{julia}
 using DrWatson
 using CurrentSheetTestParticle
+using CurrentSheetTestParticle: inverse_v
 using Beforerr
 include("../src/utils.jl")
 include("../src/plot.jl")
@@ -16,7 +17,7 @@ p = ProblemParams(
     θ=85, β=45, v=8.0, init_kwargs=(; Nw=256, Nϕ=128)
 )
 
-sols, (wϕs, B) = solve_params(p);
+sols, (wϕs, B) = solve_params(p; save_everystep=false);
 results = process_sols(sols, B, wϕs)
 ```
 
@@ -43,6 +44,13 @@ draw!(f[1, 2], l * mapping([α0, α1] .=> "α") * histogram(; bins=α_bins, norm
 draw!(f[1, 3], l * mapping([:s2α0, :s2α1] .=> "sin(α)^2") * histogram(; bins=sinα_bins, normalization))
 f
 ```
+```{julia}
+@chain results begin
+    @transform!(:vwϕ_1 = inverse_v.(:u1, :B))
+    @rtransform!(:ϕ1 = :vwϕ_1[2])
+end
+```
+
 
 ## Transition matrix
 

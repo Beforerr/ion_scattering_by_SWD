@@ -55,6 +55,25 @@ end
 init_v(v, w, ϕ, B0; e1=ez) = init_v(v, w, ϕ, local_B_coord(B0; e1=e1)...)
 init_v(v, w, ϕ, r, B; e1=ez) = init_v(v, w, ϕ, B(r); e1=e1)
 
+"""
+    inverse_v(v1, v2, v3, ...)
+
+Inverse the velocity vector (v1, v2, v3) to get the magnitude `v`, cosine pitch angle `w`, and azimuthal angle `ϕ`.
+"""
+function inverse_v(v1, v2, v3)
+    v = sqrt(v1^2 + v2^2 + v3^2)
+    w = v1 / v
+    ϕ = atan(v3, v2)
+    return v, w, ϕ
+end
+
+function inverse_v(v1, v2, v3, e_para, e_perp1, e_perp2)
+    v_local = [e_para e_perp1 e_perp2] \ [v1, v2, v3]
+    return inverse_v(v_local...)
+end
+
+inverse_v(v, B0; e1=ez) = inverse_v(v..., local_B_coord(B0; e1)...)
+inverse_v(u, B::Function; kw...) = @views inverse_v(u[4:6], B(u[1:3]); kw...)
 
 init_range(::Nothing; start, stop, length=2) = range(; start, stop, length)
 init_range(x::AbstractArray; kw...) = x
