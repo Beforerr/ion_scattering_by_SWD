@@ -59,11 +59,12 @@ init_v(v, w, ϕ, r, B; e1=ez) = init_v(v, w, ϕ, B(r); e1=e1)
     inverse_v(v1, v2, v3, ...)
 
 Inverse the velocity vector (v1, v2, v3) to get the magnitude `v`, cosine pitch angle `w`, and azimuthal angle `ϕ`.
+Note: we assume ϕ is in the range of [0, 2π).
 """
 function inverse_v(v1, v2, v3)
     v = sqrt(v1^2 + v2^2 + v3^2)
     w = v1 / v
-    ϕ = atan(v3, v2)
+    ϕ = rem2pi(atan(v3, v2), RoundDown)
     return v, w, ϕ
 end
 
