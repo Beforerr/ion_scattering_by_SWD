@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>surrogate</title>
+<title>Empirically verify the perturbation sensitivity of doubly stochastic matrices</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -128,7 +128,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/03_surrogate.html">Compare the effect of coherent structures on test particle dynamics (surrogate testing)</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/10_test_tm.html">Empirically verify the perturbation sensitivity of doubly stochastic matrices</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -142,7 +142,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notebooks/03_surrogate.html" class="sidebar-item-text sidebar-link active">
+  <a href="../notebooks/03_surrogate.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Compare the effect of coherent structures on test particle dynamics (surrogate testing)</span></a>
   </div>
 </li>
@@ -154,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notebooks/10_test_tm.html" class="sidebar-item-text sidebar-link">
+  <a href="../notebooks/10_test_tm.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Empirically verify the perturbation sensitivity of doubly stochastic matrices</span></a>
   </div>
 </li>
@@ -179,83 +179,257 @@ ul.task-list li input[type="checkbox"] {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Empirically verify the perturbation sensitivity of doubly stochastic matrices</h1>
+</div>
 
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliation</div>
+  
+  </div>
 
-<section id="compare-the-effect-of-coherent-structures-on-test-particle-dynamics-surrogate-testing" class="level1">
-<h1>Compare the effect of coherent structures on test particle dynamics (surrogate testing)</h1>
-<p><a href="https://github.com/JuliaDynamics/TimeseriesSurrogates.jl">JuliaDynamics/TimeseriesSurrogates.jl: A Julia package for generating timeseries surrogates</a></p>
-<pre class="{julia}"><code>using CurrentSheetTestParticle
-using TestParticle
-using StaticArrays
-using TimeseriesSurrogates, CairoMakie
-include("../src/io.jl")
-include("../src/plot.jl")
-include("../src/utils.jl")</code></pre>
-<pre class="{julia}"><code>v = 8
-β = 47.5 # CurrentSheetTestParticle.DEFAULT_β
-θ = 85 # CurrentSheetTestParticle.DEFAULT_θ
-init_kwargs = (; Nw=90, Nϕ=120)
-save_everystep = false
-# start = CurrentSheetTestParticle.init_z_pos(v) |&gt; abs
-z = range(-3, 3; length=4086)
-φ = β * tanh.(z)
-d = ProblemParams(; v, β, θ, init_kwargs)</code></pre>
-<pre class="{julia}"><code>method = RandomFourier(true)
-method = RelativePartialRandomization()
-method = IAAFT()
-s = surrogate(φ, method)
-surroplot(φ, s)</code></pre>
-<pre class="{julia}"><code>Bx = sind(θ) .* sind.(φ)
-Bx_s = sind(θ) .* sind.(s)</code></pre>
-<pre class="{julia}"><code>By = sind(θ) .* cosd.(φ)
-By_s = sind(θ) .* cosd.(s)
-# surroplot(By, By_s)</code></pre>
-<pre class="{julia}"><code>B_s = let B = zeros(3, length(z))
-    B[1, :] .= Bx_s
-    B[2, :] .= By_s
-    B[3, :] .= cosd(θ)
-    E(x) = SVector(0.0, 0.0, 0.0)
-    param = prepare(z, E, B; species=User, i=3)
-    param[3].field_function
-end</code></pre>
-<pre class="{julia}"><code>sols_s, (wϕs,) = solve_params(B_s, v; init_kwargs, save_everystep);
-result_s = process_sols(sols_s, B_s, wϕs)
-sols, (wϕs, B) = solve_params(d; save_everystep);
-result = process_sols(sols, B, wϕs)
+<div class="quarto-title-meta">
 
-result.tmax .= CurrentSheetTestParticle.DEFAULT_TSPAN[2]
-result_s.tmax .= CurrentSheetTestParticle.DEFAULT_TSPAN[2]</code></pre>
-<pre class="{julia}"><code>using GLMakie
-using AlgebraOfGraphics
-GLMakie.activate!()</code></pre>
-<pre class="{julia}"><code>let v = histogram(; bins=64), dfs = subset_leave(result_s), df0 = subset_leave(result)
-    fig = Figure()
+      
+  
     
-    ps = fig[1, 1]
-    plts = data(dfs) * mapping(xyw...) * v
-    fg = draw!(ps, plts; axis=w_axis)
-    colorbar!(ps[1,2], fg)
-    Label(ps[0, 1], "Surrogate"; tellwidth=false)
+  </div>
+  
 
-    p0 = fig[1, 2]
-    plt0 = data(df0) * mapping(xyw...) * v
-    draw!(p0, plt0; axis=w_axis)
-    colorbar!(p0[1,2], fg)
-    Label(p0[0, 1], "Original"; tellwidth=false)
 
-    Label(fig[0, 1:end], "θ = $(d.θ)°, β = $(d.β)°")
+</header>
 
-    surroplot!(fig[2, 1], φ, s)
-    surroplot!(fig[2, 2], Bx, Bx_s)
-    surroplot!(fig[2, 3], By, By_s)
 
-    Label(fig[2, 1][0, 1], "φ"; tellwidth=false)
-    Label(fig[2, 2][0, 1], "Bx"; tellwidth=false)
-    Label(fig[2, 3][0, 1], "By"; tellwidth=false)
+<pre class="{chatgpt}"><code>2. Numerical Stability Considerations
 
-    fig
+Numerical stability refers to how errors—stemming from finite precision arithmetic, rounding, and truncation—propagate through computations involving the matrix.
+
+a. Conditioning
+
+    •   Condition Number: The condition number of a matrix measures how much the output value can change for a small change in the input. For doubly stochastic matrices, the condition number can vary widely depending on the specific matrix. Some are well-conditioned (small condition numbers), implying that they are relatively stable under numerical perturbations, while others are ill-conditioned (large condition numbers), making them sensitive to errors.
+    •   Perturbation Sensitivity: Doubly stochastic matrices can be sensitive to perturbations, especially those near the boundary of the Birkhoff polytope (i.e., those close to permutation matrices). Small numerical errors might push such matrices outside the set of doubly stochastic matrices or significantly alter their properties.
+
+4. Theoretical Insights and Research
+
+Research into the numerical stability of doubly stochastic matrices highlights several key points:
+
+    •   Birkhoff Polytope Structure: The geometric properties of the Birkhoff polytope influence stability. Matrices that lie deep within the polytope (far from permutation matrices) tend to be better conditioned than those near the vertices.
+    •   Spectral Properties: The eigenvalues and singular values of doubly stochastic matrices play a role in their numerical behavior. For instance, the presence of eigenvalues close to zero can indicate potential instability.
+    •   Random Doubly Stochastic Matrices: Probabilistic analyses suggest that randomly generated doubly stochastic matrices often exhibit better conditioning on average, though specific instances may still be problematic.</code></pre>
+<pre class="{julia}"><code>using LinearAlgebra
+using Random</code></pre>
+<section id="generating-a-doubly-stochastic-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="generating-a-doubly-stochastic-matrix">2. Generating a Doubly Stochastic Matrix</h2>
+<blockquote class="blockquote">
+<p>There are multiple ways to generate a doubly stochastic matrix. One common method is using the Sinkhorn-Knopp algorithm, which iteratively normalizes the rows and columns of a non-negative matrix to make it doubly stochastic.</p>
+</blockquote>
+<pre class="{julia}"><code>
+function sinkhorn_knopp(A; max_iters=1000, tol=1e-9, normalize_rows=true, normalize_cols=true)
+    """
+    Applies the Sinkhorn-Knopp algorithm to matrix A to make it doubly stochastic.
+
+    # Arguments
+    - `A::Matrix{Float64}`: Non-negative input matrix
+    - `max_iters::Int`: Maximum number of iterations
+    - `tol::Float64`: Tolerance for convergence
+    - `normalize_rows::Bool`: Whether to normalize rows
+    - `normalize_cols::Bool`: Whether to normalize columns
+
+    # Returns
+    - `Matrix{Float64}`: Doubly stochastic matrix
+    """
+    A = copy(A)
+    n, m = size(A)
+    if n != m
+        error("Matrix must be square.")
+    end
+    for iter in 1:max_iters
+        if normalize_rows
+            row_sums = sum(A, dims=2)
+            A = A ./ row_sums
+        end
+        if normalize_cols
+            col_sums = sum(A, dims=1)
+            A = A ./ col_sums
+        end
+        # Check convergence
+        row_diff = normalize_rows ? maximum(abs.(sum(A, dims=2) .- 1)) : 0.0
+        col_diff = normalize_cols ? maximum(abs.(sum(A, dims=1) .- 1)) : 0.0
+        if row_diff &lt; tol &amp;&amp; col_diff &lt; tol
+            println("Converged in $iter iterations.")
+            break
+        end
+        if iter == max_iters
+            println("Reached maximum iterations without full convergence.")
+        end
+    end
+    return A
+end
+
+# Example: Generate a random non-negative matrix and make it doubly stochastic
+Random.seed!(123)  # For reproducibility
+n = 5  # Size of the matrix
+A = rand(n, n)
+A_ds = sinkhorn_knopp(A)
+println("Doubly Stochastic Matrix A_ds:\n")
+display(A_ds)
+println("Row sums: ", sum(A_ds, dims=2))
+println("Column sums: ", sum(A_ds, dims=1))
+
+i = 5
+A_ds_i = A_ds^i
+println("Matrix A_ds^$i:\n")
+display(A_ds_i)
+println("Row sums: ", sum(A_ds_i, dims=2))
+println("Column sums: ", sum(A_ds_i, dims=1))</code></pre>
+</section>
+<section id="introducing-perturbations" class="level2">
+<h2 class="anchored" data-anchor-id="introducing-perturbations">3. Introducing Perturbations</h2>
+<p>To assess perturbation sensitivity, we can introduce small random perturbations to the doubly stochastic matrix and observe how its properties change.</p>
+<pre class="{julia}"><code>function perturb_matrix(A::Matrix{Float64}, noise_level::Float64)
+    """
+    Adds Gaussian noise to matrix A and projects it back to doubly stochastic.
+    
+    # Arguments
+    - `A::Matrix{Float64}`: Original doubly stochastic matrix
+    - `noise_level::Float64`: Standard deviation of Gaussian noise
+    
+    # Returns
+    - `Matrix{Float64}`: Perturbed doubly stochastic matrix
+    """
+    n, m = size(A)
+    noise = randn(n, m) * noise_level
+    A_perturbed = A + noise
+    # Ensure non-negativity
+    A_perturbed[A_perturbed .&lt; 0] .= 0.0
+    # Re-apply Sinkhorn-Knopp to make it doubly stochastic
+    A_perturbed_ds = sinkhorn_knopp(A_perturbed)
+    return A_perturbed_ds
+end
+
+function perturb_right_stochastic(A::Matrix{Float64}, noise_level::Float64)
+    """
+    Perturbs a right stochastic matrix while preserving row sums.
+
+    # Arguments
+    - `A::Matrix{Float64}`: Original right stochastic matrix
+    - `noise_level::Float64`: Standard deviation of Gaussian noise
+
+    # Returns
+    - `Matrix{Float64}`: Perturbed right stochastic matrix
+    """
+    n, m = size(A)
+    # Add Gaussian noise
+    noise = randn(n, m) * noise_level
+    A_perturbed = A + noise
+    # Set negative entries to a small positive value to maintain non-negativity
+    A_perturbed[A_perturbed .&lt; 1e-8] .= 1e-8
+    # Renormalize rows to sum to 1
+    row_sums = sum(A_perturbed, dims=2)
+    A_perturbed_rs = A_perturbed ./ row_sums
+    return A_perturbed_rs
+end
+
+
+# Example usage
+noise_level = 0.05
+A_rs_perturbed = perturb_right_stochastic(A_ds, noise_level)
+println("Perturbed Right Stochastic Matrix A_rs_perturbed:\n", A_rs_perturbed)
+println("Row sums: ", sum(A_rs_perturbed, dims=2))
+println("Column sums: ", sum(A_rs_perturbed, dims=1))
+
+A_rs_perturbed_i = A_rs_perturbed^100
+println("Matrix A_rs_perturbed^$i:\n")
+display(A_rs_perturbed_i)
+println("Row sums: ", sum(A_rs_perturbed_i, dims=2))
+println("Column sums: ", sum(A_rs_perturbed_i, dims=1)) </code></pre>
+<pre class="{julia}"><code>
+function compute_metrics(A_original::Matrix{Float64}, A_perturbed::Matrix{Float64})
+    """
+    Computes various metrics to assess the difference between two matrices.
+    
+    # Arguments
+    - `A_original::Matrix{Float64}`: Original doubly stochastic matrix
+    - `A_perturbed::Matrix{Float64}`: Perturbed doubly stochastic matrix
+    
+    # Returns
+    - `Dict`: Dictionary containing computed metrics
+    """
+    difference = A_original - A_perturbed
+    absolute_diff = maximum(abs.(difference))
+    relative_diff = maximum(abs.(difference) ./ A_original)
+    
+    # Condition numbers
+    cond_original = cond(A_original)
+    cond_perturbed = cond(A_perturbed)
+    
+    # Eigenvalues
+    eigen_original = eigen(A_original).values
+    eigen_perturbed = eigen(A_perturbed).values
+    eigen_diff = maximum(abs.(eigen_original - eigen_perturbed))
+    
+    # Singular values
+    singular_original = svdvals(A_original)
+    singular_perturbed = svdvals(A_perturbed)
+    singular_diff = maximum(abs.(singular_original - singular_perturbed))
+    
+    # Frobenius norm
+    # frob_norm = norm(difference, Frobenius)
+    
+    return Dict(
+        :absolute_difference =&gt; absolute_diff,
+        :relative_difference =&gt; relative_diff,
+        :condition_number_original =&gt; cond_original,
+        :condition_number_perturbed =&gt; cond_perturbed,
+        :max_eigenvalue_difference =&gt; eigen_diff,
+        :max_singular_difference =&gt; singular_diff
+        # :frobenius_norm =&gt; frob_norm
+    )
+end
+
+# Compute metrics
+metrics = compute_metrics(A_ds, A_perturbed)
+println("Perturbation Metrics:")
+for (key, value) in metrics
+    println("$key: $value")
 end</code></pre>
+<pre class="{julia}"><code>using CairoMakie
+# Define a range of noise levels
+noise_levels = [0.001, 0.005, 0.01, 0.05, 0.1]
+
+# Initialize containers for metrics
+absolute_diffs = Float64[]
+relative_diffs = Float64[]
+cond_originals = Float64[]
+cond_perturbed_vals = Float64[]
+max_eigen_diffs = Float64[]
+max_singular_diffs = Float64[]
+frob_norms = Float64[]
+
+for noise in noise_levels
+    A_p = perturb_matrix(A_ds, noise)
+    m = compute_metrics(A_ds, A_p)
+    push!(absolute_diffs, m[:absolute_difference])
+    push!(relative_diffs, m[:relative_difference])
+    push!(cond_originals, m[:condition_number_original])
+    push!(cond_perturbed_vals, m[:condition_number_perturbed])
+    push!(max_eigen_diffs, m[:max_eigenvalue_difference])
+    push!(max_singular_diffs, m[:max_singular_difference])
+    # push!(frob_norms, m[:frobenius_norm])
+end
+
+# Plotting the results
+f = Figure()
+ax = Axis(f[1, 1], xlabel="Noise Level", ylabel="Metric Value", title="Sensitivity Analysis")
+
+plot!(noise_levels, absolute_diffs, label="Absolute Difference", marker=:o)
+plot!(noise_levels, relative_diffs, label="Relative Difference", marker=:o)
+axislegend(ax, position=:lt)
+# plot!(noise_levels, frob_norms, label="Frobenius Norm", marker=:o)
+display(f)</code></pre>
 
 
 </section>
