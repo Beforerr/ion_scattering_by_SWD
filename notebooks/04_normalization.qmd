@@ -13,14 +13,37 @@ using Beforerr
 include("../src/utils.jl")
 include("../src/plot.jl")
 tmax = CurrentSheetTestParticle.DEFAULT_TSPAN[2]
+save_everystep = false
+verbose = false
+dtmax = 1e-1
+diffeq = (; save_everystep, verbose, dtmax)
 ```
 
 ```{julia}
 p = ProblemParams(
-    θ=85, β=45, v=8.0, init_kwargs=(; Nw=256, Nϕ=128)
+    θ=85, β=45, v=64.0, init_kwargs=(; Nw=256, Nϕ=128)
 )
-sols, (wϕs, B) = solve_params(p; save_everystep=false);
+sols, (wϕs, B) = solve_params(p; diffeq...);
 results = process_sols(sols, B, wϕs)
+results.iter .= 1
+```
+
+```{julia}
+
+function iterate_results(results ;iter=3)
+    results_i = [results]
+    for i in range(1,iter)
+        old_u0s = results_i[i].u1
+        new_u0s = map(old_u0s) do u0
+            [u0[1:2]..., -u0[3], u0[4:6]...]
+        end
+        sols = solve_params(B, new_u0s; diffeq...)
+        results = process_sols(sols, B, wϕs)
+        results.iter .= i+1
+        push!(results_i, results)
+    end
+    vcat(results_i...)
+end
 ```
 
 ## Distribution
@@ -28,17 +51,20 @@ results = process_sols(sols, B, wϕs)
 ```{julia}
 using DataFramesMeta
 
+function process_results_gryo!(df)
+    @chain df begin
+        @rtransform!(:ψ1 = inverse_v(:u1, :B)[3])
+        @transform!(:Δψ = rem2pi.(:ψ1 - :ϕ0 ,RoundDown))
+    end
+end
+
 @chain results begin
     @transform!(
         :s2α0 = sind.(:α0) .^ 2,
         :s2α1 = sind.(:α1) .^ 2,
-        :vwϕ_1 = inverse_v.(:u1, :B),
         :leave = :t1 .!= tmax
     )
-    @rtransform!(
-        :ϕ1 = rem2pi(:vwϕ_1[2], RoundDown),
-        :z1 = :u1[3]
-    )
+    process_results_gryo!
 end
 ```
 
@@ -48,7 +74,7 @@ w_bins = range(-1, 1, length=129)
 sinα_bins = range(0, 1, length=63)
 
 f = Figure(; size=(1200, 600))
-l = data(results) * mapping(row=dims(1) => renamer(["Initial", "Final"]))
+l = data(results) * mapping(row=dims(1) => renamer(["Initial", "Final"]), col = :iter => nonnumeric)
 normalization = :probability
 draw!(f[1, 1], l * mapping([w0, w1] .=> "cos(α)") * histogram(; bins=w_bins, normalization))
 draw!(f[1, 2], l * mapping([α0, α1] .=> "α") * histogram(; bins=α_bins, normalization))
@@ -57,13 +83,11 @@ f
 ```
 
 ```{julia}
-ϕ_bins = range(0, 2π, length=32)
+ψ_bins = range(0, 2π, length=32)
 
-draw(l * mapping([ϕ0, :ϕ1] .=> "ϕ"; layout=:leave) * histogram(; bins=ϕ_bins, normalization))
-```
+draw(l * mapping([ϕ0, :ψ1] .=> "ψ"; layout=leave) * histogram(; bins=ψ_bins))
 
-```{julia}
-draw(data(results) * mapping(w0, ϕ0; color=:z1))
+draw(data(results) * mapping(:Δψ; layout=leave) * histogram())
 ```
 
 ## Transition matrix
@@ -93,6 +117,24 @@ end
 ```
 
 ```{julia}
+let i = 5, df = results, binedge = range(0, 1, length=32)
+    kw = (;)
+    binedges = (binedge, binedge)
+    h=Hist2D((df.s2α0, df.s2α1); binedges)
+    tm=transition_matrix(h)
+    tmi = tm^i
+    f = Figure()
+    plot!(Axis(f[1, 1]), tm; kw...)
+    plot!(Axis(f[2, 1]), tmi; kw...)
+    @info sum(tmi; dims=1)
+    @info sum(tmi; dims=2)
+    f
+end
+```
+
+```{julia}
+ψ_scale() = scales(Color=(;colormap=:brocO))
+
 let df = results, xy = (w0, ϕ0), figure = (; size=(1200, 600))
     f = Figure(; figure...)
 
@@ -103,8 +145,22 @@ let df = results, xy = (w0, ϕ0), figure = (; size=(1200, 600))
     l = data(df) * mapping(xy...)
     cdraw!(gl[1, 1], l * (; color=Δw))
     cdraw!(gl[2, 1], l * (; color=Δt))
-    cdraw!(gl[3, 1], l * (; color=(:Δw, :t1) => (x, y) -> x / y))
+    cdraw!(gl[3, 1], l * (; color=:ψ1,), ψ_scale(); colorbar = (;colormap=(:brocO)))
+    # cdraw!(gl[3, 1], l * (; color=(:Δw, :t1) => (x, y) -> x / y))
 
     easy_save("tm/Δw_Δt")
 end
+```
+
+### Averaging
+
+```{julia}
+using StatsBase
+results_avg = combine(groupby(results, :w0), :Δψ => mean, :Δw => mean; renamecols=false)
+sort!(results_avg, :w0)
+results_avg.Δw_cumsum .= cumsum(results_avg.Δw)
+
+r = renamer(["<Δψ>", "<Δ cos α>", "<Δ cos α> cumsum"])
+ys = [:Δψ, :Δw, ]
+draw(data(results_avg) * mapping(w0, ys; color = dims(1)=>r) * visual(Scatter))
 ```
