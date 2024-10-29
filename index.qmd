@@ -73,16 +73,41 @@ Scan the parameter with angle difference by 10 degree and velocity by ...
 
 ![Transition matrix for different particle energies](figures/tm_stats_vPs.png)
 
-::: {#fig-pa_jump_history}
+
+# Examples of transition matrix
+
+![](figures/tm/example.png)
+
+![θ = 85°, β = 60°](figures/tm/example_subset.png)
+
+::: {#fig-tm-stats-100keV}
+![](figures/tm/tm_stats_100keV.png)
+
+Transition matrix for 100 keV particles.
+:::
+
+
+$$
+\begin{aligned}
+M_1(n) = ∑_i (α_i^n - α_i^0) / ∑_i
+\\
+M_2(n) = ∑_i (α_i^n - α_i^0)^2  -M_1^2 / ∑_i
+\end{aligned}
+$$
+
+::: {#fig-pa-jump-history}
 ![](figures/pa_jump_history.png)
 
 Examples of ion pitch angle scattering by solar wind discontinuities for different energies.
 :::
 
-::: {#fig-tm_stats_100keV}
+![](figures/pa_jump_history_high.png)
+
+# Mixing rates
+
+:::
 ![](figures/tm/tm_stats_100keV.png)
 
-Transition matrix for 100 keV particles.
 :::
 
 # Notations
@@ -107,5 +132,6 @@ multivariate discrete non-parametric distribution
 
 ## References
 
+-   @malaraEnergeticParticleDynamics2023
 -   @malaraChargedparticleChaoticDynamics2021
 -   @artemyevSuperfastIonScattering2020
