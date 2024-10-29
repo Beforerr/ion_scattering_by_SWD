@@ -1,5 +1,10 @@
 # Updates
 
+## 2024-10-29
+
+![](figures/pa_cdf.png)
+
+
 ![](figures/tm/tm_weighted.png)
 
 ![](figures/tm/%CE%94w_%CE%94t.png)

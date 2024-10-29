@@ -21,7 +21,7 @@ diffeq = (; save_everystep, verbose, dtmax)
 
 ```{julia}
 p = ProblemParams(
-    θ=85, β=45, v=64.0, init_kwargs=(; Nw=256, Nϕ=128)
+    θ=85, β=45, v=64.0, init_kwargs=(; Nw=256, Nϕ=256)
 )
 sols, (wϕs, B) = solve_params(p; diffeq...);
 results = process_sols(sols, B, wϕs)
@@ -30,16 +30,16 @@ results.iter .= 1
 
 ```{julia}
 
-function iterate_results(results ;iter=3)
+function iterate_results(results; iter=3)
     results_i = [results]
-    for i in range(1,iter)
+    for i in range(1, iter)
         old_u0s = results_i[i].u1
         new_u0s = map(old_u0s) do u0
             [u0[1:2]..., -u0[3], u0[4:6]...]
         end
         sols = solve_params(B, new_u0s; diffeq...)
         results = process_sols(sols, B, wϕs)
-        results.iter .= i+1
+        results.iter .= i + 1
         push!(results_i, results)
     end
     vcat(results_i...)
@@ -54,7 +54,7 @@ using DataFramesMeta
 function process_results_gryo!(df)
     @chain df begin
         @rtransform!(:ψ1 = inverse_v(:u1, :B)[3])
-        @transform!(:Δψ = rem2pi.(:ψ1 - :ϕ0 ,RoundDown))
+        @transform!(:Δψ = rem2pi.(:ψ1 - :ϕ0, RoundDown))
     end
 end
 
@@ -74,7 +74,7 @@ w_bins = range(-1, 1, length=129)
 sinα_bins = range(0, 1, length=63)
 
 f = Figure(; size=(1200, 600))
-l = data(results) * mapping(row=dims(1) => renamer(["Initial", "Final"]), col = :iter => nonnumeric)
+l = data(results) * mapping(row=dims(1) => renamer(["Initial", "Final"]), col=:iter => nonnumeric)
 normalization = :probability
 draw!(f[1, 1], l * mapping([w0, w1] .=> "cos(α)") * histogram(; bins=w_bins, normalization))
 draw!(f[1, 2], l * mapping([α0, α1] .=> "α") * histogram(; bins=α_bins, normalization))
@@ -120,8 +120,8 @@ end
 let i = 5, df = results, binedge = range(0, 1, length=32)
     kw = (;)
     binedges = (binedge, binedge)
-    h=Hist2D((df.s2α0, df.s2α1); binedges)
-    tm=transition_matrix(h)
+    h = Hist2D((df.s2α0, df.s2α1); binedges)
+    tm = transition_matrix(h)
     tmi = tm^i
     f = Figure()
     plot!(Axis(f[1, 1]), tm; kw...)
@@ -133,7 +133,7 @@ end
 ```
 
 ```{julia}
-ψ_scale() = scales(Color=(;colormap=:brocO))
+ψ_scale() = scales(Color=(; colormap=:brocO))
 
 let df = results, xy = (w0, ϕ0), figure = (; size=(1200, 600))
     f = Figure(; figure...)
@@ -145,7 +145,7 @@ let df = results, xy = (w0, ϕ0), figure = (; size=(1200, 600))
     l = data(df) * mapping(xy...)
     cdraw!(gl[1, 1], l * (; color=Δw))
     cdraw!(gl[2, 1], l * (; color=Δt))
-    cdraw!(gl[3, 1], l * (; color=:ψ1,), ψ_scale(); colorbar = (;colormap=(:brocO)))
+    cdraw!(gl[3, 1], l * (; color=:ψ1,), ψ_scale(); colorbar=(; colormap=(:brocO)))
     # cdraw!(gl[3, 1], l * (; color=(:Δw, :t1) => (x, y) -> x / y))
 
     easy_save("tm/Δw_Δt")
@@ -161,6 +161,88 @@ sort!(results_avg, :w0)
 results_avg.Δw_cumsum .= cumsum(results_avg.Δw)
 
 r = renamer(["<Δψ>", "<Δ cos α>", "<Δ cos α> cumsum"])
-ys = [:Δψ, :Δw, ]
-draw(data(results_avg) * mapping(w0, ys; color = dims(1)=>r) * visual(Scatter))
+ys = [:Δψ, :Δw,]
+draw(data(results_avg) * mapping(w0, ys; color=dims(1) => r) * visual(Scatter))
 ```
+
+## Cumulative distribution
+
+```{julia}
+using StatsBase, Distributions
+"""
+    EmpiricalDistribution(data::Vector{T} where T <: Real)
+
+Create a discrete empirical distribution based on observations.
+"""
+function EmpiricalDistribution(data)
+    data = sort(data) #sort the observations
+    empirical_cdf = ecdf(data) #create empirical cdf
+    data_clean = unique(data) #remove duplicates to avoid allunique error
+    cdf_data = empirical_cdf.(data_clean) #apply ecdf to data
+    pmf_data = vcat(cdf_data[1], diff(cdf_data)) #create pmf from the cdf
+    DiscreteNonParametric(data_clean, pmf_data) #define distribution
+end
+
+function rand_jump(x0; da=ecdfs_da)
+    d = da[x=Near(x0)]
+    rand(d)
+end
+
+function rand_jumps(x::AbstractVector, n; kw...)
+    for i in 1:n
+        push!(x, rand_jump(x[end]; kw...))
+    end
+    return x
+end
+
+rand_jumps(x0; n=1, kw...) = rand_jumps([x0], n; kw...)
+```
+
+```{julia}
+x = :w0
+y = :w1
+
+x = :s2α0
+y = :s2α1
+
+function df_rand_jumps(x, y; n = 100, counts=16)
+    ecdfs = combine(
+        groupby(results, x),
+        y => EmpiricalDistribution;
+        renamecols=false
+    )
+    sort!(ecdfs, x)
+
+    da = DimArray(ecdfs[!, y], (x=ecdfs[!, x],))
+
+    xs = repeat(ecdfs[!, x], counts)
+
+    xs_jumps = rand_jumps.(xs; n, da=da) |> stack
+end
+
+s2α0_s2α1_jumps = df_rand_jumps(:s2α0, :s2α1; n=100)
+w0_w1_jumps = df_rand_jumps(:w0, :w1; n=100)
+
+using CairoMakie
+
+let position = :rb,
+
+    mid_index = div(size(s2α0_s2α1_jumps, 1), 2)
+
+    f = Figure(;)
+    ax = Axis(f[1, 1]; xlabel = "sin(α)^2", ylabel = "F")
+    ecdfplot!(s2α0_s2α1_jumps[1, :]; label="Initial")
+    ecdfplot!(s2α0_s2α1_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
+    ecdfplot!(s2α0_s2α1_jumps[end, :]; label="Final", color=Cycled(3))
+    
+    Axis(f[1, 2]; xlabel = "cos(α)")
+    ecdfplot!(w0_w1_jumps[1, :]; label="Initial")
+    ecdfplot!(w0_w1_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
+    ecdfplot!(w0_w1_jumps[end, :]; label="Final", color=Cycled(3))
+
+    Legend(f[0, 1:end], ax; tellheight = true, orientation = :horizontal)
+    easy_save("pa_cdf")
+end
+```
+
+![](../figures/pa_cdf.png)
