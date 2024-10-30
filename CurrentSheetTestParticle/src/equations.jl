@@ -1,5 +1,6 @@
 using TestParticle: FTLError
 using TestParticle: c
+using LinearAlgebra: ×
 
 const c2 = c^2
 
@@ -20,28 +21,30 @@ Optimized version of `trace_normalized!` for the case of static magnetic field.
 function trace_normalized_B!(du, u, p, t)
     _, _, B = p
 
-    vx, vy, vz = @view u[4:6]
-    Bx, By, Bz = B(u, t)
+    v = @views SVector{3}(u[4:6])
+    b = SVector{3}(B(u, t))
 
-    du[1], du[2], du[3] = vx, vy, vz
-    du[4] = vy * Bz - vz * By
-    du[5] = vz * Bx - vx * Bz
-    du[6] = vx * By - vy * Bx
+    du[1:3] = v
+    du[4:6] = v × b
 end
 
 """
-Normalized ODE equations for relativistic charged particle moving in static magnetic field with in-place form.
+Out-of-place version of `trace_normalized_B!`, with a little bit better performance.
 """
-function trace_relativistic_normalized_B!(du, u, p, t)
-    q2m, B, v0 = p
+function trace_normalized_B(u, p, t)
+    _, _, B = p
 
-    vx, vy, vz = @view u[4:6]
-    Bx, By, Bz = B(u, t)
+    v = @views SVector{3}(u[4:6])
+    b = SVector{3}(B(u, t))
 
-    γInv = gamma_reciprocal(vx, vy, vz; v0=v0)
+    dv = v × b
+    return SVector{6}(v..., dv...)
+end
 
-    du[1], du[2], du[3] = vx, vy, vz
-    du[4] = q2m * γInv * (vy * Bz - vz * By)
-    du[5] = q2m * γInv * (vz * Bx - vx * Bz)
-    du[6] = q2m * γInv * (vx * By - vy * Bx)
+function trace_normalized_B_1D!(du, u, p, t; dir=1)
+    _, _, B = p
+    v = @views SVector{3}(u[4:6])
+    b = SVector{3}(B(u, t))
+    du[1] = v[dir]
+    du[2:4] = v × b
 end

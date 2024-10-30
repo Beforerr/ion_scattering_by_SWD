@@ -11,6 +11,7 @@ export solve_params, dsolve_params
 export w_ϕ_pairs, init_state, init_states, init_states_pm, filter_wϕs!
 export isoutofdomain_params
 export ProblemParams
+export trace_normalized_B!, trace_normalized_B
 
 include("field.jl")
 include("state.jl")
@@ -59,21 +60,26 @@ function _alg(alg)
     end
 end
 
+isinplace(f) = first(methods(f)).nargs == 5
+
 """
 Solve the system of ODEs.
 """
-function solve_params(B, u0s::Vector; f = trace_normalized_B!, E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_DIFFEQ_KWARGS, kwargs...)
+function solve_params(B, u0s::AbstractVector; f=trace_normalized_B!, E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_DIFFEQ_KWARGS, kwargs...)
     solve_kwargs = merge(diffeq, kwargs)
     alg = _alg(alg)
+
+    u0s = isinplace(f) ? u0s : [SVector{6}(u0) for u0 in u0s]
 
     param = prepare(E, B; species=User)
     prob = ODEProblem(f, u0s[1], tspan, param)
 
-    ensemble_prob = EnsembleProblem(prob, u0s)
+    prob_func = (prob, i, repeat=nothing) -> remake(prob, u0=u0s[i])
+    ensemble_prob = EnsembleProblem(prob; prob_func, safetycopy=false)
     solve(ensemble_prob, alg, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
 end
 
-function solve_params_boris(B, u0s::Vector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_BORIS_KWARGS, kwargs...)
+function solve_params_boris(B, u0s::AbstractVector; E=E, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_BORIS_KWARGS, kwargs...)
     solve_kwargs = merge(diffeq, kwargs)
 
     param = prepare(E, B; species=User)
