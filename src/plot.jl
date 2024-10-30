@@ -22,6 +22,7 @@ begin
     xyα = (α0, α1)
     xyw = (w0, w1)
     Δt = :t1 => "Δt"
+    leave = :leave => renamer([true => "Leave", false => "Trapped"])
 end
 
 begin

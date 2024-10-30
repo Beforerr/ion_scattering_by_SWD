@@ -1,3 +1,8 @@
+---
+execute: 
+  eval: false
+  freeze: true
+---
 # Compare the effect of coherent structures on test particle dynamics (surrogate testing)
 
 [JuliaDynamics/TimeseriesSurrogates.jl: A Julia package for generating timeseries surrogates](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl)
