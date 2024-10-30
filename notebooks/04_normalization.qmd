@@ -64,6 +64,7 @@ end
         :s2α1 = sind.(:α1) .^ 2,
         :leave = :t1 .!= tmax
     )
+    @transform!(:Δs2α = :s2α1 - :s2α0)
     process_results_gryo!
 end
 ```
@@ -74,7 +75,7 @@ w_bins = range(-1, 1, length=129)
 sinα_bins = range(0, 1, length=63)
 
 f = Figure(; size=(1200, 600))
-l = data(results) * mapping(row=dims(1) => renamer(["Initial", "Final"]), col=:iter => nonnumeric)
+l = data(results) * mapping(row=AlgebraOfGraphics.dims(1) => renamer(["Initial", "Final"]), col=:iter => nonnumeric)
 normalization = :probability
 draw!(f[1, 1], l * mapping([w0, w1] .=> "cos(α)") * histogram(; bins=w_bins, normalization))
 draw!(f[1, 2], l * mapping([α0, α1] .=> "α") * histogram(; bins=α_bins, normalization))
@@ -117,7 +118,7 @@ end
 ```
 
 ```{julia}
-let i = 5, df = results, binedge = range(0, 1, length=32)
+let i = 16, df = results, binedge = range(0, 1, length=64)
     kw = (;)
     binedges = (binedge, binedge)
     h = Hist2D((df.s2α0, df.s2α1); binedges)
@@ -183,29 +184,22 @@ function EmpiricalDistribution(data)
     DiscreteNonParametric(data_clean, pmf_data) #define distribution
 end
 
-function rand_jump(x0; da=ecdfs_da)
+function rand_jump(x0, da)
     d = da[x=Near(x0)]
     rand(d)
 end
 
 function rand_jumps(x::AbstractVector, n; kw...)
     for i in 1:n
-        push!(x, rand_jump(x[end]; kw...))
+
+        push!(x, x[end] + rand_jump(x[end]; kw...))
     end
     return x
 end
 
 rand_jumps(x0; n=1, kw...) = rand_jumps([x0], n; kw...)
-```
 
-```{julia}
-x = :w0
-y = :w1
-
-x = :s2α0
-y = :s2α1
-
-function df_rand_jumps(x, y; n = 100, counts=16)
+function df_rand_jumps(x, y; n = 100, counts=1024)
     ecdfs = combine(
         groupby(results, x),
         y => EmpiricalDistribution;
@@ -215,30 +209,33 @@ function df_rand_jumps(x, y; n = 100, counts=16)
 
     da = DimArray(ecdfs[!, y], (x=ecdfs[!, x],))
 
-    xs = repeat(ecdfs[!, x], counts)
+    min_x, max_x = extrema(ecdfs[!, x])
+    xs = range(min_x, max_x, length=counts)
 
     xs_jumps = rand_jumps.(xs; n, da=da) |> stack
 end
+```
 
-s2α0_s2α1_jumps = df_rand_jumps(:s2α0, :s2α1; n=100)
-w0_w1_jumps = df_rand_jumps(:w0, :w1; n=100)
+```{julia}
+s2α_jumps = df_rand_jumps(:s2α0, :Δs2α; n=100)
+w_jumps = df_rand_jumps(:w0, :Δw; n=100)
 
 using CairoMakie
 
 let position = :rb,
 
-    mid_index = div(size(s2α0_s2α1_jumps, 1), 2)
+    mid_index = div(size(s2α_jumps, 1), 2)
 
     f = Figure(;)
     ax = Axis(f[1, 1]; xlabel = "sin(α)^2", ylabel = "F")
-    ecdfplot!(s2α0_s2α1_jumps[1, :]; label="Initial")
-    ecdfplot!(s2α0_s2α1_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
-    ecdfplot!(s2α0_s2α1_jumps[end, :]; label="Final", color=Cycled(3))
+    ecdfplot!(s2α_jumps[1, :]; label="Initial")
+    ecdfplot!(s2α_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
+    ecdfplot!(s2α_jumps[end, :]; label="Final", color=Cycled(3))
     
     Axis(f[1, 2]; xlabel = "cos(α)")
-    ecdfplot!(w0_w1_jumps[1, :]; label="Initial")
-    ecdfplot!(w0_w1_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
-    ecdfplot!(w0_w1_jumps[end, :]; label="Final", color=Cycled(3))
+    ecdfplot!(w_jumps[1, :]; label="Initial")
+    ecdfplot!(w_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
+    ecdfplot!(w_jumps[end, :]; label="Final", color=Cycled(3))
 
     Legend(f[0, 1:end], ax; tellheight = true, orientation = :horizontal)
     easy_save("pa_cdf")
@@ -246,3 +243,13 @@ end
 ```
 
 ![](../figures/pa_cdf.png)
+
+```{julia}
+# calculate the moments of the distribution
+let jumps = s2α_jumps
+    diffs = jumps .- jumps[1, :]'
+    m1 = mean(diffs, dims=2)
+    m2 = mean(diffs .^ 2, dims=2) - m1 .^ 2
+    scatterlines(vec(m2))
+end
+```
