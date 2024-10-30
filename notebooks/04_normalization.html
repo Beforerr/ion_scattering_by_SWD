@@ -96,6 +96,10 @@ ul.task-list li input[type="checkbox"] {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-notebooks">    
         <li>
+    <a class="dropdown-item" href="../notebooks/02_mixing_rates.html">
+ <span class="dropdown-text">Mixing rates</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../notebooks/03_surrogate.html">
  <span class="dropdown-text">Compare the effect of coherent structures on test particle dynamics (surrogate testing)</span></a>
   </li>  
@@ -140,6 +144,12 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/02_mixing_rates.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Mixing rates</span></a>
+  </div>
+</li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../notebooks/03_surrogate.html" class="sidebar-item-text sidebar-link">
@@ -227,11 +237,6 @@ function process_results_gryo!(df)
 end
 
 @chain results begin
-    @transform!(
-        :s2α0 = sind.(:α0) .^ 2,
-        :s2α1 = sind.(:α1) .^ 2,
-        :leave = :t1 .!= tmax
-    )
     process_results_gryo!
 end</code></pre>
 <pre class="{julia}"><code>w_bins = range(-1, 1, length=129)
@@ -239,7 +244,7 @@ end</code></pre>
 sinα_bins = range(0, 1, length=63)
 
 f = Figure(; size=(1200, 600))
-l = data(results) * mapping(row=dims(1) =&gt; renamer(["Initial", "Final"]), col=:iter =&gt; nonnumeric)
+l = data(results) * mapping(row=AlgebraOfGraphics.dims(1) =&gt; renamer(["Initial", "Final"]), col=:iter =&gt; nonnumeric)
 normalization = :probability
 draw!(f[1, 1], l * mapping([w0, w1] .=&gt; "cos(α)") * histogram(; bins=w_bins, normalization))
 draw!(f[1, 2], l * mapping([α0, α1] .=&gt; "α") * histogram(; bins=α_bins, normalization))
@@ -271,7 +276,7 @@ tm_w = transition_matrix_w(results; weights)</code></pre>
     plot!(Axis(f[2, 2]), tm_w^i; kw...)
     easy_save("tm/tm_weighted")
 end</code></pre>
-<pre class="{julia}"><code>let i = 5, df = results, binedge = range(0, 1, length=32)
+<pre class="{julia}"><code>let i = 16, df = results, binedge = range(0, 1, length=64)
     kw = (;)
     binedges = (binedge, binedge)
     h = Hist2D((df.s2α0, df.s2α1); binedges)
@@ -315,79 +320,38 @@ draw(data(results_avg) * mapping(w0, ys; color=dims(1) =&gt; r) * visual(Scatter
 </section>
 <section id="cumulative-distribution" class="level2">
 <h2 class="anchored" data-anchor-id="cumulative-distribution">Cumulative distribution</h2>
-<pre class="{julia}"><code>using StatsBase, Distributions
-"""
-    EmpiricalDistribution(data::Vector{T} where T &lt;: Real)
-
-Create a discrete empirical distribution based on observations.
-"""
-function EmpiricalDistribution(data)
-    data = sort(data) #sort the observations
-    empirical_cdf = ecdf(data) #create empirical cdf
-    data_clean = unique(data) #remove duplicates to avoid allunique error
-    cdf_data = empirical_cdf.(data_clean) #apply ecdf to data
-    pmf_data = vcat(cdf_data[1], diff(cdf_data)) #create pmf from the cdf
-    DiscreteNonParametric(data_clean, pmf_data) #define distribution
-end
-
-function rand_jump(x0; da=ecdfs_da)
-    d = da[x=Near(x0)]
-    rand(d)
-end
-
-function rand_jumps(x::AbstractVector, n; kw...)
-    for i in 1:n
-        push!(x, rand_jump(x[end]; kw...))
-    end
-    return x
-end
-
-rand_jumps(x0; n=1, kw...) = rand_jumps([x0], n; kw...)</code></pre>
-<pre class="{julia}"><code>x = :w0
-y = :w1
-
-x = :s2α0
-y = :s2α1
-
-function df_rand_jumps(x, y; n = 100, counts=16)
-    ecdfs = combine(
-        groupby(results, x),
-        y =&gt; EmpiricalDistribution;
-        renamecols=false
-    )
-    sort!(ecdfs, x)
-
-    da = DimArray(ecdfs[!, y], (x=ecdfs[!, x],))
-
-    xs = repeat(ecdfs[!, x], counts)
-
-    xs_jumps = rand_jumps.(xs; n, da=da) |&gt; stack
-end
-
-s2α0_s2α1_jumps = df_rand_jumps(:s2α0, :s2α1; n=100)
-w0_w1_jumps = df_rand_jumps(:w0, :w1; n=100)
+<pre class="{julia}"><code>include("../src/jump.jl")</code></pre>
+<pre class="{julia}"><code>s2α_jumps = df_rand_jumps(results, :s2α0, :Δs2α; n=100)
+w_jumps = df_rand_jumps(results, :w0, :Δw; n=100)
 
 using CairoMakie
 
 let position = :rb,
 
-    mid_index = div(size(s2α0_s2α1_jumps, 1), 2)
+    mid_index = div(size(s2α_jumps, 1), 2)
 
     f = Figure(;)
     ax = Axis(f[1, 1]; xlabel = "sin(α)^2", ylabel = "F")
-    ecdfplot!(s2α0_s2α1_jumps[1, :]; label="Initial")
-    ecdfplot!(s2α0_s2α1_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
-    ecdfplot!(s2α0_s2α1_jumps[end, :]; label="Final", color=Cycled(3))
+    ecdfplot!(s2α_jumps[1, :]; label="Initial")
+    ecdfplot!(s2α_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
+    ecdfplot!(s2α_jumps[end, :]; label="Final", color=Cycled(3))
     
     Axis(f[1, 2]; xlabel = "cos(α)")
-    ecdfplot!(w0_w1_jumps[1, :]; label="Initial")
-    ecdfplot!(w0_w1_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
-    ecdfplot!(w0_w1_jumps[end, :]; label="Final", color=Cycled(3))
+    ecdfplot!(w_jumps[1, :]; label="Initial")
+    ecdfplot!(w_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
+    ecdfplot!(w_jumps[end, :]; label="Final", color=Cycled(3))
 
     Legend(f[0, 1:end], ax; tellheight = true, orientation = :horizontal)
     easy_save("pa_cdf")
 end</code></pre>
 <p><img src="../figures/pa_cdf.png" class="img-fluid"></p>
+<pre class="{julia}"><code># calculate the moments of the distribution
+let jumps = s2α_jumps
+    diffs = jumps .- jumps[1, :]'
+    m1 = mean(diffs, dims=2)
+    m2 = mean(diffs .^ 2, dims=2) - m1 .^ 2
+    scatterlines(vec(m2))
+end</code></pre>
 
 
 </section>

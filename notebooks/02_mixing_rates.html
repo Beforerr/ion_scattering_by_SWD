@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>notes</title>
+<title>mixing_rates</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,22 +23,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-29a703985b9506ee1f3285ce059650bf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-03d3ce69b05c6473b4f06dc23ce2b5ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-29a703985b9506ee1f3285ce059650bf.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-03d3ce69b05c6473b4f06dc23ce2b5ff.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -67,39 +67,10 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-sidebar floating nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -112,15 +83,15 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./index.html"> 
+    <a class="nav-link" href="../index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./notes.html" aria-current="page"> 
+    <a class="nav-link" href="../notes.html"> 
 <span class="menu-text">Notes</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./presentations/index.html"> 
+    <a class="nav-link" href="../presentations/index.html"> 
 <span class="menu-text">Presentation</span></a>
   </li>  
   <li class="nav-item dropdown ">
@@ -129,27 +100,27 @@ window.Quarto = {
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-notebooks">    
         <li>
-    <a class="dropdown-item" href="./notebooks/02_mixing_rates.html">
+    <a class="dropdown-item" href="../notebooks/02_mixing_rates.html">
  <span class="dropdown-text">Mixing rates</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./notebooks/03_surrogate.html">
+    <a class="dropdown-item" href="../notebooks/03_surrogate.html">
  <span class="dropdown-text">Compare the effect of coherent structures on test particle dynamics (surrogate testing)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./notebooks/04_normalization.html">
+    <a class="dropdown-item" href="../notebooks/04_normalization.html">
  <span class="dropdown-text">Distribution</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./notebooks/10_test_tm.html">
+    <a class="dropdown-item" href="../notebooks/10_test_tm.html">
  <span class="dropdown-text">Empirically verify the perturbation sensitivity of doubly stochastic matrices</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./notebooks/main.html">
+    <a class="dropdown-item" href="../notebooks/main.html">
  <span class="dropdown-text">Example Event</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./notebooks/sim_analysis.html">
+    <a class="dropdown-item" href="../notebooks/sim_analysis.html">
  <span class="dropdown-text">Test the different algorithms for the problem</span></a>
   </li>  
     </ul>
@@ -160,10 +131,63 @@ window.Quarto = {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/02_mixing_rates.html">Mixing rates</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/02_mixing_rates.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Mixing rates</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/03_surrogate.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Compare the effect of coherent structures on test particle dynamics (surrogate testing)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/04_normalization.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Distribution</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/10_test_tm.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Empirically verify the perturbation sensitivity of doubly stochastic matrices</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/main.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Example Event</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/sim_analysis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Test the different algorithms for the problem</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     
 <!-- main -->
@@ -172,37 +196,125 @@ window.Quarto = {
 
 
 
-<section id="updates" class="level1">
-<h1>Updates</h1>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section">2024-10-30</h2>
-<p><img src="figures/mixing_rate_sin2.png" class="img-fluid"></p>
-</section>
-<section id="section-1" class="level2">
-<h2 class="anchored" data-anchor-id="section-1">2024-10-29</h2>
-<p><img src="figures/pa_cdf.png" class="img-fluid"></p>
-<p><img src="figures/tm/tm_weighted.png" class="img-fluid"></p>
-<p><img src="figures/tm/Δw_Δt.png" class="img-fluid"></p>
-</section>
-</section>
-<section id="questions" class="level1">
-<h1>Questions</h1>
-<ul>
-<li><p><label><input type="checkbox">Order of magnitude of estimation of the scattering rate.</label></p></li>
-<li><p>The validality of small <span class="math inline">\(κ\)</span> in observations and its implications in quasi-adibatic approximation.</p></li>
-<li><p>The validality of approximate Hamiltonian form for off-center scattering.</p></li>
-</ul>
-</section>
-<section id="todos" class="level1">
-<h1>TODOs</h1>
-<ul class="task-list">
-<li><label><input type="checkbox">Check the algorithm for energy conservation (Boris pusher)</label></li>
-<li><label><input type="checkbox" checked="">GPU acceleration</label></li>
-</ul>
-<p>DynamicalSystems.jl - Currently, the limits can not be changed with time.</p>
-<ul>
-<li>Saving as a DataFrame is more space-efficient than saving as a vector of dictionaries</li>
-</ul>
+<section id="mixing-rates" class="level1">
+<h1>Mixing rates</h1>
+<pre class="{julia}"><code>begin
+    using DrWatson
+    using FHist
+    using HDF5
+    using StatsBase: sample
+    using DataFrames
+    using DimensionalData
+    using DimensionalData: dims
+    using StatsBase: mean
+    using Beforerr
+    include("../src/io.jl")
+    include("../src/plot.jl")
+    include("../src/jump.jl")
+    VMIN = 0.25
+    VMAX = 256
+end</code></pre>
+<pre class="{julia}"><code>dir = "simulations"
+dfs = get_result_dfs(; dir)</code></pre>
+<pre class="{julia}"><code>foreach(get_result, eachrow(dfs))
+@rtransform!(dfs, :ecdf_da = ecdf_da(:results, "s2α0", "Δs2α"))</code></pre>
+<pre class="{julia}"><code>function load_obs_hist(; file=datadir("obs/") * "wind_hist3d.h5")
+    h = h5readhist(file, "hist")
+    bc = bincenters(h)
+    vs = 2 .^ bc[1]
+    βs = bc[2] ./ 2
+    θs = bc[3]
+    return DimArray(bincounts(h), (v=vs, β=βs, θ=θs))
+end
+
+function dargmax(p)
+    # Note: iteration is deliberately unsupported for CartesianIndex.
+    name.(dims(p)), map(getindex, dims(p), Tuple(argmax(p)))
+end
+
+function check_obs_hist(p)
+    # check the maxximum value of the observation data
+    @info maximum(p)
+    @info dargmax(p)
+end
+
+p = load_obs_hist()
+
+function sample_hist(p, args...)
+    a = []
+    wv = Float64[]
+    foreach(Iterators.product(dims(p)...)) do t
+        push!(a, t)
+        push!(wv, p[v=At(t[1]), β=At(t[2]), θ=At(t[3])])
+    end
+    sample(a, Weights(wv), args...)
+end
+</code></pre>
+<pre class="{julia}"><code>function subset_ecdf(v0, β, θ, vP; df=dfs, vmin=VMIN, vmax=VMAX)
+    v = clamp(vP / v0, vmin, vmax)
+    sdf = @subset(df, :v .== v, :β .== β, :θ .== θ; view = true)
+    ecdf_das = sdf[!, :ecdf_da]
+    if isempty(ecdf_das)
+        @warn "No data found for v=$v, β=$β, θ=$θ, v0=$v0"
+    elseif length(ecdf_das) != 1
+        @warn "Multiple data found for v=$v, β=$β, θ=$θ, v0=$v0"
+    end
+    return ecdf_das[1]
+end
+
+function rand_jumps(x0, p, vP; n=10, kw...)
+    x = [x0]
+    samples = sample_hist(p, n)
+    ecdf_das = map(samples) do t
+        subset_ecdf(t..., vP)
+    end
+
+    for i in 1:n
+        ecdf_da = ecdf_das[i]
+        x_new = x[end] + rand_jump(x[end], ecdf_da)
+        push!(x, x_new)
+    end
+    return x
+end
+
+rand_jumps(x0; p=p, vP=4, kw...) = rand_jumps(x0, p, vP; kw...)</code></pre>
+<pre class="{julia}"><code>vPs = 4 .^ (3:6)
+counts = 1024
+vPs_jumps = map(vPs) do vP
+    xs = range(0, 1, length=counts)
+    jumps = rand_jumps.(xs; n=100, p=p, vP)
+    (;vP, jumps)
+end</code></pre>
+<pre class="{julia}"><code>function m2(jumps) 
+    jumps_s = stack(jumps)
+    diffs = jumps_s .- jumps_s[1, :]'
+    m1 = mean(diffs, dims=2)
+    m2 = mean(diffs .^ 2, dims=2) - m1 .^ 2
+    vec(m2)
+end
+
+f = Figure(;)
+ax = Axis(f[1, 1]; xlabel = "n", ylabel = "M2")
+
+contents = map(vPs_jumps) do t
+    vP, jumps = t
+    m2s = m2(jumps)
+    scatterlines!(m2s; label="vP=$vP")
+end
+
+labels = ergs_approx[1:4]
+Legend(f[1, 2], contents, labels, "Energy")
+
+easy_save("mixing_rate_sin2")
+
+# let jumps = s2α_jumps, n = 8
+#     sample_jumps = sample(jumps, n)
+#     scatterlines!(vec(m2))
+    
+#     ax = Axis(f[2, 1]; xlabel = "n", ylabel = "sin(α)^2")
+#     stairs!.(sample_jumps)
+#     f
+# end</code></pre>
 
 
 </section>
