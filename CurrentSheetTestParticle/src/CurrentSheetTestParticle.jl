@@ -65,7 +65,7 @@ isinplace(f) = first(methods(f)).nargs == 5
 """
 Solve the system of ODEs.
 """
-function solve_params(B, u0s::AbstractVector; f=trace_normalized_B!, E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_DIFFEQ_KWARGS, kwargs...)
+function solve_params(B, u0s::AbstractVector; f=trace_normalized_B, E=E, alg=DEFAULT_SOLVER, tspan=DEFAULT_TSPAN, diffeq=DEFAULT_DIFFEQ_KWARGS, kwargs...)
     solve_kwargs = merge(diffeq, kwargs)
     alg = _alg(alg)
 
