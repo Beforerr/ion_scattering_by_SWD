@@ -39,7 +39,7 @@ $$
 
 ![](../figures/wind_hist3d.png)
 
-$Δ|B|/|B| > 0.05$ or $ω > 60°$
+$Δ|B|/|B| > 0.05$ or $ω > 60°$ [@liuFailuresMinimumVariance2023]
 
 The most probable values in the 3D distribution are a characteristic velocity ($v_0$) of approximately 250 km/s, a in-plane rotation angle ($ω_{in}$) about 90 degrees, and an azimuthal angle ($θ$) of around 85 degrees.
 

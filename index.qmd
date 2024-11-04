@@ -103,12 +103,12 @@ Examples of ion pitch angle scattering by solar wind discontinuities for differe
 
 ![](figures/pa_jump_history_high.png)
 
-# Mixing rates
+# Conclusion
 
-:::
-![](figures/tm/tm_stats_100keV.png)
+In this study, we have investigated the scattering of energetic ions by solar wind discontinuities. We have provided a model that includes statistical properties of solar wind discontinuities and provides estimates of ion scattering rates.
 
-:::
+Solar wind discontinuities are important coherent structures in the solar wind that can effectively scatter energetic ions. 
+
 
 # Notations
 
