@@ -23,6 +23,8 @@ begin
     xyw = (w0, w1)
     Δt = :t1 => "Δt"
     leave = :leave => renamer([true => "Leave", false => "Trapped"])
+
+    ergs_approx = ["~10 eV", "~100 eV", "~5 keV", "~100 keV", "~1 MeV"]
 end
 
 begin

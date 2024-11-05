@@ -59,12 +59,6 @@ function process_results_gryo!(df)
 end
 
 @chain results begin
-    @transform!(
-        :s2α0 = sind.(:α0) .^ 2,
-        :s2α1 = sind.(:α1) .^ 2,
-        :leave = :t1 .!= tmax
-    )
-    @transform!(:Δs2α = :s2α1 - :s2α0)
     process_results_gryo!
 end
 ```
@@ -169,56 +163,12 @@ draw(data(results_avg) * mapping(w0, ys; color=dims(1) => r) * visual(Scatter))
 ## Cumulative distribution
 
 ```{julia}
-using StatsBase, Distributions
-"""
-    EmpiricalDistribution(data::Vector{T} where T <: Real)
-
-Create a discrete empirical distribution based on observations.
-"""
-function EmpiricalDistribution(data)
-    data = sort(data) #sort the observations
-    empirical_cdf = ecdf(data) #create empirical cdf
-    data_clean = unique(data) #remove duplicates to avoid allunique error
-    cdf_data = empirical_cdf.(data_clean) #apply ecdf to data
-    pmf_data = vcat(cdf_data[1], diff(cdf_data)) #create pmf from the cdf
-    DiscreteNonParametric(data_clean, pmf_data) #define distribution
-end
-
-function rand_jump(x0, da)
-    d = da[x=Near(x0)]
-    rand(d)
-end
-
-function rand_jumps(x::AbstractVector, n; kw...)
-    for i in 1:n
-
-        push!(x, x[end] + rand_jump(x[end]; kw...))
-    end
-    return x
-end
-
-rand_jumps(x0; n=1, kw...) = rand_jumps([x0], n; kw...)
-
-function df_rand_jumps(x, y; n = 100, counts=1024)
-    ecdfs = combine(
-        groupby(results, x),
-        y => EmpiricalDistribution;
-        renamecols=false
-    )
-    sort!(ecdfs, x)
-
-    da = DimArray(ecdfs[!, y], (x=ecdfs[!, x],))
-
-    min_x, max_x = extrema(ecdfs[!, x])
-    xs = range(min_x, max_x, length=counts)
-
-    xs_jumps = rand_jumps.(xs; n, da=da) |> stack
-end
+include("../src/jump.jl")
 ```
 
 ```{julia}
-s2α_jumps = df_rand_jumps(:s2α0, :Δs2α; n=100)
-w_jumps = df_rand_jumps(:w0, :Δw; n=100)
+s2α_jumps = df_rand_jumps(results, :s2α0, :Δs2α; n=100)
+w_jumps = df_rand_jumps(results, :w0, :Δw; n=100)
 
 using CairoMakie
 
