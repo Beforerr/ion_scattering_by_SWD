@@ -68,6 +68,15 @@ end
 
 test(; params=test_params(), dir="test", logger=filtered_logger) = main(; params, dir, logger)
 test_alg(; params=test_params_alg(), dir="test_alg", logger=filtered_logger) = main(; params, dir, logger)
+function test_td(; params=test_params_TD(), dir="test_TD", logger=filtered_logger)
+    path = datadir(dir)
+    with_logger(logger) do
+        @showprogress map(params) do d
+            prefix = "Bfn=" * (d[:Bfn] == TD_B_field ? "TD" : "RD")
+            produce_or_load(makesim, d, path; prefix, loadfile=false)
+        end
+    end
+end
 
 (@main)(ARGS) = main()
 

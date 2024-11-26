@@ -26,3 +26,13 @@ function RD_B_field(r; dir=3, B=1, θ=DEFAULT_θ, β=DEFAULT_β, sign=DEFAULT_SI
 end
 
 RD_B_field(; kwargs...) = r -> RD_B_field(r; kwargs...)
+
+function TD_B_field(r; dir=3, B=1, By = 0, θ=DEFAULT_θ, β=DEFAULT_β, kw...)
+    z = r[dir]
+    φ = β * tanh(z)
+    Bz = B * cosd(θ)
+    Bx = B * sind(θ) * sind(φ)
+    return SVector(Bx, By, Bz)
+end
+
+TD_B_field(; kw...) = r -> TD_B_field(r; kw...)

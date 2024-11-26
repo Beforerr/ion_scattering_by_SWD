@@ -6,7 +6,7 @@ using StaticArrays
 using UnPack
 using Moshi.Match: @match
 
-export RD_B_field
+export RD_B_field, TD_B_field
 export solve_params, dsolve_params
 export w_ϕ_pairs, init_state, init_states, init_states_pm, filter_wϕs!
 export isoutofdomain_params
@@ -30,6 +30,7 @@ const DEFAULT_TSPAN = (0, 256)
 const ez = SA[0, 0, 1]
 
 @kwdef struct ProblemParams
+    Bfn = RD_B_field
     θ = DEFAULT_θ
     β = DEFAULT_β
     sign = DEFAULT_SIGN
@@ -38,6 +39,13 @@ const ez = SA[0, 0, 1]
     init_kwargs = (; Nw=8, Nϕ=8)
     tspan = DEFAULT_TSPAN
     diffeq = DEFAULT_DIFFEQ_KWARGS
+end
+
+@kwdef struct BParams
+    Bfn = RD_B_field
+    θ = DEFAULT_θ
+    β = DEFAULT_β
+    sign = DEFAULT_SIGN
 end
 
 # Step 3: Define the Electric Field (if any)
@@ -90,8 +98,8 @@ function solve_params_boris(B, u0s::AbstractVector; E=E, tspan=DEFAULT_TSPAN, di
 end
 
 function solve_params(d; kwargs...)
-    @unpack θ, β, v, sign, alg, init_kwargs, diffeq, tspan = d
-    B = RD_B_field(; θ, β, sign)
+    @unpack θ, β, v, sign, alg, init_kwargs, diffeq, tspan, Bfn = d
+    B = Bfn(; θ, β, sign)
     u0s, wϕs = init_states_pm(B, v; init_kwargs...)
 
     isoutofdomain = isoutofdomain_params(v)

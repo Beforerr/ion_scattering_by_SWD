@@ -39,3 +39,20 @@ function test_params_alg()
 
     return dict_list(allparams)
 end
+
+"""
+Parameters for the simulation with tangential discontinuity
+"""
+function test_params_TD()
+    vs = 2.0 .^ (1:6)
+
+    allparams = Dict(
+        :Bfn => [TD_B_field, RD_B_field],
+        :θ => 85,
+        :β => 47.5,
+        :v => vs,
+        :init_kwargs => (; Nw=90, Nϕ=120),
+    )
+
+    return dict_list(allparams)
+end

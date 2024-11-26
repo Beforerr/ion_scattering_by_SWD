@@ -42,6 +42,15 @@ let dir = "test", figure=(; size=(800, 400))
     easy_save("tm/example_subset")
 end
 
+# ----
+# Test different field configurations
+# ----
+let dir = "test_TD", figure=(; size=(500, 1000))
+    df = get_result(; dir)
+    pa_layer() = mapping(xyw..., col = :Bfn => string, row=v_map) * density_layer()
+    draw(data(df) * pa_layer(), tm_scale(); figure)
+    easy_save("tm/example_td")
+end
 
 plt = data(subset_leave(sdf)) * mapping(xyw...; layout=v_map) * v
 draw(plt; axis=w_axis)
