@@ -20,6 +20,7 @@ begin
     include("../src/io.jl")
     include("../src/plot.jl")
     include("../src/jump.jl")
+    include("../src/mix_rates.jl")
     VMIN = 0.25
     VMAX = 256
 end
@@ -33,6 +34,7 @@ dfs = get_result_dfs(; dir)
 ```{julia}
 foreach(get_result, eachrow(dfs))
 @rtransform!(dfs, :ecdf_da = ecdf_da(:results, "s2α0", "Δs2α"))
+@rtransform!(dfs, :ecdf_μ = ecdf_da(:results, "μ0", "Δμ"))
 ```
 
 ```{julia}
@@ -71,10 +73,10 @@ end
 ```
 
 ```{julia}
-function subset_ecdf(v0, β, θ, vP; df=dfs, vmin=VMIN, vmax=VMAX)
+function subset_ecdf(v0, β, θ, vP; df=dfs, col=:ecdf_da, vmin=VMIN, vmax=VMAX)
     v = clamp(vP / v0, vmin, vmax)
     sdf = @subset(df, :v .== v, :β .== β, :θ .== θ; view=true)
-    ecdf_das = sdf[!, :ecdf_da]
+    ecdf_das = sdf[!, col]
     if isempty(ecdf_das)
         @warn "No data found for v=$v, β=$β, θ=$θ, v0=$v0"
     elseif length(ecdf_das) != 1
@@ -88,41 +90,38 @@ function rand_jumps(x0, vP, p; n=10, kw...)
     samples = sample_hist(p, n)
 
     for i in 1:n
-        ecdf_da = subset_ecdf(samples[i]..., vP)
+        ecdf_da = subset_ecdf(samples[i]..., vP; kw...)
         x_new = x[end] + rand_jump(x[end], ecdf_da)
         push!(x, x_new)
     end
     return x
 end
-
-rand_jumps(x0, vP; p=p, kw...) = rand_jumps(x0, vP, p; kw...)
 ```
 
 ```{julia}
 vPs = 4 .^ (3:6)
 counts = 1024
+n = 100
 vPs_jumps = map(vPs) do vP
     xs = range(0, 1, length=counts)
-    jumps = rand_jumps.(xs, vP; n=100, p=p)
+    jumps = rand_jumps.(xs, vP, Ref(p); n)
     (; vP, jumps)
 end
 
 vPs_jumps_ani = map(vPs) do vP
     xs = range(0.4, 0.6, length=counts)
-    jumps = rand_jumps.(xs, vP; n=100, p=p)
+    jumps = rand_jumps.(xs, vP, Ref(p); n)
+    (; vP, jumps)
+end
+
+vPs_μJumps = map(vPs) do vP
+    xs = range(-1, 1, length=counts)
+    jumps = rand_jumps.(xs, vP, Ref(p); n, col=:ecdf_μ)
     (; vP, jumps)
 end
 ```
 
 ```{julia}
-function m2(jumps)
-    jumps_s = stack(jumps)
-    diffs = jumps_s .- jumps_s[1, :]'
-    m1 = mean(diffs, dims=2)
-    m2 = mean(diffs .^ 2, dims=2) - m1 .^ 2
-    vec(m2)
-end
-
 function jumps_ecdfplot(jumps; idxs=[1, div(size(jumps, 1), 2), size(jumps, 1)], kw...)
     linestyles = [:solid, :dash, :dot]
     ps = map(enumerate(idxs)) do (i, idx)
@@ -184,6 +183,19 @@ easy_save("mixing_rate_sin2")
 ```
 
 ```{julia}
+D_nn(m2s) = m2s[2] - m2s[1]
+
+vPs_m2s = map(vPs_μJumps) do t
+    vP, jumps = t
+    m2(jumps)
+end
+
+D_nns = D_nn.(vPs_m2s)
+
+result_df = DataFrame(vP=vPs, m2s=vPs_m2s, D_nn=D_nns)
+```
+
+```{julia}
 labels = ergs_approx[1:4]
 contents = map(vPs_jumps_ani) do t
     vP, jumps = t
@@ -193,6 +205,6 @@ end
 
 gl1 = S.GridLayout([S.Axis(; plots=contents, xlabel="n", ylabel="M2")])
 gl2 = jumps_ecdfplot_grid(vPs_jumps_ani; idxs)
-plot(S.GridLayout([gl1, gl2], rowsizes = [Auto(2), Auto(3)]))
+plot(S.GridLayout([gl1, gl2], rowsizes=[Auto(2), Auto(3)]))
 easy_save("mr/mixing_rate_sin2_ani")
 ```
