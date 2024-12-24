@@ -16,10 +16,10 @@ Rotating magnetic field.
 # Notes
 φ = β * tanh(z) is the polar angle
 """
-@kwdef struct RotationDiscontinuity{T<:Number}
-    B::T = 1
-    θ::T = DEFAULT_θ
-    β::T = DEFAULT_β
+@kwdef struct RotationDiscontinuity
+    B = 1
+    θ = DEFAULT_θ
+    β = DEFAULT_β
     sign::Integer = DEFAULT_SIGN
 end
 
