@@ -27,8 +27,8 @@ function field_lines(sol, B; kwargs...)
 
     isoutofdomain = (u, p, t) -> abs(u[3]) > maximum(abs.(sol[3, :]))
     tmax = 100 * sol.t[end]
-    fl0_sol = solve_fl(gc0, B_field_line(B); tspan=(0.0, tmax), isoutofdomain, kwargs...)
-    flf_sol = solve_fl(gcf, B_field_line(B); tspan=(0.0, -tmax), isoutofdomain, kwargs...)
+    fl0_sol = solve_fl(gc0, B_field_line(B); tspan=(0, -sign(gc0[3]) * tmax), isoutofdomain, kwargs...)
+    flf_sol = solve_fl(gcf, B_field_line(B); tspan=(0, -sign(gcf[3]) * tmax), isoutofdomain, kwargs...)
     return fl0_sol, flf_sol
 end
 
