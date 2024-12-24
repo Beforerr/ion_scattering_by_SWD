@@ -19,12 +19,15 @@ function process_sols(sol, B, wϕs)
 end
 
 function process_result!(df::AbstractDataFrame)
+
+    "wϕ0" in names(df) && @rtransform!(df, :μ0 = :wϕ0[1], :ϕ0 = :wϕ0[2])
+
     @chain df begin
-        @rtransform!(:w0 = :wϕ0[1], :ϕ0 = :wϕ0[2], :w1 = cos_pitch_angle(:u1, :B))
-        @transform!(:w0 = clamp.(:w0, -1, 1), :w1 = clamp.(:w1, -1, 1))
-        @transform!(:α0 = acosd.(:w0), :α1 = acosd.(:w1))
+        @rtransform!(:μ1 = cos_pitch_angle(:u1, :B))
+        @transform!(:μ0 = clamp.(:μ0, -1, 1), :μ1 = clamp.(:μ1, -1, 1))
+        @transform!(:α0 = acosd.(:μ0), :α1 = acosd.(:μ1))
         @transform!(:s2α0 = sind.(:α0) .^ 2, :s2α1 = sind.(:α1) .^ 2)
-        @transform!(:Δα = :α1 .- :α0, :Δw = :w1 .- :w0, :Δs2α = :s2α1 - :s2α0)
+        @transform!(:Δα = :α1 .- :α0, :Δμ = :μ1 .- :μ0, :Δs2α = :s2α1 - :s2α0)
         @transform!(:leave = :t1 .!= :tmax)
         select!(Not(:wϕ0))
     end

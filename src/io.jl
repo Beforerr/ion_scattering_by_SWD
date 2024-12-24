@@ -13,8 +13,10 @@ apply(fn; kw...) = x -> fn(x; kw...)
 
 function get_result_dfs(; dir="simulations")
     df = collect_results(datadir(dir))
-    "tspan" ∈ names(df) ? @transform!(df, :tmax = last.(:tspan)) : insertcols!(df, :tmax => DEFAULT_TSPAN[2])
-    "sign" ∈ names(df) || insertcols!(df, :sign => DEFAULT_SIGN)
+    cols = names(df)
+    "tspan" ∈ cols ? @transform!(df, :tmax = last.(:tspan)) : insertcols!(df, :tmax => DEFAULT_TSPAN[2])
+    "sign" ∈ cols || insertcols!(df, :sign => DEFAULT_SIGN)
+    "Bfn" ∈ cols || insertcols!(df, :Bfn => CurrentSheetTestParticle.RD_B_field)
     @rtransform!(df, :B = apply(:Bfn, θ=:θ, β=:β, sign=:sign))
     return df
 end
