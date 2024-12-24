@@ -2,6 +2,7 @@ using AlgebraOfGraphics
 using CairoMakie
 using DataFrames, DataFramesMeta
 using Match
+using CurrentSheetTestParticle: field_lines, get_gc_func
 
 begin
     set_aog_theme!()
@@ -199,13 +200,6 @@ function plot_trajectory(sol, sol_field=missing, sol_gc=missing)
     return f
 end
 
-E0(x) = SVector(0.0, 0.0, 0.0)
-
-function get_gc_func(B)
-    param = prepare(E0, B, species=User)
-    get_gc(param)
-end
-
 function plot_gc!(sol, B; color=Makie.wong_colors()[2])
     gc = get_gc_func(B)
     gc_plot(x, y, z, vx, vy, vz) = (gc([x, y, z, vx, vy, vz])...,)
@@ -213,15 +207,8 @@ function plot_gc!(sol, B; color=Makie.wong_colors()[2])
 end
 
 function plot_gc_field_lines!(sol, B; idxs=(1, 2, 3), kwargs...)
-    gc = get_gc_func(B)
-    gc0 = gc(sol[1])
-    gcf = gc(sol[end])
-
-    isoutofdomain = (u, p, t) -> abs(u[3]) > maximum(abs.(sol[3, :]))
-
-    tmax = sol.t[end]
-    fl0_sol = CurrentSheetTestParticle.solve_fl(gc0, B; tspan=(0.0, tmax), isoutofdomain, kwargs...)
-    flf_sol = CurrentSheetTestParticle.solve_fl(gcf, B; tspan=(0.0, -tmax), isoutofdomain, kwargs...)
+    fl0_sol, flf_sol = field_lines(sol, B; kwargs...)
     lines!(fl0_sol; idxs, color=Makie.wong_colors()[3])
     lines!(flf_sol; idxs, color=Makie.wong_colors()[4])
+    return fl0_sol, flf_sol
 end

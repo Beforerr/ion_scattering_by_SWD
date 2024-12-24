@@ -85,14 +85,18 @@ idxs = (ku, 1, 2, 3)
 plot_sols(temp_sols, idxs)
 
 # Plot trajectories with guiding centers and field lines.
-let sol = sols[17]
+begin
+    sol = sols[17]
     idxs = (1, 2, 3)
     plot_sol(sol, idxs)
     plot_gc!(sol, B)
-    plot_gc_field_lines!(sol, B)
+    fl0_sol, flf_sol = plot_gc_field_lines!(sol, B)
     current_figure()
 end
 
+CurrentSheetTestParticle.field_lines_distance(sol)
+
+distance(fl0_sol, flf_sol)
 
 plot_detail(sols[[12, 13]])
 easy_save("example_tp", plot_detail(sols[[12, 13]]))

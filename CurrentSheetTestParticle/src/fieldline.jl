@@ -15,3 +15,21 @@ function solve_fl(r, B_field; tspan=(0.0, 100.0), alg=Tsit5(), kwargs...)
     prob = ODEProblem(field_line_ode!, r, tspan, (B_field,); kwargs...)
     return solve(prob, alg)
 end
+
+function field_lines(sol, B; kwargs...)
+    gc = get_gc_func(B)
+    gc0 = gc(sol[1])
+    gcf = gc(sol[end])
+
+    isoutofdomain = (u, p, t) -> abs(u[3]) > maximum(abs.(sol[3, :]))
+    tmax = sol.t[end]
+    fl0_sol = solve_fl(gc0, B; tspan=(0.0, tmax), isoutofdomain, kwargs...)
+    flf_sol = solve_fl(gcf, B; tspan=(0.0, -tmax), isoutofdomain, kwargs...)
+    return fl0_sol, flf_sol
+end
+
+"""field lines distance"""
+function field_lines_distance(sol)
+    fl0_sol, flf_sol = field_lines(sol, B)
+    distance(fl0_sol, flf_sol)
+end

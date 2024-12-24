@@ -13,6 +13,7 @@ export isoutofdomain_params
 export ProblemParams
 export trace_normalized_B!, trace_normalized_B
 
+include("utils.jl")
 include("field.jl")
 include("state.jl")
 include("fieldline.jl")
