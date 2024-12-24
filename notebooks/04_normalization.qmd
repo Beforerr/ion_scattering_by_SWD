@@ -1,6 +1,7 @@
 ---
 execute: 
   eval: false
+engine: julia
 ---
 
 How would normalization affect the transition matrix?
@@ -177,17 +178,17 @@ let position = :rb,
     mid_index = div(size(s2α_jumps, 1), 2)
 
     f = Figure(;)
-    ax = Axis(f[1, 1]; xlabel = "sin(α)^2", ylabel = "F")
+    ax = Axis(f[1, 1]; xlabel="sin(α)^2", ylabel="F")
     ecdfplot!(s2α_jumps[1, :]; label="Initial")
     ecdfplot!(s2α_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
     ecdfplot!(s2α_jumps[end, :]; label="Final", color=Cycled(3))
-    
-    Axis(f[1, 2]; xlabel = "cos(α)")
+
+    Axis(f[1, 2]; xlabel="cos(α)")
     ecdfplot!(w_jumps[1, :]; label="Initial")
     ecdfplot!(w_jumps[mid_index, :]; label="Intermediate", color=Cycled(2))
     ecdfplot!(w_jumps[end, :]; label="Final", color=Cycled(3))
 
-    Legend(f[0, 1:end], ax; tellheight = true, orientation = :horizontal)
+    Legend(f[0, 1:end], ax; tellheight=true, orientation=:horizontal)
     easy_save("pa_cdf")
 end
 ```

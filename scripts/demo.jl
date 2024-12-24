@@ -9,10 +9,13 @@ include("../src/utils.jl")
 # ---------------------------
 # Minimal working example
 # ---------------------------
-d = ProblemParams(
-    θ=45,
+
+θ = 45;
+v = 8;
+d = ProblemParams(;
+    θ,
     β=90,
-    v=0.1,
+    v,
 )
 
 sols, (wϕs, B) = solve_params(d);
@@ -26,13 +29,15 @@ GLMakie.activate!()
 using CairoMakie
 CairoMakie.activate!()
 
-θ = d.θ
-ku(x; θ=θ) = cosd(θ) * x
-ku(t, x) = (t, ku(x))
-ku(x, y, z) = (ku(x), ku(y), z)
-ku_zx(z, x) = (z, ku(x))
+begin
+    ku(x; θ=θ) = cosd(θ) * x
+    ku(t, x) = (t, ku(x))
+    ku(x, y, z) = (ku(x), ku(y), z)
+    ku_zx(z, x) = (z, ku(x))
 
-Eₖ(u) = 1 / 2 * sum(u[4:6] .^ 2)
+    Eₖ(u) = 1 / 2 * sum(u[4:6] .^ 2)
+end
+
 
 function plot_sol(sol, idxs)
     fig = Figure()
@@ -87,6 +92,7 @@ plot_sols(temp_sols, idxs)
 # Plot trajectories with guiding centers and field lines.
 begin
     sol = sols[17]
+    sol = sols[12]
     idxs = (1, 2, 3)
     plot_sol(sol, idxs)
     plot_gc!(sol, B)

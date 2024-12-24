@@ -1,6 +1,6 @@
 ---
 title: Energetic ion scattering by solar wind discontinuities
-abstract: Because solar wind plasma flow transports the entire spectrum of magnetic field fluctuations (from low-frequency inertial range to electron kinetic range), it is a natural laboratory for plasma turbulence investigation. Among the various wave modes and coherent plasma structures that contribute to this spectrum, one of the most important solar wind elements is ion-scale solar wind discontinuities. These structures, which carry very intense current, have been considered as a free energy source for plasma instabilities that contribute to solar wind heating. Investigations of such discontinuities have been mostly focused on their magnetic field signatures; much less is known about their role in scattering of energetic ions. In this studay, we consider observational-based model of ion dynamics and scattering in force-free rotational magnetic discontinuities. Focusing on quantification of the scattering effect, we demonstrate that background sheared magnetic field plays an important role in determining the efficiency of pitch angle scattering. We provide a model included statistical properties of solar wind discontinuities and providing estimates of ion scattering rate.
+abstract: Because solar wind plasma flow transports the entire spectrum of magnetic field fluctuations (from low-frequency inertial range to electron kinetic range), it is a natural laboratory for plasma turbulence investigation. Among the various wave modes and coherent plasma structures that contribute to this spectrum, one of the most important solar wind elements is ion-scale solar wind discontinuities. These structures, which carry very intense current, have been considered as a free energy source for plasma instabilities that contribute to solar wind heating. Investigations of such discontinuities have been mostly focused on their magnetic field signatures; much less is known about their role in scattering of energetic ions. In this study, we consider observational-based model of ion dynamics and scattering in force-free rotational magnetic discontinuities. Focusing on quantification of the scattering effect, we demonstrate that background sheared magnetic field plays an important role in determining the efficiency of pitch angle scattering. We provide a model included statistical properties of solar wind discontinuities and providing estimates of ion scattering rate.
 author:
   - name: Zijin Zhang
     corresponding: true
@@ -40,17 +40,65 @@ The transport of energetic particles within the heliosphere is significantly inf
 
 We investigated the interaction of ions with rotational discontinuities by employing a simplified analytical model for the magnetic field configuration. Our study aimed to examine how the particle pitch angle is influenced by the parameters of the magnetic field configuration and the initial conditions of the particles.
 
+# Basic Equations
+
+We assume the following force-free magnetic field configuration:
+
+$$
+\mathbf{B} = B_0 (\cos θ \ e_z + \sin θ ( \sin φ(z) \ e_x + \cos φ (z) \ e_y))
+$$
+
+with $φ(z) = β \tanh(z)$, where $L$ is the thickness of the current sheet.
+
+The motion of a particle in such a field can be expressed in the Hamiltonian formalism as follows:
+
+$$
+ H = \frac{1}{2m} \left( \mathbf{p} - q \mathbf{A} \right)^2
+$$
+
+where $\mathbf{A}$ represents the magnetic vector potential, $\mathbf{p}$ is the canonical momentum. More specifically, the magnetic vector potential $\mathbf{A}$ can be expressed in an exact integrable form:
+
+$$
+\begin{aligned}
+A_x\to \frac{1}{2} B_0 L f_1(z) \sin (\theta )
+\\
+A_y\to \frac{1}{2} B_0 L f_2(z) \sin (\theta )+B_0 x \cos (\theta )
+\\
+A_z\to0
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+f_1(z)\to \cos (\beta) \left(\text{Ci}\left(\beta +\beta \tanh \left(\frac{z}{L}\right)  \right)-\text{Ci}\left(\beta -\beta  \tanh \left(\frac{z}{L}\right)\right)\right)+\sin (\beta) \left(\text{Si}\left(\beta +\beta \tanh \left(\frac{z}{L}\right) \right)-\text{Si}\left(\beta -\beta  \tanh \left(\frac{z}{L}\right)\right)\right),
+\\
+f_2(z)\to \sin (\beta) \left(\text{Ci}\left(\beta +\beta \tanh \left(\frac{z}{L}\right)  \right)+\text{Ci}\left(\beta -\beta  \tanh \left(\frac{z}{L}\right)\right)\right)-\cos (\beta) \left(\text{Si}\left(\beta +\beta \tanh \left(\frac{z}{L}\right)  \right)+\text{Si}\left(\beta -\beta  \tanh \left(\frac{z}{L}\right)\right)\right)
+\end{aligned}
+$$
+
+$$
+\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-\frac{1}{2} \tilde{f_1}(\tilde z) \sin \theta \right)^2 + \left(\tilde{x} \cos (\theta )+\frac{1}{2} \left(\tilde{f_2}(\tilde z)-C_{\beta }\right) \sin \theta \right)^2+\tilde{p_z}^2\right)
+$$
+
+We expand the Hamiltonian near the current sheet to the third order.
+
+$$
+\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-(\tilde{z} - \frac{1}{6} \beta ^2 \tilde{z}^3) \sin \theta \right)^2 + \left(\tilde{x} \cos \theta -\frac{\beta  \tilde{z}^2}{2} \sin \theta \right)^2+\tilde{p_z}^2\right)
+$$
+
+It is important to note that the in-plane rotational effect $β$ would appear in the second order expansion. This distinctive feature represents a significant aspect that has not been addressed in previous studies employing the Hamiltonian formalism.
+
 # Test particle simulations of ion scattering by solar wind discontinuities
 
 We assume the following expression:
 
 $$
- \mathbf{B} = B_0 (\cos θ \ e_z + \sin θ ( \sin φ(z) \ e_z + \cos φ (z) \ e_y))
+ \mathbf{B} = B_0 (\cos θ \ e_z + \sin θ ( \sin φ(z) \ e_x + \cos φ (z) \ e_y))
 $$
 
-with $φ(z) = β \tanh(z)$,
+with $φ(z) = β \tanh(z/L)$, 
 
-We normalize the magnetic field $\mathbf{B}$ to the background magnetic field magnitude $B_0$, the position $\mathbf{r}$ to the thickness of the discontinuity $L$, time $t$ to $1/Ω_0$, with $Ω_0 = q B_0/m_p$, and the velocity $v$ to characteristic velocity $v_0 = Ω_0 L$. And the dimensionless form of the motion equation can be written as follows:
+We normalize the magnetic field $\mathbf{B}$ to the background magnetic field magnitude $B_0$, time $t$ to $1/Ω_0$, with $Ω_0 = q B_0/m_p$, and the velocity $v$ to characteristic velocity $v_0 = Ω_0 L$. And the dimensionless form of the motion equation can be written as follows:
 
 $$
 \frac{d (γ \mathbf{v})}{dt} = \mathbf{v} \times \mathbf{B} ,
