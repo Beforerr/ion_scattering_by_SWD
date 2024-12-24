@@ -94,10 +94,6 @@ begin
     current_figure()
 end
 
-CurrentSheetTestParticle.field_lines_distance(sol)
-
-distance(fl0_sol, flf_sol)
-
 plot_detail(sols[[12, 13]])
 easy_save("example_tp", plot_detail(sols[[12, 13]]))
 
