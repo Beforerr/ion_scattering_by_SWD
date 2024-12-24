@@ -1,6 +1,7 @@
 using Revise
 using DrWatson
 using CurrentSheetTestParticle
+using TestParticle
 using Beforerr
 include("../src/plot.jl")
 include("../src/utils.jl")
@@ -11,8 +12,7 @@ include("../src/utils.jl")
 d = ProblemParams(
     θ=45,
     β=90,
-    v=1,
-    init_kwargs = (; w=[-0.8,0.8])
+    v=0.1,
 )
 
 sols, (wϕs, B) = solve_params(d);
@@ -23,6 +23,8 @@ Bz(z) = B([0, 0, z])[3]
 
 using GLMakie
 GLMakie.activate!()
+using CairoMakie
+CairoMakie.activate!()
 
 θ = d.θ
 ku(x; θ=θ) = cosd(θ) * x
@@ -30,7 +32,15 @@ ku(t, x) = (t, ku(x))
 ku(x, y, z) = (ku(x), ku(y), z)
 ku_zx(z, x) = (z, ku(x))
 
-Eₖ(u) = 1/2 * sum(u[4:6].^2)
+Eₖ(u) = 1 / 2 * sum(u[4:6] .^ 2)
+
+function plot_sol(sol, idxs)
+    fig = Figure()
+    layout = fig[1, 1]
+    ax = get_ax(layout, idxs)
+    plot!(ax, sol, idxs=idxs)
+    fig
+end
 
 function plot_sols(sols, idxs)
     fig = Figure()
@@ -43,13 +53,13 @@ function plot_sols(sols, idxs)
 end
 
 # Plot trajectories of three particles projected onto the z-x plane.
-function plot_detail(sols; idxs = (3, 2))
+function plot_detail(sols; idxs=(3, 2))
     fig = Figure(; size=(800, 400))
-    ax1 = Axis(fig[1, 1]; xlabel="z", ylabel="B", limits = (nothing, (-1, 1)))
+    ax1 = Axis(fig[1, 1]; xlabel="z", ylabel="B", limits=(nothing, (-1, 1)))
     ax2 = Axis(fig[2, 1]; xlabel="z", ylabel="y")
     ax3 = Axis(fig[3, 1]; xlabel="z", ylabel="x")
     # ax3 = Axis(fig[3, 1]; xlabel="x", ylabel="y")
-    ax4 = Axis(fig[1:end, 2]; xlabel = "t", ylabel = "Cos(α)")
+    ax4 = Axis(fig[1:end, 2]; xlabel="t", ylabel="Cos(α)")
     # ax5 = Axis(fig[2, 2]; limits = (nothing, (0, 0.5)))
 
     zmin, zmax = minimum(sols[1][3, :]), maximum(sols[1][3, :])
@@ -57,7 +67,7 @@ function plot_detail(sols; idxs = (3, 2))
     lines!(ax1, z, Bx, label="Bx")
     lines!(ax1, z, By, label="By")
     lines!(ax1, z, Bz, label="Bz")
-    axislegend(ax1, orientation = :horizontal, position = :rb)
+    axislegend(ax1, orientation=:horizontal, position=:rb)
 
     for sol in sols.u
         # plot!(ax2, sol, idxs=(3, 2)) # this would smooth the trajectory
@@ -70,11 +80,22 @@ function plot_detail(sols; idxs = (3, 2))
     fig
 end
 
+temp_sols = sols[16:17]
 idxs = (ku, 1, 2, 3)
-plot_sols(sols[16:18], idxs)
+plot_sols(temp_sols, idxs)
 
-plot_detail(sols[[12,13]])
-easy_save("example_tp", plot_detail(sols[[12,13]]))
+# Plot trajectories with guiding centers and field lines.
+let sol = sols[17]
+    idxs = (1, 2, 3)
+    plot_sol(sol, idxs)
+    plot_gc!(sol, B)
+    plot_gc_field_lines!(sol, B)
+    current_figure()
+end
+
+
+plot_detail(sols[[12, 13]])
+easy_save("example_tp", plot_detail(sols[[12, 13]]))
 
 observables = [3, 6, Eₖ, pa]
 
@@ -125,45 +146,3 @@ idxs = [1, 2, 3]
 sols = solve_params(α, β, v, w)
 plot_params(parameter_sliders, idxs)
 
-# ---------------------------
-# Dynamical system
-# ---------------------------
-using DynamicalSystems
-
-param = prepare(E_field, B_field; species=User)
-
-u0s = init_state(α, β, v, w; Nϕ=64)
-
-isoutofdomain = isoutofdomain_params(v)
-diffeq = (; alg=alg, isoutofdomain)
-
-total_time = 100
-Y, t = trajectory(ds, total_time)
-
-
-fig = Figure()
-ax = Axis(fig[1, 1]; xlabel="time", ylabel="variable")
-for var in columns(Y)
-    lines!(ax, t, var)
-end
-fig
-
-# compute the Lyapunov spectrum
-steps = 10_000
-lyapunovspectrum(ds, steps)
-# As expected, there is at least one positive Lyapunov exponent, because the system is chaotic, and at least one zero Lyapunov exponent, because the system is continuous time.
-z_max = 2 * init_z_pos(v) |> abs
-timeseries_ylims = [(-z_max, z_max), (-v, v), missing, (-1, 1)]
-
-lims = ((-z_max, z_max), (-v, v))
-idxs = [3, 6]
-
-fig, dsobs = interactive_trajectory_timeseries(
-    ds, observables, u0s;
-    lims, idxs,
-    timeseries_ylims
-)
-fig
-
-
-figure, oddata = interactive_orbitdiagram(ds, 3)

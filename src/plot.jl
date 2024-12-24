@@ -63,7 +63,7 @@ pa_pair_plot(df::AbstractDataFrame) = pa_pair_plot(data(df))
 # Function to plot one figure per column
 function pa_layer(s)
     layout = @match s begin
-        :v => mapping(col=θ_map, row=β_map) 
+        :v => mapping(col=θ_map, row=β_map)
         :β => mapping(col=θ_map, row=v_map)
     end
     return mapping(xyw...) * density_layer() * layout
@@ -74,7 +74,7 @@ function pa_pair_hist!(df::AbstractDataFrame, layout, s=:v; layer=pa_layer(s), s
     fgs = [layout[1, i] for i in 1:length(vs)]
     return map(zip(fgs, vs)) do (fg, v)
         df_s = @subset(df, $s .== v)
-        plt = data(df_s)  * layer
+        plt = data(df_s) * layer
         grids = draw!(fg, plt, scales; axis, kwargs...)
         r = s == :v ? rename_sym : rename_sym_deg
         Label(fg[0, :], r(s)(v), tellwidth=false)
@@ -90,8 +90,8 @@ function pa_pair_hist(df; figure=(; size=(1200, 400)), scale=colorscale, kw...)
 end
 
 function sign_label(fig; i1=0, i2=2)
-    Label(fig[i1, :], "Left-hand rotation", font = :bold, tellwidth=false)
-    Label(fig[i2, :], "Right-hand rotation", font = :bold, tellwidth=false)
+    Label(fig[i1, :], "Left-hand rotation", font=:bold, tellwidth=false)
+    Label(fig[i2, :], "Right-hand rotation", font=:bold, tellwidth=false)
 end
 
 function pa_pair_hist(ldf, rdf; figure=(; size=(1200, 800)), scale=colorscale, kw...)
@@ -127,7 +127,7 @@ pa_diff_plot(df::AbstractDataFrame; kwargs...) = pa_diff_plot(data(df) * mapping
 
 
 # Create Two-dimensional maps of the final value w1 are plotted as functions of the initial pitch-angle cosine w0 and gyrophase φ0
-function w1_map_plot(l; color = w1, scale= scales(;), kwargs...)
+function w1_map_plot(l; color=w1, scale=scales(;), kwargs...)
     plt = l * mapping(w0, ϕ0, color=color)
     draw(plt, scale; kwargs...)
 end
@@ -197,4 +197,31 @@ function plot_trajectory(sol, sol_field=missing, sol_gc=missing)
     end
 
     return f
+end
+
+E0(x) = SVector(0.0, 0.0, 0.0)
+
+function get_gc_func(B)
+    param = prepare(E0, B, species=User)
+    get_gc(param)
+end
+
+function plot_gc!(sol, B; color=Makie.wong_colors()[2])
+    gc = get_gc_func(B)
+    gc_plot(x, y, z, vx, vy, vz) = (gc([x, y, z, vx, vy, vz])...,)
+    lines!(sol, idxs=(gc_plot, 1, 2, 3, 4, 5, 6); color)
+end
+
+function plot_gc_field_lines!(sol, B; idxs=(1, 2, 3), kwargs...)
+    gc = get_gc_func(B)
+    gc0 = gc(sol[1])
+    gcf = gc(sol[end])
+
+    isoutofdomain = (u, p, t) -> abs(u[3]) > maximum(abs.(sol[3, :]))
+
+    tmax = sol.t[end]
+    fl0_sol = CurrentSheetTestParticle.solve_fl(gc0, B; tspan=(0.0, tmax), isoutofdomain, kwargs...)
+    flf_sol = CurrentSheetTestParticle.solve_fl(gcf, B; tspan=(0.0, -tmax), isoutofdomain, kwargs...)
+    lines!(fl0_sol; idxs, color=Makie.wong_colors()[3])
+    lines!(flf_sol; idxs, color=Makie.wong_colors()[4])
 end

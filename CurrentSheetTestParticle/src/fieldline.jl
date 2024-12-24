@@ -11,7 +11,7 @@ function field_line_ode!(drds, r, p, t)
     drds[3] = B[3] / B_norm
 end
 
-function solve_fl(r, B_field; tspan = (0.0, 100.0), alg = Tsit5())
-    prob = ODEProblem(field_line_ode!, r, tspan, (B_field,))
+function solve_fl(r, B_field; tspan=(0.0, 100.0), alg=Tsit5(), kwargs...)
+    prob = ODEProblem(field_line_ode!, r, tspan, (B_field,); kwargs...)
     return solve(prob, alg)
 end
