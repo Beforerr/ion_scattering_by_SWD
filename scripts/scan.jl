@@ -57,16 +57,16 @@ function scan_params()
     return dict_list(allparams)
 end
 
-function main(; params=scan_params(), dir="simulations", logger=error_only_logger)
+function main(; params=scan_params(), dir="simulations", logger=error_only_logger, kwargs...)
     path = datadir(dir)
     with_logger(logger) do
         @showprogress map(params) do d
-            produce_or_load(makesim, d, path; loadfile=false)
+            produce_or_load(makesim, d, path; loadfile=false, kwargs...)
         end
     end
 end
 
-test(; params=test_params(), dir="test", logger=filtered_logger) = main(; params, dir, logger)
+test(; params=test_params(), dir="test", logger=filtered_logger, kwargs...) = main(; params, dir, logger, kwargs...)
 test_alg(; params=test_params_alg(), dir="test_alg", logger=filtered_logger) = main(; params, dir, logger)
 function test_td(; params=test_params_TD(), dir="test_TD", logger=filtered_logger)
     path = datadir(dir)
