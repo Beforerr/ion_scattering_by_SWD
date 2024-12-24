@@ -17,8 +17,6 @@ function distance(A, B)
     return minimum(result)
 end
 
-distance(sol1::ODESolution, sol2::ODESolution) = distance(sol1[1:3, :]', sol2[1:3, :]')
-
 function get_gc_func(B)
     param = prepare(E, B, species=User)
     get_gc(param)

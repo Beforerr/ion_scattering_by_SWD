@@ -28,8 +28,7 @@ function field_lines(sol, B; kwargs...)
     return fl0_sol, flf_sol
 end
 
+distance(sol1::ODESolution, sol2::ODESolution) = distance(sol1[1:3, :]', sol2[1:3, :]')
+
 """field lines distance"""
-function field_lines_distance(sol)
-    fl0_sol, flf_sol = field_lines(sol, B)
-    distance(fl0_sol, flf_sol)
-end
+field_lines_distance(sol, B) = distance(field_lines(sol, B)...)

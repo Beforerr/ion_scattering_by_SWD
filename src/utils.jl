@@ -1,14 +1,15 @@
 using StaticArrays
 using DrWatson
 using DataFrames, DataFramesMeta
-
+using CurrentSheetTestParticle: field_lines_distance
 # %% Solution processing
 
 function extract_info(sol)
     u0 = SVector(sol.prob.u0...)
     u1 = SVector(sol.u[end]...)
     t1 = sol.t[end]
-    return @dict u0 u1 t1
+    dR_perp = field_lines_distance(sol, B)
+    return @dict u0 u1 t1 dR_perp
 end
 
 function process_sols(sol, B, wϕs)
