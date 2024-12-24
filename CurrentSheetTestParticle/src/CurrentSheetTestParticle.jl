@@ -6,11 +6,11 @@ using StaticArrays
 using UnPack
 using Moshi.Match: @match
 
-export RD_B_field, TD_B_field
+export RotationDiscontinuity, RD_B_field, TD_B_field
 export solve_params, dsolve_params
 export w_ϕ_pairs, init_state, init_states, init_states_pm, filter_wϕs!
 export isoutofdomain_params
-export ProblemParams
+export ProblemParamsBase, ProblemParams
 export trace_normalized_B!, trace_normalized_B
 
 include("utils.jl")
@@ -30,11 +30,8 @@ const DEFAULT_BORIS_KWARGS = (; dt=1e-2, savestepinterval=1)
 const DEFAULT_TSPAN = (0, 256)
 const ez = SA[0, 0, 1]
 
-@kwdef struct ProblemParams
-    Bfn = RD_B_field
-    θ = DEFAULT_θ
-    β = DEFAULT_β
-    sign = DEFAULT_SIGN
+@kwdef struct ProblemParamsBase
+    B::Function
     v = 1
     alg = :AutoVern9
     init_kwargs = (; Nw=8, Nϕ=8)
@@ -42,12 +39,12 @@ const ez = SA[0, 0, 1]
     diffeq = DEFAULT_DIFFEQ_KWARGS
 end
 
-@kwdef struct BParams
-    Bfn = RD_B_field
-    θ = DEFAULT_θ
-    β = DEFAULT_β
-    sign = DEFAULT_SIGN
+function RDProblemParams(; Bfn=RD_B_field, θ=DEFAULT_θ, β=DEFAULT_β, sign=DEFAULT_SIGN, kwargs...)
+    B = Bfn(; θ, β, sign)
+    ProblemParamsBase(; B, kwargs...)
 end
+
+const ProblemParams = RDProblemParams
 
 # Step 3: Define the Electric Field (if any)
 const E0 = SVector(0.0, 0.0, 0.0)
@@ -98,9 +95,8 @@ function solve_params_boris(B, u0s::AbstractVector; E=E, tspan=DEFAULT_TSPAN, di
     TestParticle.solve(prob, EnsembleThreads(); trajectories=length(u0s), solve_kwargs...)
 end
 
-function solve_params(d; kwargs...)
-    @unpack θ, β, v, sign, alg, init_kwargs, diffeq, tspan, Bfn = d
-    B = Bfn(; θ, β, sign)
+function solve_params(d::ProblemParamsBase; kwargs...)
+    @unpack B, v, alg, init_kwargs, diffeq, tspan = d
     u0s, wϕs = init_states_pm(B, v; init_kwargs...)
 
     isoutofdomain = isoutofdomain_params(v)
