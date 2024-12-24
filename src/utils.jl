@@ -4,16 +4,16 @@ using DataFrames, DataFramesMeta
 using CurrentSheetTestParticle: field_lines_distance
 # %% Solution processing
 
-function extract_info(sol)
+function extract_info(sol, B)
     u0 = SVector(sol.prob.u0...)
     u1 = SVector(sol.u[end]...)
     t1 = sol.t[end]
-    dR_perp = field_lines_distance(sol, B)
-    return @dict u0 u1 t1 dR_perp
+    distances = field_lines_distance(sol, B)
+    return (; u0, u1, t1, distances...) |> pairs |> Dict
 end
 
 function process_sols(sol, B, wϕs)
-    results = extract_info.(sol.u) |> DataFrame
+    results = extract_info.(sol.u, B) |> DataFrame
     results.wϕ0 = wϕs
     results.B .= B
     process_result!(results)
