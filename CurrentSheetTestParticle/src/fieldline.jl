@@ -12,8 +12,8 @@ function field_line_ode!(drds, r, p, t)
 end
 
 function solve_fl(r, B_field, args...; tspan=DEFAULT_TSPAN, kwargs...)
-    prob = ODEProblem(field_line_ode!, r, tspan, (B_field,); kwargs...)
-    return solve(prob, args...)
+    prob = ODEProblem(field_line_ode!, r, tspan, (B_field,))
+    return solve(prob, args...; verbose=false, kwargs...)
 end
 
 function B_field_line(Bf::Function)
@@ -24,7 +24,6 @@ function field_lines(sol, B; kwargs...)
     gc = get_gc_func(B)
     gc0 = gc(sol[1])
     gcf = gc(sol[end])
-
     isoutofdomain = (u, p, t) -> abs(u[3]) > maximum(abs.(sol[3, :]))
     tmax = 100 * sol.t[end]
     fl0_sol = solve_fl(gc0, B_field_line(B); tspan=(0, -sign(gc0[3]) * tmax), isoutofdomain, kwargs...)
