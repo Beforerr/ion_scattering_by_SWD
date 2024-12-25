@@ -16,18 +16,15 @@ function solve_fl(r, B_field, args...; tspan=DEFAULT_TSPAN, kwargs...)
     return solve(prob, args...; verbose=false, kwargs...)
 end
 
-function B_field_line(Bf::Function)
-    return r -> (B = Bf(r); sign(B[3]) * B)
-end
-
 function field_lines(sol, B; kwargs...)
     gc = get_gc_func(B)
     gc0 = gc(sol[1])
     gcf = gc(sol[end])
     isoutofdomain = (u, p, t) -> abs(u[3]) > maximum(abs.(sol[3, :]))
+    Bz0 = B(gc0)[3] # this only works for constant Bz
     tmax = 100 * sol.t[end]
-    fl0_sol = solve_fl(gc0, B_field_line(B); tspan=(0, -sign(gc0[3]) * tmax), isoutofdomain, kwargs...)
-    flf_sol = solve_fl(gcf, B_field_line(B); tspan=(0, -sign(gcf[3]) * tmax), isoutofdomain, kwargs...)
+    fl0_sol = solve_fl(gc0, B; tspan=(0, -sign(Bz0 * gc0[3]) * tmax), isoutofdomain, kwargs...)
+    flf_sol = solve_fl(gcf, B; tspan=(0, -sign(Bz0 * gcf[3]) * tmax), isoutofdomain, kwargs...)
     return fl0_sol, flf_sol
 end
 
