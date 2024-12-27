@@ -8,13 +8,22 @@ function test_params()
     allparams = Dict(
         :θ => θs,
         :β => βs,
-        :sign => [-1, 1],
         :v => vs,
         :init_kwargs => (; Nw=90, Nϕ=120),
         :tspan => (0, 1024),
         :diffeq => diffeq
     )
 
+    return dict_list(allparams)
+end
+
+function test_sign_params()
+    allparams = Dict(
+        :θ => 65,
+        :β => 60,
+        :sign => [-1, 1],
+        :v => 8.0,
+    )
     return dict_list(allparams)
 end
 
