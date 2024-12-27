@@ -13,8 +13,8 @@ end
 vals(df, s) = unique(df[!, s]) |> sort
 
 begin
-    w0 = :w0 => "cos(α₀)"
-    w1 = :w1 => "cos(α₁)"
+    μ0 = w0 = :μ0 => "cos(α₀)"
+    w1 = :μ1 => "cos(α₁)"
     Δw = :Δw => "Δ cos α"
     α0 = :α0 => "α₀"
     α1 = :α1 => "α₁"
@@ -61,26 +61,18 @@ end
 
 pa_pair_plot(df::AbstractDataFrame) = pa_pair_plot(data(df))
 
-# Function to plot one figure per column
-function pa_layer(s)
-    layout = @match s begin
+function col_row_mapping(s)
+    return @match s begin
         :v => mapping(col=θ_map, row=β_map)
         :β => mapping(col=θ_map, row=v_map)
     end
-    return mapping(xyw...) * density_layer() * layout
 end
 
+pa_layer(s) = mapping(xyw...) * density_layer() * col_row_mapping(s)
+
 function pa_pair_hist!(df::AbstractDataFrame, layout, s=:v; layer=pa_layer(s), scales=tm_scale(), axis=w_axis, kwargs...)
-    vs = vals(df, s)  # Get unique velocity values
-    fgs = [layout[1, i] for i in 1:length(vs)]
-    return map(zip(fgs, vs)) do (fg, v)
-        df_s = @subset(df, $s .== v)
-        plt = data(df_s) * layer
-        grids = draw!(fg, plt, scales; axis, kwargs...)
-        r = s == :v ? rename_sym : rename_sym_deg
-        Label(fg[0, :], r(s)(v), tellwidth=false)
-        grids
-    end
+    r = s == :v ? rename_sym(s) : rename_sym_deg(s)
+    sdraw!(layout, data(df) * layer, s => r; scales, axis, kwargs...)
 end
 
 function pa_pair_hist(df; figure=(; size=(1200, 400)), scale=colorscale, kw...)

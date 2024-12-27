@@ -17,8 +17,10 @@ function get_result_dfs(; dir="simulations")
     "tspan" ∈ cols ? @transform!(df, :tmax = last.(:tspan)) : insertcols!(df, :tmax => DEFAULT_TSPAN[2])
     "sign" ∈ cols || insertcols!(df, :sign => DEFAULT_SIGN)
     "Bfn" ∈ cols || insertcols!(df, :Bfn => CurrentSheetTestParticle.RD_B_field)
-    @rtransform!(df, :B = apply(:Bfn, θ=:θ, β=:β, sign=:sign))
-    return df
+    @chain df begin
+        @transform!(:sign = coalesce.(:sign, DEFAULT_SIGN))
+        @rtransform!(:B = apply(:Bfn, θ=:θ, β=:β, sign=:sign))
+    end
 end
 
 function get_result(; dir="simulations")
