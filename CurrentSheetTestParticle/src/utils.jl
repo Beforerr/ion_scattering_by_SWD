@@ -14,7 +14,7 @@ function distance(A, B)
         end
         result[i] = minSqDist
     end
-    return minimum(result)
+    return minimum(result) |> sqrt
 end
 
 """
