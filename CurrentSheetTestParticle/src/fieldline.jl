@@ -43,15 +43,15 @@ function field_lines_asym_distance(sol1, sol2, B)
     distance(p1, p2, direction)
 end
 
-field_lines_asym_distance(sol, B) =
-    field_lines_asym_distance(field_lines(sol, B)..., B)
-
 """
 Field lines distances
 """
-function field_lines_distance(sol, B)
-    fl0_sol, flf_sol = field_lines(sol, B)
-    dR_perp_min = distance(fl0_sol, flf_sol)
-    dR_perp_asym = field_lines_asym_distance(sol, B)
+function field_lines_distance(sol1, sol2, B)
+    dR_perp_min = distance(sol1, sol2)
+    dR_perp_asym = field_lines_asym_distance(sol1, sol2, B)
     return (; dR_perp_min, dR_perp_asym)
+end
+
+for sym in [:field_lines_distance, :field_lines_asym_distance]
+    @eval $sym(sol, B) = $sym(field_lines(sol, B)..., B)
 end
