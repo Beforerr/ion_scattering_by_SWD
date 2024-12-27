@@ -22,6 +22,10 @@ end
 function process_result!(df::AbstractDataFrame)
 
     "wϕ0" in names(df) && @rtransform!(df, :μ0 = :wϕ0[1], :ϕ0 = :wϕ0[2])
+    "dR_perp_min" in names(df) && @transform!(df,
+        :dR_perp_asym_norm = :dR_perp_asym ./ :v,
+        :dR_perp_min_norm = :dR_perp_min ./ :v
+    )
 
     @chain df begin
         @rtransform!(:μ1 = cos_pitch_angle(:u1, :B))

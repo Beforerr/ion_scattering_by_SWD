@@ -11,14 +11,11 @@ include("../src/utils.jl")
 # ---------------------------
 
 θ = 45;
+θ = 85;
 v = 8;
-d = ProblemParams(;
-    θ,
-    β=90,
-    v,
-)
+d = @dict(θ, β = 90, v)
 
-sols, (wϕs, B) = solve_params(d);
+sols, (wϕs, B) = solve_params(ProblemParams(; d...));
 
 Bx(z) = B([0, 0, z])[1]
 By(z) = B([0, 0, z])[2]
@@ -97,7 +94,8 @@ begin
     plot_sol(sol, idxs)
     plot_gc!(sol, B)
     fl0_sol, flf_sol = plot_gc_field_lines!(sol, B)
-    current_figure()
+    @info field_lines_distance(fl0_sol, flf_sol, B)
+    easy_save("example_dR_perp" * savename(d))
 end
 
 plot_detail(sols[[12, 13]])

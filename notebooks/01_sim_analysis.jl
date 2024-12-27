@@ -3,7 +3,7 @@ using DrWatson
 using Revise
 using CairoMakie
 using Beforerr
-includet("../src/main.jl")
+include("../src/main.jl")
 
 
 dir = "simulations"
@@ -25,29 +25,47 @@ end
 # ----
 colorscale = log10
 
-let dir = "test"
-    df = get_result(; dir)
+dir = "test"
+df = get_result(; dir)
+
+let
     ldf, rdf = split_results(df)
     pa_pair_hist(ldf, rdf)
     easy_save("tm/example")
 end
 
-let dir = "test", figure=(; size=(800, 400))
+let figure = (; size=(800, 400))
     pa_layer() = mapping(xyw...) * density_layer()
     subset_outside(df) = @subset(df, outside.(:u1; z_init_0=3.5))
 
-    df = get_result(; dir)
     sdf = @subset(df, :θ .== 85, :β .== 60, :v .!= 8) |> subset_outside
-    pa_pair_hist(sdf; figure, layer = pa_layer())
+    pa_pair_hist(sdf; figure, layer=pa_layer())
     easy_save("tm/example_subset")
+end
+
+let figure = (; size=(400, 800))
+    sdf = @subset(df, :θ .== 85, :sign .== 1)
+    fig = Figure(; figure)
+    layer = data(sdf) * mapping(μ0, ϕ0) * visual(Heatmap) * col_row_mapping(:v)
+    grids = sdraw!(fig[1, 1], layer * (:dR_perp_asym,), :v)
+    colorbar!(fig[1, end+1], grids[end])
+    fig
+end
+
+let figure = (; size=(400, 800))
+    sdf = @subset(df, :θ .== 85, :sign .== 1, :β .== 90)
+    fig = Figure(; figure)
+    layer = data(sdf) * mapping(μ0, ϕ0) * visual(Heatmap) * col_row_mapping(:v)
+    grids = sdraw!(fig, layer * (:dR_perp_asym_norm,), :v; add_cb=true)
+    fig
 end
 
 # ----
 # Test different field configurations
 # ----
-let dir = "test_TD", figure=(; size=(500, 1000))
+let dir = "test_TD", figure = (; size=(500, 1000))
     df = get_result(; dir)
-    pa_layer() = mapping(xyw..., col = :Bfn => string, row=v_map) * density_layer()
+    pa_layer() = mapping(xyw..., col=:Bfn => string, row=v_map) * density_layer()
     draw(data(df) * pa_layer(), tm_scale(); figure)
     easy_save("tm/example_td")
 end
