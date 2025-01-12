@@ -14,8 +14,6 @@ author:
     affiliations:
       - ref: ucla
 code-links:
-  - href: zotero://select/library/collections/XHVVKL3N
-    text: Zotero
   - href: https://app.tana.inc?nodeid=3CspYXE465
     text: Tana
   - text: Overleaf
@@ -70,20 +68,20 @@ $$
 
 $$
 \begin{aligned}
-f_1(z)\to \cos (\beta) \left(\text{Ci}\left(\beta +\beta \tanh \left(\frac{z}{L}\right)  \right)-\text{Ci}\left(\beta -\beta  \tanh \left(\frac{z}{L}\right)\right)\right)+\sin (\beta) \left(\text{Si}\left(\beta +\beta \tanh \left(\frac{z}{L}\right) \right)-\text{Si}\left(\beta -\beta  \tanh \left(\frac{z}{L}\right)\right)\right),
+f_1(z)\to \cos (β) \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)-\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)+\sin (β) \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right) \right)-\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right),
 \\
-f_2(z)\to \sin (\beta) \left(\text{Ci}\left(\beta +\beta \tanh \left(\frac{z}{L}\right)  \right)+\text{Ci}\left(\beta -\beta  \tanh \left(\frac{z}{L}\right)\right)\right)-\cos (\beta) \left(\text{Si}\left(\beta +\beta \tanh \left(\frac{z}{L}\right)  \right)+\text{Si}\left(\beta -\beta  \tanh \left(\frac{z}{L}\right)\right)\right)
+f_2(z)\to \sin (β) \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)-\cos (β) \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)
 \end{aligned}
 $$
 
 $$
-\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-\frac{1}{2} \tilde{f_1}(\tilde z) \sin \theta \right)^2 + \left(\tilde{x} \cos (\theta )+\frac{1}{2} \left(\tilde{f_2}(\tilde z)-C_{\beta }\right) \sin \theta \right)^2+\tilde{p_z}^2\right)
+\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-\frac{1}{2} \tilde{f_1}(\tilde z) \sin \theta \right)^2 + \left(\tilde{x} \cos (\theta )+\frac{1}{2} \left(\tilde{f_2}(\tilde z)-C_{β }\right) \sin \theta \right)^2+\tilde{p_z}^2\right)
 $$
 
 We expand the Hamiltonian near the current sheet to the third order.
 
 $$
-\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-(\tilde{z} - \frac{1}{6} \beta ^2 \tilde{z}^3) \sin \theta \right)^2 + \left(\tilde{x} \cos \theta -\frac{\beta  \tilde{z}^2}{2} \sin \theta \right)^2+\tilde{p_z}^2\right)
+\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-(\tilde{z} - \frac{1}{6} β ^2 \tilde{z}^3) \sin \theta \right)^2 + \left(\tilde{x} \cos \theta -\frac{β  \tilde{z}^2}{2} \sin \theta \right)^2+\tilde{p_z}^2\right)
 $$
 
 It is important to note that the in-plane rotational effect $β$ would appear in the second order expansion. This distinctive feature represents a significant aspect that has not been addressed in previous studies employing the Hamiltonian formalism.

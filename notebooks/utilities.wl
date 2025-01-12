@@ -2,12 +2,58 @@
 
 (* << utilities.wl *)
 
-(* ::Section:: *)
-(*Others*)
-form[x_] := Rasterize@TraditionalForm@x
+
 
 (* ::Section:: *)
+(*Others*)
+
+
+form[x_] := Rasterize@TraditionalForm@x
+
+
+
+(* ::Section:: *)
+(*Potential  energy  U*)
+
+
+uNPlot[U_, kxTemp_, pxTemp_, zTemp_:3, erg_ : 1/2, opts : OptionsPattern[
+    {Plot, addLine -> True, addPoint -> False}]] := Module[{},
+    epilog = {};
+    
+    
+    If[OptionValue[addLine],
+        line1 = Line[{{-zTemp, erg}, {zTemp, erg}}];
+        epilog = Join[epilog, {Directive[{Dashed}], line1}]
+    ];
+    Utemp = U /. {\[Kappa]xN -> Rationalize[kxTemp], pxN -> pxTemp};
+    If[OptionValue[addPoint],
+        zNs = NSolveValues[# == erg && zN \[Element] Reals, zN]& /@ Utemp;
+        point = Point[{#, erg}& /@ #]& /@ zNs;
+        epilog = Join[epilog, {PointSize[Medium], point}]
+    ];
+    Plot[Evaluate[Utemp], {zN, -zTemp, zTemp}, PlotRange -> {Full, {0,
+         1}}, Epilog -> epilog, Axes -> False, Frame -> True, PlotLabel -> StringForm[
+        "\[Kappa]x: ``, px: ``", N @ kxTemp, N @ pxTemp], FrameLabel -> {"z", "U"}, 
+        Evaluate[FilterRules[{opts}, Options[Plot]]]]
+]
+
+
+uPlot[kxTemp_, pxTemp_, zTemp_ : 3] := Module[{},
+  line1 = Line[{{-zTemp, 1/2}, {zTemp, 1/2}}];
+  lineStyle = {Dashed};
+  Plot[U /. {kx -> kxTemp, px -> pxTemp}, {z, -zTemp, zTemp}, 
+   PlotRange -> {Full, {0, 1}},
+   Epilog -> {Directive[lineStyle], line1},
+   Axes -> False, Frame -> True, 
+   PlotLabel -> StringForm["kx: `` px: ``", N@kxTemp, N@pxTemp],
+   FrameLabel -> {"z", "\!\(\*SubscriptBox[\(U\), \(z\)]\)"}
+   ]
+  ]
+
+
+(* ::Section::Closed:: *)
 (*Solver*)
+
 
 getInitialPoints::usage = 
   "Get Initial Points given equations (need to set `x0, px0, z0, pz0`)"
@@ -35,6 +81,7 @@ Options[getInitialPoints] = {
 
 (* ::Subsubsection:: *)
 (*getPoint : Solve the integration using initial conditions*)
+
 
 ClearAll[getPoint]
 getPoint::usage = "Solve the integration using initial conditions"
@@ -217,8 +264,12 @@ nDataset[allPointsDS_] := Module[{ds},
       }] &]
   ]
 
+
+
 (* ::Section:: *)
 (*Plotting utilities*)
+
+
 uCurve[zc0_ : 5] := Module[{},
   tempSol = NSolveValues[
     D[U, z] == 0 && rawH == 1/2 /. {z -> zc, pz -> 0, kx -> kxs, px -> pxs}, 
@@ -283,20 +334,6 @@ arcLen[aTemp_, kmTemp_] := Block[{\[Alpha], c1, c2},
    ]
   ]
 
-
-uPlot[kxTemp_, pxTemp_, zTemp_ : 3] := Module[{},
-  line1 = Line[{{-zTemp, 1/2}, {zTemp, 1/2}}];
-  lineStyle = {Dashed};
-  Plot[U /. {kx -> kxTemp, px -> pxTemp}, {z, -zTemp, zTemp}, 
-   PlotRange -> {Full, {0, 1}},
-   Epilog -> {Directive[lineStyle], line1},
-   Axes -> False, Frame -> True, 
-   PlotLabel -> StringForm["kx: `` px: ``", N@kxTemp, N@pxTemp],
-   FrameLabel -> {"z", "\!\(\*SubscriptBox[\(U\), \(z\)]\)"}
-   ]
-  ]
-
-(*  *)
 
 ClearAll[overviewPlot];
 overviewPlot[s_, opts : OptionsPattern[]] := Block[{variable, plotList},
@@ -559,8 +596,10 @@ overviewPlot[sol]
 (* ::Subsection:: *)
 (*Scattering*)
 
+
 (* ::Subsubsection:: *)
 (*Px*)
+
 
 pxPairs[dataset_] := (
   initialPx = dataset[All, "initialPoint"] // Map[#["px"] &] // Normal;
@@ -586,8 +625,11 @@ pxPairsPlot[dataset_Dataset] := (
   pxPairsPlot[pxPairs[dataset]]
   )
 
+
+
 (* ::Subsubsection:: *)
 (*Pitch angle*)
+
 
 paAssoc[point_Association] := (
   If[KeyExistsQ[point, "x"],
