@@ -1,5 +1,5 @@
 ---
-title: Energetic ion scattering by solar wind discontinuities
+title: "Quantification of ion scattering by solar wind discontinuities: pitch-angle diffusion rates"
 abstract: Because solar wind plasma flow transports the entire spectrum of magnetic field fluctuations (from low-frequency inertial range to electron kinetic range), it is a natural laboratory for plasma turbulence investigation. Among the various wave modes and coherent plasma structures that contribute to this spectrum, one of the most important solar wind elements is ion-scale solar wind discontinuities. These structures, which carry very intense current, have been considered as a free energy source for plasma instabilities that contribute to solar wind heating. Investigations of such discontinuities have been mostly focused on their magnetic field signatures; much less is known about their role in scattering of energetic ions. In this study, we consider observational-based model of ion dynamics and scattering in force-free rotational magnetic discontinuities. Focusing on quantification of the scattering effect, we demonstrate that background sheared magnetic field plays an important role in determining the efficiency of pitch angle scattering. We provide a model included statistical properties of solar wind discontinuities and providing estimates of ion scattering rate.
 author:
   - name: Zijin Zhang
@@ -13,13 +13,9 @@ author:
     roles: [conceptualization, writing]
     affiliations:
       - ref: ucla
-code-links:
-  - href: https://app.tana.inc?nodeid=3CspYXE465
-    text: Tana
-  - text: Overleaf
-    href: https://www.overleaf.com/project/66f2c8eb4064b5d2596a806e
 ---
 
+```{=html}
 <!-- 
 Figure 1: two examples of discontinuity observations in ARTEMIS data (gse magnetic field, solar wind speed in gse, lmn magnetic field, ion omnidirection spectrum) with hodographs and fitting Bm(Bl)
 Figure 2: distribution of kappa_m, thickness L/di, distributions of energies estimated from L=\rhoi equation
@@ -30,23 +26,23 @@ Figure 6: several examples of (px_init, px_final) matrix for different km and al
 Figure 7: (km, alpha) space with color showing averaged over 10% variance of pitch-angle maximum (over initial px).
 Figure 8, 9-10: these will be results of mapping technique for which we can use your maxtrixes. Let us discuss what do with this figures, as they should show the effective scattering rate that is more universal than pitch-angle variance 
 -->
-
+```
 
 # Introduction
 
-The transport of energetic particles within the heliosphere is significantly influenced by the turbulent magnetic field present in the solar wind. However, this turbulence should not be regarded merely as a collection of random magnetic field fluctuations. Instead, the nonlinear energy cascade process results in the formation of coherent structures. These coherent structures have been shown to act as efficient particle scatterers in non-collisional plasmas [@artemyevSuperfastIonScattering2020]. 
+The transport of energetic particles within the heliosphere is significantly influenced by the turbulent magnetic field present in the solar wind. However, this turbulence should not be regarded merely as a collection of random magnetic field fluctuations. Instead, the nonlinear energy cascade process results in the formation of coherent structures. These coherent structures have been shown to act as efficient particle scatterers in non-collisional plasmas [@artemyevSuperfastIonScattering2020].
 
 We investigated the interaction of ions with rotational discontinuities by employing a simplified analytical model for the magnetic field configuration. Our study aimed to examine how the particle pitch angle is influenced by the parameters of the magnetic field configuration and the initial conditions of the particles.
 
 # Basic Equations
 
-We assume the following force-free magnetic field configuration:
+We assume the following 1-D force-free magnetic field configuration where $\mathbf{B}$ depends only on the $z$ coordinate:
 
 $$
-\mathbf{B} = B_0 (\cos θ \ e_z + \sin θ ( \sin φ(z) \ e_x + \cos φ (z) \ e_y))
+\mathbf{B} = B_0 (\cos θ \ \mathbf{e_z} + \sin θ ( \sin φ(z) \ \mathbf{e_x} + \cos φ (z) \ \mathbf{e_y})) 
 $$
 
-with $φ(z) = β \tanh(z)$, where $L$ is the thickness of the current sheet.
+where $B_0$ is the magnitude of the magnetic field, $θ$ is the azimuthal angle between the normal $\mathbf{B_z} = B_0 \cos θ \ \mathbf{e_z} \equiv B_n \mathbf{e_z}$ and the magnetic field. More specifically we assume the following form, $φ(z) = β \tanh(z/L)$, where $L$ is the thickness of the current sheet and $β$ is the half of in plane rotation angle $ω_{in}$. The transverse magnetic field component $\mathbf{B_t} = B_t \sin φ(z) \ \mathbf{e_x} + B_t \cos φ (z) \ \mathbf{e_y}$ rotates by an angle $ω_{in}$ from $-∞$ to $+∞$ where $B_t = B_0 \sin θ$
 
 The motion of a particle in such a field can be expressed in the Hamiltonian formalism as follows:
 
@@ -58,9 +54,9 @@ where $\mathbf{A}$ represents the magnetic vector potential, $\mathbf{p}$ is the
 
 $$
 \begin{aligned}
-A_x\to \frac{1}{2} B_0 L f_1(z) \sin (\theta )
+A_x\to L B_t f_1(z)
 \\
-A_y\to \frac{1}{2} B_0 L f_2(z) \sin (\theta )+B_0 x \cos (\theta )
+A_y\to L B_t f_2(z) + x B_n
 \\
 A_z\to0
 \end{aligned}
@@ -68,63 +64,67 @@ $$
 
 $$
 \begin{aligned}
-f_1(z)\to \cos (β) \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)-\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)+\sin (β) \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right) \right)-\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right),
+f_1(z)\to \frac{1}{2} \cos β \ \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)-\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)+ \frac{1}{2} \sin β \ \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right) \right)-\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right),
 \\
-f_2(z)\to \sin (β) \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)-\cos (β) \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)
+f_2(z)\to \frac{1}{2}  \sin β \ \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right) - \frac{1}{2} \cos β \ \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)
 \end{aligned}
 $$
 
-$$
-\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-\frac{1}{2} \tilde{f_1}(\tilde z) \sin \theta \right)^2 + \left(\tilde{x} \cos (\theta )+\frac{1}{2} \left(\tilde{f_2}(\tilde z)-C_{β }\right) \sin \theta \right)^2+\tilde{p_z}^2\right)
-$$
-
-We expand the Hamiltonian near the current sheet to the third order.
+We introduce a dimensionless Hamiltonian $\tilde{H} = H / h$ by normalizing $(x, z) = (\tilde{x} L + \frac{c p_y}{q B_z}, \tilde{z} L)$ and $(p_x, p_z) = p (\tilde{p_x}, \tilde{p_z})$ where $p = \frac{q L B_t}{c}$ and $h = \frac{q^2 L^2 B_t^2}{m c^2}$.
 
 $$
-\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-(\tilde{z} - \frac{1}{6} β ^2 \tilde{z}^3) \sin \theta \right)^2 + \left(\tilde{x} \cos \theta -\frac{β  \tilde{z}^2}{2} \sin \theta \right)^2+\tilde{p_z}^2\right)
+\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-f_1(z)\right)^2+\left(\tilde{x} \cot θ + f_2(z)\right)^2+\tilde{p_z}^2\right)
 $$
 
-It is important to note that the in-plane rotational effect $β$ would appear in the second order expansion. This distinctive feature represents a significant aspect that has not been addressed in previous studies employing the Hamiltonian formalism.
+It is important to note that this is an exact Hamiltonian of the particle dynamic. We do not expand it near the neutral plane $z=0$ like previous study employing the Hamiltonian formalism. This Hamiltonian also include the rotation effect $β$. Expand the Hamiltonian near the current sheet to the third order and assume that $β=1$ we could reduce to the Hamiltonian form in @artemyevSuperfastIonScattering2020 where $κ = \cot θ$. In this study, we quantitatively investigate the role of $β$ and particle energy $E$ in the pitch-angle scattering efficiency. In the following discussion, the tilde notation over the dimensionless variable is omitted for simplicity.
 
-# Test particle simulations of ion scattering by solar wind discontinuities
+# Violation of the adiabatic invariant
 
-We assume the following expression:
+For discontinuities where $B_n / B_t ≪ 1$, the variables $(κ x, p_x)$ evolve significantly more slowly compared to $(z, p_z)$. Assuming that $x$ and $p_x$ are effectively frozen, the Hamiltonian describes a periodic motion within the $(z, p_z)$ plane, governed by the effective potential energy $U(z) = H - p_z^2$. For slow variations in $(κ x, p_x)$, the generalized magnetic moment $I_z = (2 π)^{-1} ∮ p_z dz $ is conserved as an adiabatic invariant, with changes occurring only in response to substantial trajectory reconfigurations. 
 
-$$
- \mathbf{B} = B_0 (\cos θ \ e_z + \sin θ ( \sin φ(z) \ e_x + \cos φ (z) \ e_y))
-$$
+The Hamiltonian captures two distinct types of ion motion within the $(z, p_z)$ plane. As $(κ x, p_x)$ evolve slowly, the corresponding trajectory in the $(z, p_z)$ plane undergoes a gradual transformation. Particles may transition from one type of motion to another via a separatrix crossing, which results in a jump in $I_z$ of approximately $\sim 1$, attributed to the geometrical destruction of adiabatic invariance. Concurrently, the projection of the particle’s phase point onto the $(κ x, p_x)$ plane lies along the so-called uncertainty curve, which demarcates regions corresponding to different types of motion in the $(z, p_z)$ plane. Importantly, this $2π I_z$ jump corresponds to the difference in areas enclosed by the separatrix in the $(z, p_z)$ plane and is independent of $κ$.
 
-with $φ(z) = β \tanh(z/L)$, 
+::: {#fig-zPz_phase}
+![](figures/zPz_phase_portraits.pdf)
 
-We normalize the magnetic field $\mathbf{B}$ to the background magnetic field magnitude $B_0$, time $t$ to $1/Ω_0$, with $Ω_0 = q B_0/m_p$, and the velocity $v$ to characteristic velocity $v_0 = Ω_0 L$. And the dimensionless form of the motion equation can be written as follows:
+Phase portraits of Hamiltonian at frozen $(κx, p_x)$ for $β = 1$ : $H$ values of each curve are shown in the plot; $κ x = 4, p_x = 1$ in the left panel and $κx = 0, p_x = 0.5$ in the right panel.
+:::
 
-$$
-\frac{d (γ \mathbf{v})}{dt} = \mathbf{v} \times \mathbf{B} ,
-\frac{d\mathbf{r}}{dt} = \mathbf{v}
-$$
+Due to the symmetry of ion motion about the $p_z = 0$ line, at the saddle point $z = z_c, p_z = 0$ of the separatrix, the potential energy $U$ reaches a local maximum along the $z$-direction, satisfying $∂ U/∂ z = 0$ and $∂^2 U/∂ z^2 < 0$. These conditions allow the expression of the slow variables along the uncertainty curve in the $(κ x, p_x)$ plane as functions of $z_c$. When a particle trajectory crosses the $z = 0$ plane, the crossing point is distributed within a circular region defined by $(p_x - f_1(0))^2 + (\kappa x + f_2(0))^2 = 2H$. The likelihood of the trajectory intersecting the uncertainty curve is therefore proportional to the separatrix length $L_{\text{sep}}$, normalized by the square root of the particle energy $H = E$.
 
-And therefore, the parameters important for our investigation of the ion scattering is $θ$, $β$, and $v_0$.
+::: {#fig-UCLength}
+![](figures/UCLength.pdf)
 
-Using data from the Wind mission, we compiled a dataset of 100,000 discontinuities, with their orientations determined via the minimum variance analysis of the magnetic field (MVAB) method. The orientation of these discontinuities is critical for accurately determining both their thickness ($L$) and the in-plane magnetic field rotation ($ω_{in}$), which are key factors in the ion scattering process. To ensure the robustness of the analysis, we utilized a filtered dataset that includes only discontinuities where $Δ|B|/|B| > 0.05$ or $ω > 60°$. As noted by @liuFailuresMinimumVariance2023, the MVAB method yields acceptable accuracy for B_N when these conditions are met. Importantly, these two parameters, thickness and rotation, do not depend on the discontinuity normal and can be directly calculated from the magnetic field data.
+:::
+
+# Test particle simulations
+
+To quantitatively understand how particles are scattered by solar wind discontinuities, we conducted extensive test particle simulations using the distribution of real solar wind parameters at 1 AU. As indicated by the dimensionless Hamiltonian, the key parameters influencing particle dynamics are the two angles $θ, β$ and the normalized particle energy $E/h$. Since our primary focus is on protons, we assume a particle mass equal to $m_p$ (the proton mass) and a charge equal to the elementary charge $q$. For a given particle energy, the normalized particle energy can be determined from the magnetic field configuration, specifically $B_t = B_0 \sin θ$ and the characteristic scale $L$. Using a simple transformation, $B_t = B_0 \sin θ$, the parameters critical for investigating ion scattering are $θ$, $β$, and $v_0 = Ω_0 L = q B_0 L / (c m_p)$, where $Ω_0$ is the cyclotron frequency corresponding to the reference magnetic field $B_0$.
+
+Using data from the Wind mission, we compiled a dataset of 100,000 discontinuities, with their orientations determined via the minimum variance analysis of the magnetic field (MVAB) method. The orientation of these discontinuities is critical for accurately determining both their thickness ($L$) and the in-plane magnetic field rotation ($ω_{in}$), which are key factors in the ion scattering process. To ensure the robustness of the analysis, we utilized a filtered dataset that includes only discontinuities where $Δ|B|/|B| > 0.05$ or $ω > 60°$. As noted by @liuFailuresMinimumVariance2023, the MVAB method yields acceptable accuracy for $B_n$ when these conditions are met. Importantly, these two parameters, thickness and rotation, do not depend on the discontinuity normal and can be directly calculated from the magnetic field data.
 
 ![](figures/wind_hist3d.png)
 
 The most probable values in the 3D distribution are a characteristic velocity ($v_0$) of approximately 250 km/s, a in-plane rotation angle ($ω_{in}$) about 90 degrees, and an azimuthal angle ($θ$) of around 85 degrees.
 
-# Results
+For each magnetic field configuration, we initialize a distribution of particles with different pitch angle $α_0$ and gyro phase $ψ_0$ that are far away from the current sheet center. We numerically integrate the particle motion until the particle has completely left the current sheet. We track the particle final pitch angle $α_1$ and construct the transition matrix (TM), that describes the probability for pitch-angle change $∆α= α_1−α_0$ for a single interaction. @fig-tm-example illustrates the transition matrix for particle of ??? keV (left) and ???keV (right) in magnetic field configuration with $θ = 85°, β = 60°, L = ?$. Enhanced probability around the diagonal of TM corresponds to weakly scattered SEPs, ∆α = 0. Spreading around the diagonal indicates the diffusive scattering, and the probability of large pitch-angle jumps are described by essentially non-diagonal elements.
 
-![](figures/example_tp.png)
-
-Scan the parameter with angle difference by 10 degree and velocity by ...
-
-![Transition matrix for different particle energies](figures/tm_stats_vPs.png)
-
-
-# Examples of transition matrix
-
-![](figures/tm/example.png)
-
+::: {#fig-tm-example}
 ![θ = 85°, β = 60°](figures/tm/example_subset.png)
+
+:::
+
+# Long-term pitch angle evolution
+
+
+Long-term modeling of particle pitch-angle distributions resulting from current-sheet scattering involves simulating the dynamics of a large number of particles through multiple current-sheet interactions over extended periods. To reduce computational time and complexity, we derive a simplified probabilistic description of pitch-angle evolution for modeling energetic particle transport under current-sheet scattering. 
+The scattering process depends on the particle's initial conditions, $(\mathbf{r}, \mathbf{v})$, as well as the configuration of the current sheet, $\mathbf{B}$. In the 1D model, these initial conditions can be expressed in terms of $z, E_0, α_0$, and $ψ_0$. Since our primary interest lies in the pitch angle after the particle exits the current sheet, and the energy $E_0$ remains constant in the absence of an electric field, the initial energy $E_0$ and position $z$ (provided the particle is sufficiently far from the center of the current sheet) can be omitted from further consideration.
+
+The final pitch angle, however, is highly sensitive to initial conditions $(α_0, ψ_0)$, where small variations in the gyro phase can lead to significantly different final pitch angles. Therefore, the scattering process $\Pi : (α_0, ψ_0) \to (α_1, ψ_1)$ is better represented as a probabilistic transition $p(α_1 | α_0, \Pi)$, with the probability derived through numerical interpolation of the transition matrix. Here, $\Pi$ characterizes the current sheet configuration. This probabilistic representation is further justified by the fact that the gyro phase depends on the particle's location and may undergo random shifts during the crossing of a current sheet. Additionally, numerical integration methods, such as the Boris method, introduce a phase error proportional to $Δ t$, making the gyro phase less reliable. Thus, it is more appropriate to model the gyro phase as a random variable. This probabilistic approach eliminates dependence on the gyro phase, focusing instead on the statistical relationship between the initial pitch angle $α_0$ and the final pitch angle $α_1$, as governed by the properties of the current sheets.
+
+From the obtained profile of the transition matrix under various current sheet configurations, the long-term behavior of particle pitch angles can be characterized as a combination of intermediate diffusion and large pitch-angle jumps. For instance, during interactions with current sheets featuring a large shear angle $β$, particles in the ensemble may experience significant pitch-angle jumps. These large jumps are followed by more frequent interactions with current sheets with smaller shear angles, leading to a gradual diffusion of particles in pitch angle. This interplay between large non-diffusive jumps and continuous diffusive processes suggests a dynamic evolution of the particle ensemble, where the overall pitch-angle distribution reflects the combined effects of both scattering regimes. Over time, this results in a broadened and redistributed pitch-angle profile, governed by the statistical nature of the interactions with the solar wind current sheets.
+
+For particles with a specific energy, a weighted transition matrix (WTM) can be constructed over the observed distribution of SWDs: $p(α_1 | α_0) = \sum_{i} p(α_1 | α_0, \Pi_i) w_i$, where the weight $w_i$ corresponds to the occurrence probabilities of specific SWD configurations. The WTM accounts for the varying likelihoods of particles encountering SWDs with different properties and encapsulates the overall probability of a particle undergoing a pitch-angle jump at 1 AU due to interactions with an ensemble of SWDs.
 
 ::: {#fig-tm-stats-100keV}
 ![](figures/tm/tm_stats_100keV.png)
@@ -132,29 +132,46 @@ Scan the parameter with angle difference by 10 degree and velocity by ...
 Transition matrix for 100 keV particles.
 :::
 
+As shown in @fig-tm-stats-100keV, the WTM for 100 keV protons at 1 AU indicates a strong probability of minimal pitch-angle changes, evident from the prominent bright diagonal, as well as significant probabilities associated with diffusive scattering. Notably, it also reveals a considerable likelihood of large pitch-angle changes. These large-angle jumps result from scattering on SWDs with characteristic scales $L$ that are comparable to or smaller than the gyroradius of 100 keV protons. Such strong scattering cannot be adequately described by diffusion alone. However, the WTM can be directly employed to simulate the long-term evolution of particles' pitch-angle distributions using stochastic difference equation, as described in @eq-mapping:
 
 $$
-\begin{aligned}
-M_1(n) = ∑_i (α_i^n - α_i^0) / ∑_i
-\\
-M_2(n) = ∑_i (α_i^n - α_i^0)^2  -M_1^2 / ∑_i
-\end{aligned}
-$$
+α_{n+1,i} = W\left(α_{n,i}, ξ_{n,i}\right)
+$$ {#eq-mapping}
+
+where $n$ is the number of interaction (interaction with SWD), $i$ is the particle index within the ensemble, and $W\left(α_{n,i}, ξ_{n,i}\right)$ determines pitch-angle change from the WTM and a given random variable $ξ_{n,i}$, which is sampled from a uniform distribution.
+
+@fig-pa-jump-history illustrates two characteristic solutions of the dynamical equation (pitch-angle mapping) based on the WTM evaluated at 1 AU. The pitch-angle dynamics are primarily governed by infrequent but substantial jumps, which could result in the reflection of particles from the discontinuity, indicated by a reversal in the sign of $\cos α$.
 
 ::: {#fig-pa-jump-history}
 ![](figures/pa_jump_history.png)
 
+![](figures/pa_jump_history_high.png)
+
 Examples of ion pitch angle scattering by solar wind discontinuities for different energies.
 :::
 
-![](figures/pa_jump_history_high.png)
+However, directly incorporating stochastic difference equations and WTM into classical numerical schemes for transport diffusion equations is a non-trivial task. To facilitate comparison with other scattering processes and to enable the inclusion of SWD scattering effects in such models, we evaluate the averaged scattering rate, $D$. This rate serves as a global diffusion coefficient, independent of the local pitch angle, as high-energy particles frequently experience large pitch-angle jumps. The scattering rate is determined by the characteristics of the WTM and the particle energy. Using the mapping described in @eq-mapping for an ensemble of particles, we evaluate the evolution of the second moment of the pitch-angle distribution:
+
+$$
+\begin{aligned}
+M_1(n) = N^{-1}∑_{i=1}^N (α_{n,i} - α_{0,i})
+\\
+M_2(n) = N^{-1}∑_{i=1}^N (α_{n,i} - α_{0,i})^2 - M_1^2(n)
+\end{aligned}
+$$
+
+where $M_1(n)$ represents the mean shift in the pitch angle, and $M_2(n)$ quantifies the spreading of particles in pitch-angle space. The function $M_2(n)$ increases linearly with the number of interactions (the number of interactions with SWDs) before reaching saturation, where the pitch-angle distribution becomes fully mixed. This linear behavior is illustrated in @fig-mixing-rate. By fitting $M_2(n)$ with a linear model $D n$ , we determine the scattering rate $D$ , which depends on the particle energy and the WTM. These scattering rates are analogous to diffusion coefficients for pitch-angle scattering and can be directly incorporated into transport-diffusion simulations, providing a simplified yet effective way to account for SWD-induced scattering in broader energetic particle models.
+
+::: {#fig-mixing-rate}
+![](figures/mixing_rate.pdf)
+
+:::
 
 # Conclusion
 
-In this study, we have investigated the scattering of energetic ions by solar wind discontinuities. We have provided a model that includes statistical properties of solar wind discontinuities and provides estimates of ion scattering rates.
+In this study, we have investigated the scattering of energetic particles by solar wind discontinuities. We have provided a model that includes statistical properties of solar wind discontinuities and provides estimates of pitch angle scattering rates.
 
-Solar wind discontinuities are important coherent structures in the solar wind that can effectively scatter energetic ions. 
-
+<!-- Solar wind discontinuities are important coherent structures in the solar wind that can effectively scatter energetic particles. -->
 
 # Notations
 

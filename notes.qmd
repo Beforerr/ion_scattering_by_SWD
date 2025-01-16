@@ -1,3 +1,15 @@
+# Results
+
+![](figures/example_tp.png)
+
+Scan the parameter with angle difference by 10 degree and velocity by ...
+
+![Transition matrix for different particle energies](figures/tm_stats_vPs.png)
+
+## Examples of transition matrix
+
+![](figures/tm/example.png)
+
 # Updates
 
 ## 2024-10-30
