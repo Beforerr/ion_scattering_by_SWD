@@ -30,7 +30,7 @@ Figure 8, 9-10: these will be results of mapping technique for which we can use 
 
 # Introduction
 
-The transport of energetic particles within the heliosphere is significantly influenced by the turbulent magnetic field present in the solar wind. However, this turbulence should not be regarded merely as a collection of random magnetic field fluctuations. Instead, the nonlinear energy cascade process results in the formation of coherent structures. These coherent structures have been shown to act as efficient particle scatterers in non-collisional plasmas [@artemyevSuperfastIonScattering2020].
+The transport of energetic particles within the heliosphere is significantly influenced by the turbulent magnetic field present in the solar wind. However, this turbulence should not be regarded merely as a collection of random magnetic field fluctuations. Instead, the nonlinear energy cascade process results in the formation of coherent structures. These coherent structures have been shown to act as efficient particle scatterers in non-collisional plasmas [@artemyevSuperfastIonScattering2020; @malaraChargedparticleChaoticDynamics2021].
 
 We investigated the interaction of ions with rotational discontinuities by employing a simplified analytical model for the magnetic field configuration. Our study aimed to examine how the particle pitch angle is influenced by the parameters of the magnetic field configuration and the initial conditions of the particles.
 
@@ -42,7 +42,7 @@ $$
 \mathbf{B} = B_0 (\cos θ \ \mathbf{e_z} + \sin θ ( \sin φ(z) \ \mathbf{e_x} + \cos φ (z) \ \mathbf{e_y})) 
 $$
 
-where $B_0$ is the magnitude of the magnetic field, $θ$ is the azimuthal angle between the normal $\mathbf{B_z} = B_0 \cos θ \ \mathbf{e_z} \equiv B_n \mathbf{e_z}$ and the magnetic field. More specifically we assume the following form, $φ(z) = β \tanh(z/L)$, where $L$ is the thickness of the current sheet and $β$ is the half of in plane rotation angle $ω_{in}$. The transverse magnetic field component $\mathbf{B_t} = B_t \sin φ(z) \ \mathbf{e_x} + B_t \cos φ (z) \ \mathbf{e_y}$ rotates by an angle $ω_{in}$ from $-∞$ to $+∞$ where $B_t = B_0 \sin θ$
+where $B_0$ is the magnitude of the magnetic field, $θ$ is the azimuthal angle between the normal $\mathbf{B_z} = B_0 \cos θ \ \mathbf{e_z} \equiv B_n \mathbf{e_z}$ and the magnetic field. More specifically we assume the following form, $φ(z) = β \tanh(z/L)$, where $L$ is the thickness of the current sheet and $β$ is the half of in plane rotation angle $ω_{in}$. The transverse magnetic field component $\mathbf{B_t} = B_t \sin φ(z) \ \mathbf{e_x} + B_t \cos φ (z) \ \mathbf{e_y}$ rotates by an angle $ω_{in}$ from $-∞$ to $+∞$ where $B_t = B_0 \sin θ$.
 
 The motion of a particle in such a field can be expressed in the Hamiltonian formalism as follows:
 
@@ -54,43 +54,43 @@ where $\mathbf{A}$ represents the magnetic vector potential, $\mathbf{p}$ is the
 
 $$
 \begin{aligned}
-A_x\to L B_t f_1(z)
+A_x &= L B_t f_1(z)
 \\
-A_y\to L B_t f_2(z) + x B_n
+A_y &= L B_t f_2(z) + x B_n
 \\
-A_z\to0
+A_z &= 0
 \end{aligned}
 $$
 
 $$
 \begin{aligned}
-f_1(z)\to \frac{1}{2} \cos β \ \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)-\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)+ \frac{1}{2} \sin β \ \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right) \right)-\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right),
+f_1(z) = \frac{1}{2} \cos β \ \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)-\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)+ \frac{1}{2} \sin β \ \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right) \right)-\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right),
 \\
-f_2(z)\to \frac{1}{2}  \sin β \ \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right) - \frac{1}{2} \cos β \ \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)
+f_2(z) = \frac{1}{2}  \sin β \ \left(\text{Ci}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Ci}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right) - \frac{1}{2} \cos β \ \left(\text{Si}\left(β +β \tanh \left(\frac{z}{L}\right)  \right)+\text{Si}\left(β -β  \tanh \left(\frac{z}{L}\right)\right)\right)
 \end{aligned}
 $$
 
-We introduce a dimensionless Hamiltonian $\tilde{H} = H / h$ by normalizing $(x, z) = (\tilde{x} L + \frac{c p_y}{q B_z}, \tilde{z} L)$ and $(p_x, p_z) = p (\tilde{p_x}, \tilde{p_z})$ where $p = \frac{q L B_t}{c}$ and $h = \frac{q^2 L^2 B_t^2}{m c^2}$.
+We introduce a dimensionless Hamiltonian $\tilde{H} = H / h$ by normalizing $(x, z) = (\tilde{x} L + c_x, \tilde{z} L)$ and $(p_x, p_z) = p (\tilde{p_x}, \tilde{p_z})$ where $p = \frac{q L B_t}{c}$ and $h = \frac{q^2 L^2 B_t^2}{m c^2}$. Note that because $∂H/∂y = 0$, $p_y = \text{const}$ and we could let $c_x = \frac{c p_y}{q B_n}$ to elinimate $y$:
 
 $$
-\tilde{H}\to \frac{1}{2} \left(\left(\tilde{p_x}-f_1(z)\right)^2+\left(\tilde{x} \cot θ + f_2(z)\right)^2+\tilde{p_z}^2\right)
+\tilde{H} = \frac{1}{2} \left(\left(\tilde{p_x}-f_1(z)\right)^2+\left(\tilde{x} \cot θ + f_2(z)\right)^2+\tilde{p_z}^2\right)
 $$
 
-It is important to note that this is an exact Hamiltonian of the particle dynamic. We do not expand it near the neutral plane $z=0$ like previous study employing the Hamiltonian formalism. This Hamiltonian also include the rotation effect $β$. Expand the Hamiltonian near the current sheet to the third order and assume that $β=1$ we could reduce to the Hamiltonian form in @artemyevSuperfastIonScattering2020 where $κ = \cot θ$. In this study, we quantitatively investigate the role of $β$ and particle energy $E$ in the pitch-angle scattering efficiency. In the following discussion, the tilde notation over the dimensionless variable is omitted for simplicity.
+It is important to note that this is an exact Hamiltonian of the particle dynamic. We do not expand it near the neutral plane $z=0$ like previous study employing the Hamiltonian formalism [@artemyevSuperfastIonScattering2020]. This Hamiltonian also include the rotation effect $β$. Expand the Hamiltonian near the current sheet to the third order and assume that $β=1$ we could reduce to the Hamiltonian form in @artemyevSuperfastIonScattering2020 where $κ = \cot θ$. In this study, we quantitatively investigate the role of $β$ and particle energy $E$ in the pitch-angle scattering efficiency. In the following discussion, the tilde notation over the dimensionless variable is omitted for simplicity.
 
-# Violation of the adiabatic invariant
+# Adiabatic invariance and its violations at separatrix crossings
 
-For discontinuities where $B_n / B_t ≪ 1$, the variables $(κ x, p_x)$ evolve significantly more slowly compared to $(z, p_z)$. Assuming that $x$ and $p_x$ are effectively frozen, the Hamiltonian describes a periodic motion within the $(z, p_z)$ plane, governed by the effective potential energy $U(z) = H - p_z^2$. For slow variations in $(κ x, p_x)$, the generalized magnetic moment $I_z = (2 π)^{-1} ∮ p_z dz $ is conserved as an adiabatic invariant, with changes occurring only in response to substantial trajectory reconfigurations. 
+For discontinuities where $B_n / B_t ≪ 1$, the variables $(κ x, p_x)$ evolve significantly more slowly compared to $(z, p_z)$. Assuming that $x$ and $p_x$ are effectively frozen, the Hamiltonian describes a periodic motion within the $(z, p_z)$ plane, governed by the effective potential energy $U(z) = H - p_z^2$. When variations in $(κ x, p_x)$ occur on a timescale much longer than the fast oscillations in $(z, p_z)$, the generalized magnetic moment $I_z = (2 π)^{-1} ∮ p_z dz$ is conserved as an adiabatic invariant with exponential accuracy [@neishtadtAccuracyPersistenceAdiabatic2000].
 
-The Hamiltonian captures two distinct types of ion motion within the $(z, p_z)$ plane. As $(κ x, p_x)$ evolve slowly, the corresponding trajectory in the $(z, p_z)$ plane undergoes a gradual transformation. Particles may transition from one type of motion to another via a separatrix crossing, which results in a jump in $I_z$ of approximately $\sim 1$, attributed to the geometrical destruction of adiabatic invariance. Concurrently, the projection of the particle’s phase point onto the $(κ x, p_x)$ plane lies along the so-called uncertainty curve, which demarcates regions corresponding to different types of motion in the $(z, p_z)$ plane. Importantly, this $2π I_z$ jump corresponds to the difference in areas enclosed by the separatrix in the $(z, p_z)$ plane and is independent of $κ$.
+This Hamiltonian supports two distinct types of ion motion in the $(z, p_z)$ plane, as illustrated in @fig-zPz_phase. In the left portrait, there are two potential wells, resulting in one or two possible orbits in the $(z, p_z)$ plane depending on the value of $H$. In contrast, the right portrait represents a case with only one possible orbit in the $(z, p_z)$ plane for a fixed $H$. As $(κ x, p_x)$ evolve slowly, the particle's trajectory in the $(z, p_z)$ plane undergoes a gradual transformation. Transitions between motion types can occur, accompanied by significant trajectory reconfigurations when the particle crosses the separatrix. Near the separatrix, the instantaneous period of motion increases logarithmically, diverging as the trajectory approaches it. When the timescales of fast oscillations and variations in the control parameter become comparable, the particle accumulates a nonvanishing change in the adiabatic invariant, resulting in a jump in $I_z$ of approximately $\sim 1$. This jump arises primarily from the geometrical destruction of adiabatic invariance [@artemyevSuperfastIonScattering2020], and corresponds to the difference in areas enclosed by the separatrix in the $(z, p_z)$ plane which is independent of $κ$. Concurrently, the projection of the particle's phase point onto the $(κ x, p_x)$ plane lies along the so-called uncertainty curve, which demarcates regions corresponding to different types of motion in the $(z, p_z)$ plane.
 
 ::: {#fig-zPz_phase}
 ![](figures/zPz_phase_portraits.pdf)
 
-Phase portraits of Hamiltonian at frozen $(κx, p_x)$ for $β = 1$ : $H$ values of each curve are shown in the plot; $κ x = 4, p_x = 1$ in the left panel and $κx = 0, p_x = 0.5$ in the right panel.
+Phase portraits of Hamiltonian at frozen $(κx, p_x)$ for $β = 1$: $H$ values of each curve are shown in the plot; $κ x = 4, p_x = 1$ in the left panel and $κx = 0, p_x = 0.5$ in the right panel.
 :::
 
-Due to the symmetry of ion motion about the $p_z = 0$ line, at the saddle point $z = z_c, p_z = 0$ of the separatrix, the potential energy $U$ reaches a local maximum along the $z$-direction, satisfying $∂ U/∂ z = 0$ and $∂^2 U/∂ z^2 < 0$. These conditions allow the expression of the slow variables along the uncertainty curve in the $(κ x, p_x)$ plane as functions of $z_c$. When a particle trajectory crosses the $z = 0$ plane, the crossing point is distributed within a circular region defined by $(p_x - f_1(0))^2 + (\kappa x + f_2(0))^2 = 2H$. The likelihood of the trajectory intersecting the uncertainty curve is therefore proportional to the separatrix length $L_{\text{sep}}$, normalized by the square root of the particle energy $H = E$.
+Due to the symmetry of ion motion about the $p_z = 0$ line, at the saddle point $z = z_c, p_z = 0$ where two lobes connect at, the potential energy $U$ reaches a local maximum along the $z$-direction, satisfying $∂ U/∂ z = 0$ and $∂^2 U/∂ z^2 < 0$. These conditions allow the expression of the slow variables along the uncertainty curve in the $(κ x, p_x)$ plane as functions of $z_c$. When a particle trajectory crosses the $z = 0$ plane, the crossing point is distributed within a circular region defined by $(p_x - f_1(0))^2 + (\kappa x + f_2(0))^2 = 2H$. The likelihood of the trajectory intersecting the uncertainty curve is therefore proportional to the uncertainty curve length $L_{\text{uc}}$, normalized by the square root of the particle energy $H$.
 
 ::: {#fig-UCLength}
 ![](figures/UCLength.pdf)
@@ -172,29 +172,3 @@ where $M_1(n)$ represents the mean shift in the pitch angle, and $M_2(n)$ quanti
 In this study, we have investigated the scattering of energetic particles by solar wind discontinuities. We have provided a model that includes statistical properties of solar wind discontinuities and provides estimates of pitch angle scattering rates.
 
 <!-- Solar wind discontinuities are important coherent structures in the solar wind that can effectively scatter energetic particles. -->
-
-# Notations
-
--   $B_0$: background magnetic field
-
--   $α$: pitch angle, $w = \cos(α)$ is the pitch angle cosine
-
--   $ψ$: gryo phase
-
--   θ : azimuthal angle, angle between $B_0$ and $B_N = B_0 \cos(θ)$
-
--   φ : polar angle
-
--   β : half of in plnae rotation angle $ω_{in}$
-
-# TODO
-
-The independence of the parameters from discontinuities observations
-
-multivariate discrete non-parametric distribution
-
-## References
-
--   @malaraEnergeticParticleDynamics2023
--   @malaraChargedparticleChaoticDynamics2021
--   @artemyevSuperfastIonScattering2020
