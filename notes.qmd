@@ -1,3 +1,17 @@
+# Notations
+
+-   $B_0$: background magnetic field
+
+-   $α$: pitch angle, $w = \cos(α)$ is the pitch angle cosine
+
+-   $ψ$: gryo phase
+
+-   θ : azimuthal angle, angle between $B_0$ and $B_N = B_0 \cos(θ)$
+
+-   φ : polar angle
+
+-   β : half of in plnae rotation angle $ω_{in}$
+
 # Results
 
 ![](figures/example_tp.png)
@@ -39,6 +53,7 @@ Scan the parameter with angle difference by 10 degree and velocity by ...
 
 - [ ] Check the algorithm for energy conservation (Boris pusher)
 - [x] GPU acceleration
+- [ ] The independence of the parameters from discontinuities observations
 
 
 DynamicalSystems.jl
