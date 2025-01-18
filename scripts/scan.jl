@@ -17,8 +17,8 @@ end
 
 error_only_logger = MinLevelLogger(current_logger(), Logging.Error);
 
-function makesim(d; save_everystep=false, kwargs...)
-    p = ProblemParams(; d...)
+function makesim(d; problem=RDProblemParams, save_everystep=false, kwargs...)
+    p = problem(; d...)
     sol, (wϕs, B) = solve_params(p; save_everystep, kwargs...)
     results = extract_info.(sol.u, B) |> DataFrame
     results.wϕ0 = wϕs
@@ -68,6 +68,8 @@ end
 
 test(; params=test_params(), dir="test", logger=filtered_logger, kwargs...) = main(; params, dir, logger, kwargs...)
 test_alg(; params=test_params_alg(), dir="test_alg", logger=filtered_logger) = main(; params, dir, logger)
+scan_example(; params=example_params(), dir="example") = main(; params, dir)
+
 function test_td(; params=test_params_TD(), dir="test_TD", logger=filtered_logger)
     path = datadir(dir)
     with_logger(logger) do
