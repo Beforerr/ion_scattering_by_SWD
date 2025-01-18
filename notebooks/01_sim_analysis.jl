@@ -7,6 +7,17 @@ begin
     include("../src/main.jl")
 end
 
+struct vθβ
+    v
+    θ
+    β
+end
+
+rename_func(t::vθβ) = L"v_p = %$(t.v) v_0,\ θ = %$(t.θ)^∘,\ β = %$(t.β)^∘"
+
+# ----
+# Simulations
+# ----
 dir = "simulations"
 df = get_result(; dir);
 
@@ -28,22 +39,14 @@ end
 dir = "example"
 df = get_result(; dir)
 
-struct vθβ
-    v
-    θ
-    β
-end
-
-rename_func(t::vθβ) = L"v_p = %$(t.v) v_0,\ θ = %$(t.θ)^∘,\ β = %$(t.β)^∘"
-
-let figure = (; size=(72 * 6.5, 72 * 6), figure_padding=0), axis = w_axis
+let figure = (; size=(72 * 6.5, 72 * 6), figure_padding=0), axis = w_axis, colorbar = (; scale=colorscale)
     layer = mapping(xyw...) * density_layer()
     subset_outside(df) = @subset(df, outside.(:u1; z_init_0=3))
     sdf = @subset(df, +(:v .== 8, :β .== 50, :θ .== 85) .>= 2) |> subset_outside
     sdf.group = vθβ.(sdf.v, sdf.θ, sdf.β)
     scales = tm_scale(; Layout=(; palette=[(2, 2), (2, 1), (1, 1), (1, 2)]))
 
-    draw(data(sdf) * layer * mapping(layout=:group => rename_func), scales; figure, axis)
+    draw(data(sdf) * layer * mapping(layout=:group => rename_func), scales; figure, axis, colorbar)
     easy_save("tm/example_subset")
 end
 
