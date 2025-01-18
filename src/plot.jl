@@ -24,6 +24,7 @@ begin
     xyw = (w0, w1)
     Δt = :t1 => "Δt"
     leave = :leave => renamer([true => "Leave", false => "Trapped"])
+    dR_perp_asym_norm = :dR_perp_asym_norm => L"dR_{\perp}^{\text{asym}} / r_g"
 
     ergs_approx = ["~10 eV", "~100 eV", "~5 keV", "~100 keV", "~1 MeV"]
 end
@@ -39,15 +40,25 @@ begin
     v_map = get_map(:v)
 end
 
+# %%
+
+function plot_sol(sol, idxs=(1, 2, 3); label="Particle Trajectory", kwargs...)
+    fig = Figure()
+    layout = fig[1, 1]
+    ax = get_ax(layout, idxs)
+    plot!(ax, sol; idxs, label, kwargs...)
+    fig
+end
 
 begin
     colorscale = log10
     # density_layer = AlgebraOfGraphics.density(npoints=32)
     density_layer() = histogram(; bins=64, normalization=:pdf) * visual(; colorscale)
     colorrange(; scale=colorscale) = scale == log10 ? (1e-2, 1e1) : (0, 5)
-    tm_scale() = scales(Color=(;
-        colorrange=colorrange()
-    ))
+    tm_scale(; kwargs...) = scales(;
+        Color=(;
+            colorrange=colorrange()
+        ), kwargs...)
 end
 
 w_axis = (; limits=((-1, 1), (-1, 1)), yreversed=true, yticks=[-1, 0, 1], xticks=[-1, 0, 1])
@@ -192,15 +203,15 @@ function plot_trajectory(sol, sol_field=missing, sol_gc=missing)
     return f
 end
 
-function plot_gc!(sol, B; color=Makie.wong_colors()[2])
+function plot_gc!(sol, B; color=Makie.wong_colors()[2], label="Guiding Center")
     gc = get_gc_func(B)
     gc_plot(x, y, z, vx, vy, vz) = (gc([x, y, z, vx, vy, vz])...,)
-    lines!(sol, idxs=(gc_plot, 1, 2, 3, 4, 5, 6); color)
+    lines!(sol, idxs=(gc_plot, 1, 2, 3, 4, 5, 6); color, label)
 end
 
 function plot_gc_field_lines!(sol, B; idxs=(1, 2, 3), kwargs...)
     fl0_sol, flf_sol = field_lines(sol, B; kwargs...)
-    lines!(fl0_sol; idxs, color=Makie.wong_colors()[3])
-    lines!(flf_sol; idxs, color=Makie.wong_colors()[4])
+    lines!(fl0_sol; idxs, color=Makie.wong_colors()[3], label="Initial Field Line")
+    lines!(flf_sol; idxs, color=Makie.wong_colors()[4], label="Final Field Line")
     return fl0_sol, flf_sol
 end

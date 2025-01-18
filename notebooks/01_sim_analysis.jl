@@ -1,10 +1,11 @@
-using DrWatson
-@quickactivate
-using Revise
-using CairoMakie
-using Beforerr
-include("../src/main.jl")
-
+begin
+    using DrWatson
+    @quickactivate
+    using Revise
+    using Beforerr
+    using Statistics
+    include("../src/main.jl")
+end
 
 dir = "simulations"
 df = get_result(; dir);
@@ -18,6 +19,32 @@ let v = histogram(; bins=64, normalization=:pdf)
     plt0 = data(sdf) * mapping(xyw...; layout=v_map) * v
     draw(plt0, scale; axis=w_axis)
     easy_save(savename("pa", d))
+end
+
+
+# ----
+# Example
+# ----
+dir = "example"
+df = get_result(; dir)
+
+struct vθβ
+    v
+    θ
+    β
+end
+
+rename_func(t::vθβ) = L"v_p = %$(t.v) v_0,\ θ = %$(t.θ)^∘,\ β = %$(t.β)^∘"
+
+let figure = (; size=(72 * 6.5, 72 * 6), figure_padding=0), axis = w_axis
+    layer = mapping(xyw...) * density_layer()
+    subset_outside(df) = @subset(df, outside.(:u1; z_init_0=3))
+    sdf = @subset(df, +(:v .== 8, :β .== 50, :θ .== 85) .>= 2) |> subset_outside
+    sdf.group = vθβ.(sdf.v, sdf.θ, sdf.β)
+    scales = tm_scale(; Layout=(; palette=[(2, 2), (2, 1), (1, 1), (1, 2)]))
+
+    draw(data(sdf) * layer * mapping(layout=:group => rename_func), scales; figure, axis)
+    easy_save("tm/example_subset")
 end
 
 # ----
@@ -34,17 +61,9 @@ let
     easy_save("tm/example")
 end
 
-let figure = (; size=(800, 400))
-    pa_layer() = mapping(xyw...) * density_layer()
-    subset_outside(df) = @subset(df, outside.(:u1; z_init_0=3.5))
-
-    sdf = @subset(df, :θ .== 85, :β .== 60, :v .!= 8) |> subset_outside
-    pa_pair_hist(sdf; figure, layer=pa_layer())
-    easy_save("tm/example_subset")
-end
-
-let figure = (; size=(400, 800))
+let figure = (; size=(400, 800)),
     sdf = @subset(df, :θ .== 85, :sign .== 1)
+
     fig = Figure(; figure)
     layer = data(sdf) * mapping(μ0, ϕ0) * visual(Heatmap) * col_row_mapping(:v)
     grids = sdraw!(fig[1, 1], layer * (:dR_perp_asym,), :v)
@@ -52,14 +71,22 @@ let figure = (; size=(400, 800))
     fig
 end
 
-let figure = (; size=(400, 800))
-    sdf = @subset(df, :θ .== 85, :sign .== 1, :β .== 90)
+let figure = (; size=(1200, 400)), colorrange = (0, 40)
+    sdf = @subset(df, :v .> 1, :θ .> 60, :β .>= 60)
     fig = Figure(; figure)
     layer = data(sdf) * mapping(μ0, ϕ0) * visual(Heatmap) * col_row_mapping(:v)
-    grids = sdraw!(fig, layer * (:dR_perp_asym_norm,), :v; add_cb=true)
-    fig
+    grids = sdraw!(fig, layer * (dR_perp_asym_norm,), v_map; scales=scales(Color=(; colorrange)))
+    colorbar!(fig[1, end+1], grids[1])
+    easy_save("diffusion/dR_perp_asym_norm")
 end
 
+# Group by (v, θ, β) and get the average dR_perp_asym_norm
+let cols = [:v, :θ, :β]
+    sdf = @subset(df, :v .> 1)
+    tdf = combine(groupby(sdf, cols), :dR_perp_asym_norm => mean; renamecols=false)
+    draw(data(tdf) * mapping(:β, dR_perp_asym_norm; color=v_map, col=θ_map))
+    easy_save("diffusion/dR_perp_asym_norm_avg")
+end
 # ----
 # Test different field configurations
 # ----
