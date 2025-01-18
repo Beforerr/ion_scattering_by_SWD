@@ -6,11 +6,11 @@ using StaticArrays
 using UnPack
 using Moshi.Match: @match
 
-export RotationDiscontinuity, RD_B_field, TD_B_field
+export RotationDiscontinuity, TD_B_field
 export solve_params, dsolve_params
 export w_ϕ_pairs, init_state, init_states, init_states_pm, filter_wϕs!
 export isoutofdomain_params
-export ProblemParamsBase, ProblemParams
+export ProblemParamsBase, ProblemParams, RDProblemParams
 export trace_normalized_B!, trace_normalized_B
 
 include("utils.jl")
@@ -39,9 +39,9 @@ const ez = SA[0, 0, 1]
     diffeq = DEFAULT_DIFFEQ_KWARGS
 end
 
-function RDProblemParams(; Bfn=RD_B_field, θ=DEFAULT_θ, β=DEFAULT_β, sign=DEFAULT_SIGN, kwargs...)
-    B = Bfn(; θ, β, sign)
-    ProblemParamsBase(; B, kwargs...)
+function RDProblemParams(; θ=DEFAULT_θ, β=DEFAULT_β, sign=DEFAULT_SIGN, kwargs...)
+    Bf = B(RotationDiscontinuity(; θ, β, sign); kwargs...)
+    ProblemParamsBase(; B=Bf, kwargs...)
 end
 
 const ProblemParams = RDProblemParams

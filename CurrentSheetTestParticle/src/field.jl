@@ -37,12 +37,7 @@ function B(r, conf::RotationDiscontinuity; dir=3)
     return SVector(Bx, By, Bz)
 end
 
-function RD_B_field(r; dir=3, kwargs...)
-    conf = RotationDiscontinuity(; kwargs...)
-    return B(r, conf; dir)
-end
-
-RD_B_field(; kwargs...) = r -> RD_B_field(r; kwargs...)
+B(conf::RotationDiscontinuity; kwargs...) = r -> B(r, conf; kwargs...)
 
 function TD_B_field(r; dir=3, B=1, By=0, θ=DEFAULT_θ, β=DEFAULT_β, kw...)
     z = r[dir]
