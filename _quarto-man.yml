@@ -1,0 +1,13 @@
+project:
+  type: manuscript
+  render:
+    - "index.qmd"
+
+manuscript:
+  article: index.qmd
+
+format:
+  pdf:
+    cite-method: natbib
+    keep-tex: true
+    latex-clean: false

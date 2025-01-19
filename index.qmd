@@ -13,12 +13,6 @@ author:
     roles: [conceptualization, writing]
     affiliations:
       - ref: ucla
-format:
-  html: default
-  pdf:
-    cite-method: natbib # biblatex is not supported
-    keep-tex: true
-    latex-clean: false
 ---
 
 ```{=html}
@@ -76,13 +70,13 @@ f_2(z) = \frac{1}{2}  \sin β \ \left(\text{Ci}\left(β +β \tanh \left(\frac{z}
 \end{aligned}
 $$
 
-We introduce a dimensionless Hamiltonian $\tilde{H} = H / h$ by normalizing $(x, z) = (\tilde{x} L + c_x, \tilde{z} L)$ and $(p_x, p_z) = p (\tilde{p_x}, \tilde{p_z})$ where $p = \frac{q L B_t}{c}$ and $h = \frac{q^2 L^2 B_t^2}{m c^2}$. Note that because $∂H/∂y = 0$, $p_y = \text{const}$ and we could let $c_x = \frac{c p_y}{q B_n}$ to elinimate $y$:
+We introduce a dimensionless Hamiltonian $\tilde{H} = H / h$ by normalizing $(x, z) = (\tilde{x} L + c_x, \tilde{z} L)$ and $(p_x, p_z) = p (\tilde{p_x}, \tilde{p_z})$ where $p = \frac{q L B_t}{c}$ and $h = \frac{q^2 L^2 B_t^2}{m c^2}$. Note that because $∂H/∂y = 0$, $p_y = \text{const}$ and we could let $c_x = \frac{c p_y}{q B_n}$ to eliminate $p_y$:
 
 $$
 \tilde{H} = \frac{1}{2} \left(\left(\tilde{p_x}-f_1(z)\right)^2+\left(\tilde{x} \cot θ + f_2(z)\right)^2+\tilde{p_z}^2\right)
 $$
 
-It is important to note that this is an exact Hamiltonian of the particle dynamic. We do not expand it near the neutral plane $z=0$ like previous study employing the Hamiltonian formalism [@artemyevSuperfastIonScattering2020]. This Hamiltonian also accounts for the rotational effect $β$. By expanding the Hamiltonian near the current sheet to third order and assuming $β = 1$, it can be reduced to the form used in [@artemyevSuperfastIonScattering2020], where $κ = \cot θ$. In this study, we quantitatively investigate the influence of shear angle ($β$) and particle energy ($E$) on pitch-angle scattering efficiency. For simplicity, the tilde notation over dimensionless variables is omitted in the following discussion.
+It is important to note that this is an exact Hamiltonian of the particle dynamics. We do not expand it near the neutral plane $z=0$ like previous study employing the Hamiltonian formalism [@artemyevSuperfastIonScattering2020]. This Hamiltonian also accounts for the rotational effect $β$. By expanding the Hamiltonian near the current sheet to third order and assuming $β = 1$, it can be reduced to the form used in [@artemyevSuperfastIonScattering2020], where $κ = \cot θ$. In this study, we quantitatively investigate the influence of shear angle ($β$) and particle energy ($E$) on the efficiency of pitch-angle scattering. For simplicity, the tilde notation over dimensionless variables is omitted in the following discussion.
 
 # Adiabatic invariance and its violations at separatrix crossings
 
@@ -109,7 +103,7 @@ Density plot of the uncertainty curve length $L_{\text{uc}}/\sqrt{H}$ as a funct
 To quantitatively analyze how particles are scattered by solar wind discontinuities, we conducted extensive test particle simulations using a dataset of solar wind current sheets at 1 AU. Since the primary focus is on protons, the particle mass was set to $m_p$ (proton mass) and the charge to the elementary charge $q$. According to the dimensionless Hamiltonian, the critical current sheet parameters influencing particle dynamics are the angles $θ$ and $β = ω_{in}/2$, along with the parameter $B_t L$, which appears in the dimensionless factor $h = \frac{q^2 L^2 B_t^2}{m c^2}$. By applying a simple transformation, $B_t = B_0 \sin θ$, the key current sheet parameters become $θ$, $ω_{in}$, and $v_0 = Ω_0 L = q B_0 L / (c m_p)$, where $Ω_0$ is the gyrofrequency associated with the magnetic field $B_0$.
 
 Using data from the Wind mission, we compiled a dataset of 100,000 discontinuities. The orientations of these discontinuities were determined using the minimum variance analysis of the magnetic field (MVAB) method. Accurate orientation determination was crucial for estimating the discontinuities' thickness ($L$) and the in-plane magnetic field rotation angle ($ω_{in}$), both of which significantly influence ion scattering. To ensure reliability, only discontinuities with $Δ|B|/|B| > 0.05$ or $ω > 60°$ were used in the following analysis, as these conditions improve the accuracy of the MVAB method, as noted by @liuFailuresMinimumVariance2023. The two parameters $Δ|B|/|B| > 0.05$ and $ω > 60°$ are independent of the discontinuity normal and can be calculated directly from magnetic field data. 
-@fig-windHist3D shows 3D density plots of the azimuthal angle $θ$, the in-plane rotation angle $ω_{in}$, and the logarithm of the characteristic velocity $\log v_0$, categorized by whether the accuracy conditions are satisfied (left for not accurate, right for accurate). Current sheets with accurately determined orientations typically have smaller azimuthal angles $θ$, indicating a smaller $B_n$, and moderate in-plane rotation angles $ω_{in}$. In contrast, current sheets with potentially inaccurate normal orientations display larger $θ$ (larger $B_n$) and larger $ω_{in}$. The most probable values observed in the distribution are a characteristic velocity ($v_0$) of approximately 500 km/s, an in-plane rotation angle ($ω_{in}$) near 100 degrees, and an azimuthal angle (\theta) around 85-95 degrees.
+@fig-windHist3D shows 3D density plots of the azimuthal angle $θ$, the in-plane rotation angle $ω_{in}$, and the logarithm of the characteristic velocity $\log v_0$, categorized by whether the accuracy conditions are satisfied (left for not accurate, right for accurate). Current sheets with accurately determined orientations typically have smaller azimuthal angles $θ$, indicating a smaller $B_n$, and moderate in-plane rotation angles $ω_{in}$. In contrast, current sheets with potentially inaccurate normal orientations display larger $θ$ (larger $B_n$) and larger $ω_{in}$. The most probable values observed in the distribution are a characteristic velocity ($v_0$) of approximately 500 km/s, an in-plane rotation angle ($ω_{in}$) near 100 degrees, and an azimuthal angle ($θ$) around 85-95 degrees.
 
 ::: {#fig-windHist3D}
 ![](figures/wind_hist3d.png)
@@ -155,9 +149,8 @@ where $n$ is the number of interaction (interaction with SWD), $i$ is the partic
 @fig-pa-jump-history illustrates two representative solutions of the dynamical pitch-angle mapping equation derived from the WTM at 1 AU for 100 keV and 1 MeV protons. A key feature of the pitch-angle dynamics is the occurrence of infrequent but substantial jumps, including rare, large-angle changes that can lead to particle reflection from the current sheet.
 
 ::: {#fig-pa-jump-history}
-![](figures/pa_jump_history.png)
 
-![](figures/pa_jump_history_high.png)
+![](figures/pa_jump_history_high)
 
 Examples of ion pitch angle scattering by solar wind discontinuities for 100 keV and 1 MeV protons.
 :::
@@ -177,7 +170,7 @@ where $M_1(n)$ represents the mean shift in pitch angle, and $M_2(n)$ quantifies
 We fit $M_2(n)$ using an exponential model, $M_2(n) = c - a e^{-D_{nn} n}$, where $c$ is the saturated second moment and $a$ is the slope of the exponential fit. The derived scattering rates are analogous to diffusion coefficients for pitch-angle scattering and can be directly incorporated into transport-diffusion simulations. This approach provides a simplified yet effective means to account for current-sheet-induced scattering in broader models of energetic particle dynamics.
 
 ::: {#fig-mixing-rate}
-![](figures/mixing_rate.png)
+![](figures/mixing_rate)
 
 Mixing rates of particles as a function of interaction number ($n$) for different particle energies (~100 eV, ~5 keV, ~100 keV, ~1 MeV). The mixing rate is characterized by the second moment of the pitch-angle distribution, $M_2(n)$, quantifying the spreading of particles in pitch-angle space.
 :::
