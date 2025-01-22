@@ -51,6 +51,7 @@ Scan the parameter with angle difference by 10 degree and velocity by ...
 
 # TODOs
 
+- [ ] Cite Juno observations
 - [ ] Check the algorithm for energy conservation (Boris pusher)
 - [x] GPU acceleration
 - [ ] The independence of the parameters from discontinuities observations
