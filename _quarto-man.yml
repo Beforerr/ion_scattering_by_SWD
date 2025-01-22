@@ -11,3 +11,5 @@ format:
     cite-method: natbib
     keep-tex: true
     latex-clean: false
+
+wrap: preserve
