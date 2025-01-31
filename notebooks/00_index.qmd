@@ -1,0 +1,38 @@
+
+
+## Example of solar wind discontinuity
+
+> from ARTEMIS observations with showing main parameters (theta, phi, omega) and their variations across the discontinuity 
+
+```{julia}
+using Speasy
+spz = speasy()
+
+using SpaceTools
+using DimensionalData
+using CairoMakie
+using Statistics
+using LinearAlgebra
+
+tspan = ["2019-01-06T19:55:20", "2019-01-06T19:55:29"]
+spz_var = get_data("cda/THC_L2_FGM/thc_fgl_gse", tspan)
+```
+
+```{julia}
+B_ts = DimArray(spz_var)
+B_mva_ts = mva(B_ts, B_ts)
+
+B0 = tnorm(B_mva_ts)
+bn_over_b = mean(B_mva_ts[:, 3]) / mean(B0)
+φ = atan.(B_mva_ts[:, 1] ./ B_mva_ts[:, 2])
+
+begin
+    B_ts = rebuild(B_ts; metadata=Dict("long_name" => "THC FGL GSE"))
+    B_mva_ts = rebuild(B_mva_ts; metadata=Dict("long_name" => "THC FGL LMN"))
+    φ = rebuild(φ; name=:φ)
+    title = "B0 = $(round(mean(B0), digits=2)) nT, Bn/B0 = $(round(bn_over_b, digits=3))"
+    fa = tplot(timeshift.([B_ts, B_mva_ts, φ]))
+    Label(fa.figure[0, :], title, tellwidth=false)
+    fa
+end
+```

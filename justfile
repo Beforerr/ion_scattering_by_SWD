@@ -8,7 +8,11 @@ ensure-env: install-julia-deps clone-overleaf
     pixi install
     
 install-julia-deps:
-    julia --project -e 'using Pkg; Pkg.update();'
+    #!/usr/bin/env julia --threads=auto --project=.
+    using Pkg
+    Pkg.develop([(;name="Speasy"), (;name="SpaceTools")])
+    Pkg.resolve()
+    Pkg.instantiate()
 
 publish: quarto-publish
 
