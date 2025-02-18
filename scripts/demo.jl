@@ -10,16 +10,14 @@ include("../src/utils.jl")
 # Minimal working example
 # ---------------------------
 
-θ = 45;
-θ = 85;
-v = 8;
-d = @dict(θ, β = 90, v)
-
-sols, (wϕs, B) = solve_params(ProblemParams(; d...));
-
-Bx(z) = B([0, 0, z])[1]
-By(z) = B([0, 0, z])[2]
-Bz(z) = B([0, 0, z])[3]
+begin
+    θ = 45
+    θ = 85
+    v = 8
+    d = @dict(θ, β = 90, v)
+    diffeq = (; dtmax=1e-3, CurrentSheetTestParticle.DEFAULT_DIFFEQ_KWARGS...)
+    sols, (wϕs, B) = solve_params(RDProblemParams(; diffeq, d...));
+end
 
 using GLMakie
 GLMakie.activate!()
@@ -27,6 +25,9 @@ using CairoMakie
 CairoMakie.activate!()
 
 begin
+    Bx(z) = B([0, 0, z])[1]
+    By(z) = B([0, 0, z])[2]
+    Bz(z) = B([0, 0, z])[3]
     ku(x; θ=θ) = cosd(θ) * x
     ku(t, x) = (t, ku(x))
     ku(x, y, z) = (ku(x), ku(y), z)
@@ -98,8 +99,35 @@ begin
     easy_save("example_dR_perp" * savename(d))
 end
 
-plot_detail(sols[[12, 13]])
-easy_save("example_tp", plot_detail(sols[[12, 13]]))
+begin
+    plot_detail(sols[[12, 13]])
+    easy_save("example_tp", plot_detail(sols[[12, 13]]))
+end
+
+let size = (800, 400), linewidth = 1
+    fig = Figure(; size)
+    ax1 = Axis(fig[1, 1]; xlabel="t", ylabel="Cos(α)")
+    ax2 = Axis(fig[2, 1]; xlabel="t", ylabel="ΔCos(α)")
+    ax12 = Axis(fig[1, 2]; xlabel="z", ylabel="Cos(α)")
+    ax22 = Axis(fig[2, 2]; xlabel="z", ylabel="ΔCos(α)")
+
+    n = 8
+    step = Integer(length(sols) / n)
+    sampled_sols = sols[1:step:end]
+
+    for sol in sampled_sols
+        pa_ts = pa.(sol.u, B)
+        lines!(ax1, sol.t, pa_ts, alpha=0.5; linewidth)
+        lines!(ax2, sol.t, pa_ts .- pa_ts[1], alpha=0.5; linewidth)
+        lines!(ax12, sol[3, :], pa_ts, alpha=0.5; linewidth)
+        lines!(ax22, sol[3, :], pa_ts .- pa_ts[1], alpha=0.5; linewidth)
+    end
+    z0 = abs(sols.u[1][3, 1])
+    xlims!(ax12, (-z0, z0))
+    xlims!(ax22, (-z0, z0))
+    easy_save("example_cos_pa")
+end
+
 
 observables = [3, 6, Eₖ, pa]
 
