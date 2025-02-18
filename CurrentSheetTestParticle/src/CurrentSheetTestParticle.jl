@@ -40,7 +40,7 @@ const ez = SA[0, 0, 1]
 end
 
 function RDProblemParams(; θ=DEFAULT_θ, β=DEFAULT_β, sign=DEFAULT_SIGN, kwargs...)
-    Bf = B(RotationDiscontinuity(; θ, β, sign); kwargs...)
+    Bf = B(RotationDiscontinuity(; θ, β, sign))
     ProblemParamsBase(; B=Bf, kwargs...)
 end
 

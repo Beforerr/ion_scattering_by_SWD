@@ -1,6 +1,7 @@
 ---
 execute: 
   eval: false
+engine: julia
 ---
 
 # Mixing rates

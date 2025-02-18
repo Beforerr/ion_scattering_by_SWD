@@ -14,6 +14,7 @@ using DimensionalData: dims
 using CairoMakie
 using Statistics
 using LinearAlgebra
+using Unitful
 
 tspan = ["2019-01-06T19:55:20", "2019-01-06T19:55:29"]
 tspan = ["2021-04-03T04:57:40", "2021-04-03T04:57:55"]
@@ -23,13 +24,14 @@ spz_var = get_data("cda/THC_L2_FGM/thc_fgl_gsm", tspan)
 ```{julia}
 using LaTeXStrings, Latexify, UnitfulLatexify
 using Beforerr
+using AlgebraOfGraphics
 
 pub_theme = Beforerr.theme_pub(;)
 aog_theme = Theme(AlgebraOfGraphics.aog_theme())
 theme = merge(aog_theme, pub_theme)
 
 with_theme(theme) do
-    B_ts = DimArray(spz_var) * spz_var.units
+    B_ts = DimArray(spz_var) * unit(spz_var)
     B_mva_ts = mva(B_ts, B_ts)
 
     Bn = B_mva_ts[:, 3]
