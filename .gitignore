@@ -25,3 +25,6 @@ pixi.lock
 
 Manifest.toml
 .Condapkg
+
+# Ignore files in the presentation folder starting with an underscore
+presentations/_*
