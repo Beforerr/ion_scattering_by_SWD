@@ -8,13 +8,15 @@ website:
         href: index.qmd
       - text: "Notes"
         href: notes.qmd
-      - text: "Presentation"
-        href: presentations/index.qmd
+      - sidebar:presentations
       - sidebar:notebooks
   sidebar:
     - title: Notebooks
       id: notebooks
       contents: "notebooks/**"
+    - title: Presentations
+      id: presentations
+      contents: "presentations/**"
 
 manuscript:
   article: index.qmd
