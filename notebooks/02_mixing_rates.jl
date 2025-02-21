@@ -91,6 +91,8 @@ function v2E(v; m=mp)
     round(Int, u"eV", E)
 end
 
+velocity(E; m=Unitful.mp) = sqrt(2 * E / m) |> u"km/s"
+
 vPs = 4 .^ (3:6)
 tm_stats_vPs = map(vPs) do vP
     tm_stats = mapreduce(+, Iterators.product(dims(p)...)) do (v, β, θ)

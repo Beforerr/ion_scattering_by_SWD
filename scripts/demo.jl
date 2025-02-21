@@ -36,15 +36,6 @@ begin
     Eₖ(u) = 1 / 2 * sum(u[4:6] .^ 2)
 end
 
-
-function plot_sol(sol, idxs)
-    fig = Figure()
-    layout = fig[1, 1]
-    ax = get_ax(layout, idxs)
-    plot!(ax, sol, idxs=idxs)
-    fig
-end
-
 function plot_sols(sols, idxs)
     fig = Figure()
     layout = fig[1, 1]
@@ -88,15 +79,14 @@ idxs = (ku, 1, 2, 3)
 plot_sols(temp_sols, idxs)
 
 # Plot trajectories with guiding centers and field lines.
-begin
-    sol = sols[17]
-    sol = sols[12]
-    idxs = (1, 2, 3)
-    plot_sol(sol, idxs)
+foreach([1, 17]) do id
+    sol = sols[id]
+    plot_sol(sol)
     plot_gc!(sol, B)
     fl0_sol, flf_sol = plot_gc_field_lines!(sol, B)
     @info field_lines_distance(fl0_sol, flf_sol, B)
-    easy_save("example_dR_perp" * savename(d))
+    axislegend()
+    easy_save("examples/dR_perp_" * savename(d) * "_id=$(id)")
 end
 
 begin
