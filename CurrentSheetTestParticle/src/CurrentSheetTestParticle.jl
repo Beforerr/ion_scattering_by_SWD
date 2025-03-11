@@ -1,6 +1,7 @@
 module CurrentSheetTestParticle
 using TestParticle
-using OrdinaryDiffEq
+using OrdinaryDiffEqRosenbrock
+using OrdinaryDiffEqVerner
 using LinearAlgebra
 using StaticArrays
 using UnPack
