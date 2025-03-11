@@ -32,7 +32,7 @@ uNPlot[U_, kxTemp_, pxTemp_, zTemp_:3, erg_ : 1/2, opts : OptionsPattern[
         epilog = Join[epilog, {PointSize[Medium], point}]
     ];
     Plot[Evaluate[Utemp], {zN, -zTemp, zTemp}, PlotRange -> {Full, {0,
-         1}}, Epilog -> epilog, Axes -> False, Frame -> True, PlotLabel -> StringForm[
+         erg+1/2}}, Epilog -> epilog, Axes -> False, Frame -> True, PlotLabel -> StringForm[
         "\[Kappa]x: ``, px: ``", N @ kxTemp, N @ pxTemp], FrameLabel -> {"z", "U"}, 
         Evaluate[FilterRules[{opts}, Options[Plot]]]]
 ]
