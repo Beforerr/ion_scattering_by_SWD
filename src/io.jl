@@ -27,7 +27,7 @@ function get_result(; dir="simulations")
     vcat(results...)
 end
 
-function get_result(r::DataFrameRow, params=[:θ, :β, :v, :tmax, :B, :alg, :sign, :Bfn])
+function get_result!(r::DataFrameRow, params=[:θ, :β, :v, :tmax, :B, :alg, :sign, :Bfn])
     params = string.(params) ∩ names(r)
     @chain r[:results] begin
         insertcols!(Pair.(params, Array(r[params]))...; makeunique=true)

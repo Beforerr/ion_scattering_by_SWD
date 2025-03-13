@@ -21,57 +21,7 @@ end
 d = wload(datadir(TM_OBS_FILE))
 df = d["df"]
 vPs = d["vPs"]
-tms = d["tms"]
 ergs_approx = ["~10 eV", "~100 eV", "~5 keV", "~100 keV", "~1 MeV"]
-
-@memoize matmul(tm, n::Int) = n == 0 ? I : tm * matmul(tm, n - 1)
-
-"""
-First moment would approximate zero
-"""
-function mix_rate(tm;)
-    numBins = size(tm, 1)
-    shiftedStates = [i - j for i in 1:numBins, j in 1:numBins] / numBins
-    shiftedStatesS2 = shiftedStates .^ 2
-    p = fill(1 / numBins, numBins)
-
-    return n -> begin
-        tmn = matmul(tm, n)
-        m1 = p ⋅ diag(tmn * shiftedStates) # first moment
-        m2 = p ⋅ diag(tmn * shiftedStatesS2) - m1^2
-        return m2
-    end
-end
-
-r = 0:200
-res = map(tms) do tm
-    mix_rate(tm).(r)
-end
-
-fit_label(f) = L"D_{nn} = %$(round(1 / f.b, digits=2))"
-# Plot the mixing rate
-function plot_mixing_rate!(res)
-    options = Options(fine=N, nbest=8, besttol=1e-5)
-    map(res) do re
-        N = length(re)
-        sca = scatter!(1:N, re)
-        fit = fitexp(1:N, re; options)
-        lin = lines!(fit.x, fit.y)
-        [sca, lin, fit]
-    end
-end
-
-let labels = ergs_approx, ax = (xlabel="n", ylabel="Mixing rate", xscale=log10, yscale=log10)
-    f = Figure()
-    ax = Axis(f[1, 1]; ax...)
-    contents = plot_mixing_rate!(res[2:end])
-    labels = LaTeXString.(ergs_approx[2:end] .* "(" .* fit_label.(getindex.(contents, 3)) .* ")")
-    contents = getindex.(contents, Ref([1, 2]))
-    axislegend(ax, contents, labels, "Energy"; position=:rb)
-    xlims!(1.5, 200)
-    ylims!(3e-2, 3e-1)
-    easy_save("mixing_rate")
-end
 
 """
 Pitch angle jump
