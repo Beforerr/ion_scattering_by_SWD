@@ -33,6 +33,8 @@ end
 ## Transition matrix approach
 
 ```{julia}
+using EasyFit
+
 # Load the data
 d = wload(datadir(TM_OBS_FILE))
 df = d["df"]
@@ -45,7 +47,8 @@ res = map(tms) do tm
     mix_rate(tm).(r)
 end
 
-fit_label(f) = L"D_{nn} = %$(round(1 / f.b, digits=2))"
+fit_label(f) = L"D_{μμ} = %$(round(1 / f.b, digits=2))"
+xlabel = L"n"
 # Plot the mixing rate
 function plot_mixing_rate!(res)
     options = Options(nbest=8, besttol=1e-5)
@@ -58,7 +61,7 @@ function plot_mixing_rate!(res)
     end
 end
 
-let labels = ergs_approx, ax = (xlabel="n", ylabel="M_2(∞) - M_2(n)", xscale=log10, yscale=log10)
+f1 = let labels = ergs_approx, ax = (; xlabel, ylabel="M_2(∞) - M_2(n)", xscale=log10, yscale=log10)
     data = map(res[2:end]) do re
         last(re) .- re
     end
@@ -70,10 +73,9 @@ let labels = ergs_approx, ax = (xlabel="n", ylabel="M_2(∞) - M_2(n)", xscale=l
     axislegend(ax, contents, labels, "Energy"; position=:rb)
     xlims!(1.5, 200)
     ylims!(3e-2, 3e-1)
-    easy_save("mixing_rate")
 end
 
-let labels = ergs_approx, ax = (xlabel="n", ylabel="M_2(n)", xscale=log10, yscale=log10)
+f2 = let labels = ergs_approx, ax = (; xlabel, ylabel=L"M_2(n)", xscale=log10, yscale=log10)
     data = res[2:end]
     f = Figure()
     ax = Axis(f[1, 1]; ax...)
@@ -83,9 +85,12 @@ let labels = ergs_approx, ax = (xlabel="n", ylabel="M_2(n)", xscale=log10, yscal
     axislegend(ax, contents, labels, "Energy"; position=:rb)
     xlims!(1.5, 200)
     ylims!(3e-2, 3e-1)
+    easy_save("mixing_rate")
 end
-
+f2
 ```
+
+![](../figures/mixing_rate.png)
 
 ## ECDF approach (better)
 

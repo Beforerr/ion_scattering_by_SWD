@@ -1,7 +1,6 @@
 [deps]
 AlgebraOfGraphics = "cbdf2221-f076-402e-a563-3d30da359d67"
 Beforerr = "49aed396-608e-4c3f-b6d6-a749216c9ea7"
-BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 Comonicon = "863f3e99-da2a-4334-8734-de3dacbe5542"
 CurrentSheetTestParticle = "70b924fa-544d-466c-bf9c-e2ef4b9a84d3"
@@ -23,7 +22,6 @@ Match = "7eb4fadd-790c-5f42-8a69-bfa0b872bfbf"
 Memoization = "6fafb56a-5788-4b4e-91ca-c0cea6611c73"
 ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
 SciMLBase = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
-SpaceTools = "3930f61c-4d81-4846-ab8f-357babe068a6"
 Speasy = "09b745ad-c67d-442f-94a6-c7f4d1e4d861"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
@@ -32,4 +30,4 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulLatexify = "45397f5d-5981-4c77-b2b3-fc36d6e9b728"
 
 [sources]
-CurrentSheetTestParticle = {path = "CurrentSheetTestParticle"}
+CurrentSheetTestParticle = { path = "CurrentSheetTestParticle" }

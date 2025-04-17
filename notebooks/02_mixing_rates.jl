@@ -1,7 +1,6 @@
 begin
     using DrWatson
     using FHist
-    using HDF5
     using JLD2
     using DataFrames
     using DimensionalData
@@ -9,6 +8,7 @@ begin
     using StatsBase: mean, midpoints
     using Beforerr
     include("../src/plot.jl")
+    include("../src/obs.jl")
     TM_OBS_FILE = "tm_obs.jld2"
 end
 
@@ -17,26 +17,6 @@ VMAX = 256
 BINS = 45
 w_edges = range(-1, 1, length=BINS + 1)
 w_centers = midpoints(w_edges)
-
-function load_obs_hist(; file=datadir("obs/") * "wind_hist3d.h5")
-    h = h5readhist(file, "hist")
-    bc = bincenters(h)
-    vs = 2 .^ bc[1]
-    βs = bc[2] ./ 2
-    θs = bc[3]
-    return DimArray(bincounts(h), (v=vs, β=βs, θ=θs))
-end
-
-function dargmax(p)
-    # Note: iteration is deliberately unsupported for CartesianIndex.
-    name.(dims(p)), map(getindex, dims(p), Tuple(argmax(p)))
-end
-
-function check_obs_hist(p)
-    # check the maxximum value of the observation data
-    @info maximum(p)
-    @info dargmax(p)
-end
 
 tm_file(; prefix="tm", bins=BINS, dir="simulations") = datadir() * "/$(prefix)_" * savename(@dict bins dir) * ".jld2"
 load_tm_df(; kw...) = load(tm_file(; kw...))["df"]

@@ -24,3 +24,6 @@ post-render file=tex_file:
     just tex::update-mathenv {{file}}
     just tex::update-qmd {{file}}
     just tex::clean
+
+sync-figures:
+    rsync -av figures/mixing_rate.pdf overleaf/figures/
