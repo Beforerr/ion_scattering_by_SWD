@@ -1,4 +1,3 @@
-using Revise
 using DrWatson
 using CurrentSheetTestParticle
 using TestParticle
@@ -12,11 +11,10 @@ include("../src/utils.jl")
 
 begin
     θ = 45
-    θ = 85
     v = 8
     d = @dict(θ, β = 90, v)
     diffeq = (; dtmax=1e-3, CurrentSheetTestParticle.DEFAULT_DIFFEQ_KWARGS...)
-    sols, (wϕs, B) = solve_params(RDProblemParams(; diffeq, d...));
+    sols, (wϕs, B) = solve_params(RDProblemParams(; diffeq, d...))
 end
 
 using GLMakie
