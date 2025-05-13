@@ -258,6 +258,8 @@ $p(α_1 | α_0, \Pi)$ =>  $p(α_1 | α_0) = \sum_{i} p(α_1 | α_0, \Pi_i) w_i$
 
 ![Example of Multiple Pitch Angle Scattering for Different Energies](../figures/pa_jump_history.png)
 
+$$α_{n+1,i} = W\left(α_{n,i},  ξ_{n,i}\right)$$
+
 ::: {.notes}
 **Notes:**  
 - Rare large-angle jumps drive rapid mixing.
