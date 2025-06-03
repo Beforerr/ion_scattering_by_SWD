@@ -62,3 +62,38 @@ with_theme(theme) do
     easy_save("../figures/example/thc")
 end
 ```
+
+## Schematic diagram of particle motion in a representative magnetic field profile
+
+A diagram illustrating a representative magnetic field profile and representative particle trajectories in the test particle simulations, along with the key parameters used in the model. 
+
+```{julia}
+using CurrentSheetTestParticle
+using CairoMakie
+CairoMakie.activate!()
+
+begin
+    θ = 45
+    v = 8
+    d = @dict(θ, β = 90, v)
+    diffeq = (; dtmax=1e-3, CurrentSheetTestParticle.DEFAULT_DIFFEQ_KWARGS...)
+    sols, (wϕs, B) = solve_params(RDProblemParams(; diffeq, d...))
+end
+
+
+temp_sols = sols[16:17]
+idxs = (ku, 1, 2, 3)
+plot_sols(temp_sols, idxs)
+
+# Plot trajectories with guiding centers and field lines.
+foreach([1, 17]) do id
+    sol = sols[id]
+    plot_sol(sol)
+    plot_gc!(sol, B)
+    fl0_sol, flf_sol = plot_gc_field_lines!(sol, B)
+    @info field_lines_distance(fl0_sol, flf_sol, B)
+    axislegend()
+    easy_save("examples/dR_perp_" * savename(d) * "_id=$(id)")
+end
+```
+

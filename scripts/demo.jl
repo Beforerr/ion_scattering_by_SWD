@@ -72,21 +72,6 @@ function plot_detail(sols; idxs=(3, 2))
     fig
 end
 
-temp_sols = sols[16:17]
-idxs = (ku, 1, 2, 3)
-plot_sols(temp_sols, idxs)
-
-# Plot trajectories with guiding centers and field lines.
-foreach([1, 17]) do id
-    sol = sols[id]
-    plot_sol(sol)
-    plot_gc!(sol, B)
-    fl0_sol, flf_sol = plot_gc_field_lines!(sol, B)
-    @info field_lines_distance(fl0_sol, flf_sol, B)
-    axislegend()
-    easy_save("examples/dR_perp_" * savename(d) * "_id=$(id)")
-end
-
 begin
     plot_detail(sols[[12, 13]])
     easy_save("example_tp", plot_detail(sols[[12, 13]]))
