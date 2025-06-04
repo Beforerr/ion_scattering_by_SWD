@@ -26,8 +26,10 @@ Speasy = "09b745ad-c67d-442f-94a6-c7f4d1e4d861"
 StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 TestParticle = "953b605b-f162-4481-8f7f-a191c2bb40e3"
+TestParticleAnalysis = "190ac06d-205a-4ff8-8d50-56c31c2b86b9"
 Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulLatexify = "45397f5d-5981-4c77-b2b3-fc36d6e9b728"
 
 [sources]
-CurrentSheetTestParticle = {path = "../CurrentSheetTestParticle"}
+CurrentSheetTestParticle = { path = "../CurrentSheetTestParticle" }
+TestParticleAnalysis = { path = "../CurrentSheetTestParticle/TestParticleAnalysis" }

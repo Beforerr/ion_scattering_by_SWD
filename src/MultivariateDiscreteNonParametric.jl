@@ -1,4 +1,4 @@
-MultivariateDiscreteNonParametric(xs, ps; map_func = ReversibleMapper, kwargs...) = DiscreteNonParametric(map_func.(xs), ps; kwargs...)
+MultivariateDiscreteNonParametric(xs, ps; map_func=ReversibleMapper, kwargs...) = DiscreteNonParametric(map_func.(xs), ps; kwargs...)
 
 # Define the ReversibleMapper struct
 struct ReversibleMapper
@@ -10,20 +10,19 @@ struct ReversibleMapper
     function ReversibleMapper(categories)
         # Create dictionaries mapping each category to its index
         indices = [Dict(cat => idx for (idx, cat) in enumerate(dim)) for dim in categories]
-        
+
         # Calculate strides based on the size of each dimension
         strides = Vector{Int}(undef, length(categories))
         strides[1] = 1
         for i in 2:length(categories)
             strides[i] = strides[i-1] * length(categories[i-1])
         end
-        
+
         new(categories, indices, strides)
     end
 end
 
 
-# Function to encode a tuple into a single index
 # Function to encode a tuple into a single index
 function encode(mapper::ReversibleMapper, tuple::Vector)
     idx = 0
@@ -44,7 +43,7 @@ function decode(mapper::ReversibleMapper, index::Int)
         stride = mapper.strides[i]
         dim_size = length(mapper.categories[i])
         idx_in_dim = (index ÷ stride) % dim_size
-        tuple[i] = mapper.categories[i][idx_in_dim + 1]
+        tuple[i] = mapper.categories[i][idx_in_dim+1]
     end
     return tuple
 end
@@ -91,9 +90,9 @@ function test_example()
     unique_indices = Set{Int}()
     for i in 1:total_combinations
         # Generate tuple from index
-        decoded = decode(mapper, i-1)
+        decoded = decode(mapper, i - 1)
         encoded = encode(mapper, decoded)
-        @assert (i-1) == encoded
+        @assert (i - 1) == encoded
         push!(unique_indices, encoded)
     end
     println("All ", total_combinations, " combinations are unique and reversible.")

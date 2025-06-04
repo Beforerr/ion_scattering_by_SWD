@@ -15,6 +15,10 @@ author:
       - ref: ucla
 ---
 
+<!-- 
+[Zotero](zotero://select/library/collections/XHVVKL3N)
+-->
+
 ```{=html}
 <!-- 
 Figure 1: two examples of discontinuity observations in ARTEMIS data (gse magnetic field, solar wind speed in gse, lmn magnetic field, ion omnidirection spectrum) with hodographs and fitting Bm(Bl)

@@ -69,31 +69,57 @@ A diagram illustrating a representative magnetic field profile and representativ
 
 ```{julia}
 using CurrentSheetTestParticle
-using CairoMakie
-CairoMakie.activate!()
 
 begin
-    θ = 45
+    θ = 85
     v = 8
-    d = @dict(θ, β = 90, v)
+    β = 75
+    w = -0.9
+    ϕ = (2.85, 2.87, 2.89)
+    init_kwargs = (; w, ϕ)
+    d = (; θ, β, v, init_kwargs)
     diffeq = (; dtmax=1e-3, CurrentSheetTestParticle.DEFAULT_DIFFEQ_KWARGS...)
     sols, (wϕs, B) = solve_params(RDProblemParams(; diffeq, d...))
-end
-
-
-temp_sols = sols[16:17]
-idxs = (ku, 1, 2, 3)
-plot_sols(temp_sols, idxs)
-
-# Plot trajectories with guiding centers and field lines.
-foreach([1, 17]) do id
-    sol = sols[id]
-    plot_sol(sol)
-    plot_gc!(sol, B)
-    fl0_sol, flf_sol = plot_gc_field_lines!(sol, B)
-    @info field_lines_distance(fl0_sol, flf_sol, B)
-    axislegend()
-    easy_save("examples/dR_perp_" * savename(d) * "_id=$(id)")
-end
+end;
 ```
 
+```{julia}
+using Beforerr
+using CurrentSheetTestParticle: field_lines
+using LinearAlgebra
+
+using CairoMakie
+using AlgebraOfGraphics
+
+set_aog_theme!()
+CairoMakie.activate!()
+
+idxs = (1, 2, 3)
+# Plot trajectories with guiding centers and field lines.
+fig = Figure()
+
+title = L"v_p = %$(v) v_0,\ θ = %$(θ)^∘,\ β = %$(β)^∘,\ \cos(α_0)=%$(w)"
+ax = Axis3(fig[1, 1], aspect=:data)
+
+sol = sols[1]
+start_point_coords = sol.u[1][1:3] # Get x,y,z of the first point
+scatter!(ax, Point3f(start_point_coords); marker=:star5, markersize=15, color=Makie.wong_colors()[end-1]) # Plot the star
+
+traj_label(μ0, μ1, ϕ0) = "Trajectory : ϕ₀=$(round(ϕ0, digits=1))°, cos(α₁)=$(round(μ1, digits=1))"
+@views for (sol, (w0, ϕ0_rad)) in zip(sols, wϕs)
+    ϕ0_deg = rad2deg(ϕ0_rad)
+    μ1 = CurrentSheetTestParticle.cos_pitch_angle(sol.u[end], B)
+    label = traj_label(w0, μ1, ϕ0_deg)
+    lines!(ax, sol[1, :], sol[2, :], sol[3, :]; label=label)
+end
+
+fl0_sol, = field_lines(sol, B)
+lines!(fl0_sol; idxs, linewidth=3, linestyle=:dashdot, label="Field Line")
+
+axislegend(ax, title, position=(0.05, 0.9))
+
+xlims!(ax, -290, 50)
+ylims!(ax, -120, 110)
+easy_save("fig-B_diagram")
+fig
+```
