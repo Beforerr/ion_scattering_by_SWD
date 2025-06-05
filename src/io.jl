@@ -14,16 +14,16 @@ function get_result_dfs(; dir="simulations")
     cols = names(df)
     "tspan" ∈ cols ? @transform!(df, :tmax = last.(:tspan)) : insertcols!(df, :tmax => DEFAULT_TSPAN[2])
     "sign" ∈ cols || insertcols!(df, :sign => DEFAULT_SIGN)
-    "Bfn" ∈ cols || insertcols!(df, :Bfn => RotationDiscontinuity)
+    "Bfn" ∈ cols || insertcols!(df, :Bfn => RotationalDiscontinuity)
     @chain df begin
         @transform!(:sign = coalesce.(:sign, DEFAULT_SIGN))
-        @rtransform!(:B = B(:Bfn(θ=:θ, β=:β, sign=:sign)))
+        @rtransform!(:B = :Bfn(θ=:θ, β=:β, sign=:sign))
     end
 end
 
 function get_result(; dir="simulations")
     dfs = get_result_dfs(; dir)
-    results = map(get_result, eachrow(dfs))
+    results = map(get_result!, eachrow(dfs))
     vcat(results...)
 end
 

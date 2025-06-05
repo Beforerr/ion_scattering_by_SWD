@@ -13,8 +13,8 @@ struct vθβ
     β
 end
 
-rename_func(v, θ, β) = L"v_p = %$(v) v_0,\ θ = %$(θ)^∘,\ β = %$(β)^∘"
-rename_func(t::vθβ) = L"v_p = %$(t.v) v_0,\ θ = %$(t.θ)^∘,\ β = %$(t.β)^∘"
+rename_func(v, θ, β) = L"v_p = %$(v) v_B\ ,\ θ = %$(θ)^∘\ ,\ β = %$(β)^∘"
+rename_func(t::vθβ) = L"v_p = %$(t.v) v_B\ ,\ θ = %$(t.θ)^∘\ ,\ β = %$(t.β)^∘"
 
 # ----
 # Simulations
