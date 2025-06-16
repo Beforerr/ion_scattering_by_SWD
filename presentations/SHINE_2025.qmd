@@ -1,0 +1,59 @@
+---
+title: Quantification of particle scattering and transport by solar wind current sheets
+subtitle: SHINE 2025 poster
+author:
+  - name: Zijin Zhang
+    affil: 1
+  - name: Anton Artemyev
+    affil: 1
+  - name: Vassilis Angelopoulos
+    affil: 1
+affiliation:
+  - num: 1
+    address: Department of Earth, Planetary, and Space Sciences, University of California, Los Angeles
+output: "posterdown::posterdown_betterland"
+main_textsize: 120px
+main_findings:
+  - We quantify the role of solar wind current sheets in driving pitch-angle scattering
+  - Our simulations suggest that the scattering efficiency depends critically on the current sheet’s shear angle, relative magnitude of the magnetic field component directed along the normal to the current sheet surface, and the ratio of the particle gyroradius to the current sheet thickness
+bibliography:
+  - ../files/bibliography/research.bib
+---
+
+<!-- 
+The transport of energetic particles in the heliosphere is profoundly influenced by interactions with coherent structures in the turbulent magnetic field of the solar wind, particularly current sheets. While prior studies have largely relied on idealized turbulence models, this work quantifies the role of solar wind current sheets (quasi-1D plasma structures characterized by strong magnetic field gradients) in driving pitch-angle scattering. We present an analytical Hamiltonian framework coupled with test particle simulations, informed by observational data from the ARTEMIS and Wind missions, to model particle dynamics through current sheets with realistic parameters. Our results demonstrate that the scattering efficiency depends critically on the current sheet’s shear angle, relative magnitude of the magnetic field component directed along the normal to the current sheet surface, and the ratio of the particle gyroradius to the current sheet thickness. Large pitch-angle jumps, arising from non-adiabatic separatrix crossings in phase space, lead to rapid chaotization, whereas diffusive scattering broadens the pitch-angle distributions. Statistical analysis of solar wind current sheets at 1 AU reveals significant scattering rates for 100 keV-1 MeV protons, with implications for particle transport and shock acceleration mechanisms. The derived diffusion rates enable the inclusion of coherent structures into global transport models for a more accurate modeling of energetic particle dynamics in the heliosphere. These findings underscore the importance of current sheets in shaping energetic particle spatial distributions and provide practical methods for incorporating them in space and astrophysical plasmas.
+-->
+
+## Introduction & Motivation
+
+The transport of energetic particles within the heliosphere is significantly influenced by the turbulent magnetic field present in the solar wind [@giacaloneTransportCosmicRays1999, @pucciEnergeticParticleTransport2016]. Rather than being a simple superposition of random fluctuations, these turbulent fields exhibit a structured nature, frequently observed in the solar wind magnetic field in the form of current sheets, discontinuities, Alfvén vortices, magnetic holes, and other coherent structures [@perroneCoherentEventsIon2020, @perroneCompressiveCoherentStructures2016]. These structures arise from nonlinear energy cascade processes [@degiorgioCoherentStructureFormation2017, @meneguzziHelicalNonhelicalTurbulent1981] and play a critical role in modulating particle transport.
+
+<!-- ![](../figures/fig-B_diagram_particle_trajectory.pdf){width="20%"} -->
+
+<!-- Three particle trajectories (T1, T2, T3) with identical initial pitch angles ($\alpha_0 = 90^\circ$) and velocity $v_p=8v_B$, but slightly different initial gyrophases ($\phi_0 = 163.3^\circ, 164.4^\circ, 165.6^\circ$) in a representative magnetic field profile ($\beta = 75^\circ, \theta = 85^\circ$). The orange star marks the initial particle position. -->
+
+## Method
+
+We developed an analytical Hamiltonian framework that incorporates the effect of magnetic field rotation.
+
+<!--
+![(a) Phase portraits of the Hamiltonian in the plane of $(z,p_z)$ at fixed $(κx, p_x)$ for $β = 1$. Each curve corresponds to a specific $H$, indicated on the plots. The left panel corresponds to $\kappa x = 4$, $p_x = 1$, while the right panel corresponds to $\kappa x = 0$, $p_x = 0.5$. (b) Phase plane of the Hamiltonian in the $(κx,p_x)$ space. The red line represents the uncertainty curve and the blue line delineates the boundary encompassing all possible phase points. (c) Potential energy profiles defined by $U (z) = H − p_z^2 /2$ at different locations in the $(κx, p_x)$ place, corresponding to the labeled positions (\#) in panel (b).](../figures/fig-bcPlot.pdf)
+-->
+
+We compiled a dataset of 100,000 current sheets charaterizing the current sheet parameters ($\theta$, $\beta$, $\log \tilde{v}_B$) from the ARTEMIS and Wind missions.
+
+<!-- ![3D density plots of the azimuthal angle $θ$, in-plane rotation angle $ω_{in}$, and logarithm of the characteristic velocity $\log \tilde{v}_B$.](../figures/wind_hist3d.png){width="20%"} -->
+
+We conducted extensive test particle simulations to quantitatively model particle scattering and transport due to interactions with current sheets.
+
+Transition matrix for 100 keV protons under four distinct magnetic field configurations:
+
+<!-- ![Transition matrix for 100 keV protons under four distinct magnetic field configurations: (i) $v_p = 8 v_B$, $θ = 85°$, $β = 50°$; (ii) $v_p = 8 v_B$, $θ = 85°$, $β = 75°$; (iii) $v_p = 8 v_B$, $θ = 60°$, $β = 50°$; and (iv) $v_p = v_B$, $θ = 85°$, $β = 50°$.](../figures/example_subset.pdf){width="20%"} -->
+
+We modelled the long-term pitch-angle evolution of particles in the presence of current sheets using mapping techniques.
+
+Second moment of the pitch-angle distribution, $M_2(n)$, as a function of interaction number ($n$) for different particle energies
+
+<!-- ![Second moment of the pitch-angle distribution, $M_2(n)$, as a function of interaction number ($n$) for different particle energies (\textasciitilde100 eV, \textasciitilde5 keV, \textasciitilde100 keV, \textasciitilde1 MeV), The estimated mixing rates, $D_{μμ}$, are indicated in the legend.](../overleaf/figures/mixing_rate.pdf) -->
+
+![Pitch-angle diffusion rates $\mathcal{D}_{μμ}$ as a function of particle energy $E$.](../overleaf/figures/D_μμ.pdf)

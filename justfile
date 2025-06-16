@@ -27,3 +27,8 @@ exec-scripts:
     julia --project scripts/scan.jl
     julia --project scripts/tm.jl
     # include("scripts/scan.jl")
+
+
+poster path="presentations/SHINE_2025.qmd":
+    Rscript -e 'pagedown::chrome_print("{{path}}")'
+    rm {{without_extension(path)}}.html
