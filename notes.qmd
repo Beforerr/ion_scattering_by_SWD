@@ -49,6 +49,9 @@ Scan the parameter with angle difference by 10 degree and velocity by ...
 - The validality of approximate Hamiltonian form for off-center scattering.
 
 
+- [ ] “How long does it take for an irreducible finite state Markov chain to converge to equilibrium?”
+    - References: [The Spectral Gap](https://www.stat.berkeley.edu/~pitman/s205s03/lecture28.pdf), [Spectral gap of nonreversible Markov chains](https://arxiv.org/abs/2310.10876)
+
 # TODOs
 
 - [ ] Cite Juno observations

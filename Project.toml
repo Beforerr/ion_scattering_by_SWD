@@ -14,6 +14,7 @@ FHist = "68837c9b-b678-4cd5-9925-8a54edc8f695"
 GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
 HDF5 = "f67ccb44-e63f-5c2f-98bd-6dc0ccc4ba2f"
 JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+JumpProcessesPDF = "312d1462-dd19-4a74-a9fa-fc162eafa436"
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
 Latexify = "23fbe1c1-3f47-55db-b15f-69d7ec21a316"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
@@ -31,5 +32,5 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 UnitfulLatexify = "45397f5d-5981-4c77-b2b3-fc36d6e9b728"
 
 [sources]
-CurrentSheetTestParticle = { path = "../CurrentSheetTestParticle" }
-TestParticleAnalysis = { path = "../CurrentSheetTestParticle/TestParticleAnalysis" }
+CurrentSheetTestParticle = {path = "../CurrentSheetTestParticle"}
+TestParticleAnalysis = {path = "../CurrentSheetTestParticle/TestParticleAnalysis"}

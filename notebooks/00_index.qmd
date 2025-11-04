@@ -124,6 +124,7 @@ axislegend(ax, [fl0, fl1], ["Initial", "Final (ϕ₀=$(round(rad2deg(ϕ[end]), d
 
 xlims!(ax, -290, 50)
 ylims!(ax, -120, 130)
-easy_save("fig-B_diagram")
-fig
+# easy_save("fig-B_diagram")
 ```
+
+![fig-B_diagram](../figures/fig-B_diagram_particle_trajectory.png){width="20%"}

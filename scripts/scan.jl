@@ -8,14 +8,14 @@ using StaticArrays
 include("./params.jl")
 include("../src/utils.jl")
 
-filtered_logger = ActiveFilteredLogger(global_logger()) do args
+const filtered_logger = ActiveFilteredLogger(global_logger()) do args
     # filter "you passed a key as a symbol instead of a string"
     re_JLD2 = r"you passed a key"
     re_SCIML = r"dt was forced below floating point"
     return !occursin(re_JLD2, args.message) && !occursin(re_SCIML, args.message)
 end
 
-error_only_logger = MinLevelLogger(current_logger(), Logging.Error);
+const error_only_logger = MinLevelLogger(current_logger(), Logging.Error)
 
 function makesim(d; problem=RDProblemParams, save_everystep=false, kwargs...)
     p = problem(; d...)
