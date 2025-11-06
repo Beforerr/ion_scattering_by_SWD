@@ -1,0 +1,67 @@
+# Notations
+
+-   $B_0$: background magnetic field
+
+-   $α$: pitch angle, $w = \cos(α)$ is the pitch angle cosine
+
+-   $ψ$: gryo phase
+
+-   θ : azimuthal angle, angle between $B_0$ and $B_N = B_0 \cos(θ)$
+
+-   φ : polar angle
+
+-   β : half of in plnae rotation angle $ω_{in}$
+
+# Results
+
+![](figures/example_tp.png)
+
+Scan the parameter with angle difference by 10 degree and velocity by ...
+
+![Transition matrix for different particle energies](figures/tm_stats_vPs.png)
+
+## Examples of transition matrix
+
+![](figures/tm/example.png)
+
+# Updates
+
+## 2024-10-30
+
+![](figures/mixing_rate_sin2.png)
+
+![](figures/mr/mixing_rate_sin2_ani.png)
+
+## 2024-10-29
+
+![](figures/pa_cdf.png)
+
+
+![](figures/tm/tm_weighted.png)
+
+![](figures/tm/%CE%94w_%CE%94t.png)
+
+# Questions
+
+- [ ] Order of magnitude of estimation of the scattering rate.
+
+- The validality of small $κ$ in observations and its implications in quasi-adibatic approximation.
+- The validality of approximate Hamiltonian form for off-center scattering.
+
+
+- [ ] “How long does it take for an irreducible finite state Markov chain to converge to equilibrium?”
+    - References: [The Spectral Gap](https://www.stat.berkeley.edu/~pitman/s205s03/lecture28.pdf), [Spectral gap of nonreversible Markov chains](https://arxiv.org/abs/2310.10876)
+
+# TODOs
+
+- [ ] Cite Juno observations
+- [ ] Check the algorithm for energy conservation (Boris pusher)
+- [x] GPU acceleration
+- [ ] The independence of the parameters from discontinuities observations
+
+
+DynamicalSystems.jl
+- Currently, the limits can not be changed with time.
+
+
+- Saving as a DataFrame is more space-efficient than saving as a vector of dictionaries
