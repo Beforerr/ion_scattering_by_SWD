@@ -231,7 +231,7 @@ Scattering process $\Pi : (α_0, ψ_0) \to (α_1, ψ_1)$ is better represented a
 
 ![](../figures/tm/example.png)
 
-![Transition matrix for 100 keV protons under four distinct magnetic field configurations: (i) $v_p = 8 v_0$, $θ = 85°$, $β = 50°$; (ii) $v_p = 8 v_0$, $θ = 85°$, $β = 75°$; (iii) $v_p = 8 v_0$, $θ = 60°$, $β = 50°$; and (iv) $v_p = v_0$, $θ = 85°$, $β = 50°$.](../figures/tm/example_subset.png)
+![Transition matrix for 100 keV protons under four distinct magnetic field configurations: (i) $v_p = 8 v_0$, $θ = 85°$, $β = 50°$; (ii) $v_p = 8 v_0$, $θ = 85°$, $β = 75°$; (iii) $v_p = 8 v_0$, $θ = 60°$, $β = 50°$; and (iv) $v_p = v_0$, $θ = 85°$, $β = 50°$.](../figures/example_subset.png)
 
 # Pitch angle scattering by typical discontinuity
 

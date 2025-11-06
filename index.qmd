@@ -1,9 +1,10 @@
 ---
-title: "Quantification of ion scattering by solar wind discontinuities: pitch-angle diffusion rates"
+title: "Quantification of ion scattering by solar wind current sheets: Pitch-angle diffusion rates"
 abstract: Because solar wind plasma flow transports the entire spectrum of magnetic field fluctuations (from low-frequency inertial range to electron kinetic range), it is a natural laboratory for plasma turbulence investigation. Among the various wave modes and coherent plasma structures that contribute to this spectrum, one of the most important solar wind elements is the ion-scale solar wind discontinuities. These structures, which carry very intense current, have been considered as a free energy source for plasma instabilities that contribute to solar wind heating. Investigations of such discontinuities have been mostly focused on their magnetic field signatures; much less is known about their role in scattering of energetic ions. In this study, we consider an observational-based model of ion dynamics and scattering in force-free rotational magnetic discontinuities. Focusing on quantification of the scattering effect, we demonstrate that the background sheared magnetic field plays an important role in determining the efficiency of pitch angle scattering. We provide a model including statistical properties of solar wind discontinuities and providing estimates of ion scattering rate.
 author:
   - name: Zijin Zhang
     corresponding: true
+    orcid: 0000-0002-9968-067X
     email: zijin@ucla.edu
     roles: [investigation, software, visualization]
     affiliations:
@@ -13,11 +14,24 @@ author:
     roles: [conceptualization, writing]
     affiliations:
       - ref: ucla
+  - name: Vassilis Angelopoulos
+    affiliations:
+      - ref: ucla
+citation:
+  type: article-journal
+  doi: 10.1103/pkzv-k5t3
+  container-title: Physical Review E
+date: "2025-07-23"
+other-links:
+  - text: DOI
+    href: https://doi.org/10.1103/pkzv-k5t3
+  - text: SHINE 2025 Poster
+    href: presentations/SHINE_2025.pdf
 ---
 
-<!-- 
-[Zotero](zotero://select/library/collections/XHVVKL3N)
--->
+::: {.callout-note}
+This document and the accompanying website contain outdated information. Please refer to the [published paper](https://doi.org/10.1103/pkzv-k5t3) for the accurate and updated information.
+:::
 
 ```{=html}
 <!-- 
@@ -45,10 +59,16 @@ The structure of this paper is as follows: In @sec-equations, we present a detai
 We assume the following 1-D force-free magnetic field configuration where $\mathbf{B}$ depends only on the $z$ coordinate:
 
 $$
-\mathbf{B} = B_0 (\cos θ \ \mathbf{e_z} + \sin θ ( \sin φ(z) \ \mathbf{e_x} + \cos φ (z) \ \mathbf{e_y})) 
+\mathbf{B} = B (\cos θ \ \mathbf{e_z} + \sin θ ( \sin φ(z) \ \mathbf{e_x} + \cos φ (z) \ \mathbf{e_y})) 
 $$
 
-where $B_0$ is the magnitude of the magnetic field, $θ$ is the azimuthal angle between the normal $\mathbf{B_z} = B_0 \cos θ \ \mathbf{e_z} \equiv B_n \mathbf{e_z}$ and the magnetic field. More specifically we assume the following form, $φ(z) = β \tanh(z/L)$, where $L$ is the thickness of the current sheet and shear angle $β$ is the half of in plane rotation angle $ω_{in}$. The transverse magnetic field component $\mathbf{B_t} = B_t \sin φ(z) \ \mathbf{e_x} + B_t \cos φ (z) \ \mathbf{e_y}$ rotates by an angle $ω_{in}$ from $-∞$ to $+∞$ where $B_t = B_0 \sin θ$.
+where $B$ is the magnitude of the magnetic field, $θ$ is the azimuthal angle between the normal $\mathbf{B_z} = B \cos θ \ \mathbf{e_z} \equiv B_n \mathbf{e_z}$ and the magnetic field. More specifically we assume the following form, $φ(z) = β \tanh(z/L)$, where $L$ is the thickness of the current sheet and shear angle $β$ is the half of in plane rotation angle $ω_{in}$. The transverse magnetic field component $\mathbf{B_t} = B_t \sin φ(z) \ \mathbf{e_x} + B_t \cos φ (z) \ \mathbf{e_y}$ rotates by an angle $ω_{in}$ from $-∞$ to $+∞$ where $B_t = B \sin θ$. As an example, we present an observation from the ARTEMIS mission [@angelopoulosARTEMISMission2011], which captures a magnetic field transition consistent with our model. @fig-ARTEMIS shows the variations in $\mathbf{B}$, $θ$, and $φ$ across the current sheet. The transverse field rotates smoothly, with $φ$ following a hyperbolic tangent profile (note that time is linearly proportional to the spatial coordinate $z\approx v_n t$ where $v_n$ is the solar wind velocity along the normal to the current sheet surface), while $θ$ remains nearly constant near $\pi/2$, indicating a small normal component $B_n$. (A three-dimensional visualization of a typical current sheet magnetic field structure, represented by the magnetic field line, together with three representative particle trajectories is provided in @fig-B_diagram_particle_trajectory.)
+
+::: {#fig-ARTEMIS}
+![](figures/thc.pdf)
+
+Example of a current sheet observed by ARTEMIS [@angelopoulosARTEMISMission2011]. Top: magnetic field in the current sheet $\textbf{lmn}$ coordinate system [@sonnerupMinimumMaximumVariance1998] where $l$ represents the maximum variance direcction ($B_x=B_t\sin φ$ in our model), $m$ the intermediate variance direction ($B_y=B_t\cos φ$), and $n$ the minimum variance direction ($B_z=B\cos\theta$). Here, $B_t$ and $B$ represent the tangential and total magnetic fields, respectively (see text for detailed definitions). Bottom: variations of the azimuthal angle $φ$ and the azimuthal angle $θ$ across the current sheet. Vertical lines indicate the current sheet boundaries, and the horizontal line represents $\pi/2$. The analysis is based on magnetic field data with a 0.25-second resolution from the Fluxgate Magnetometer [@austerTHEMISFluxgateMagnetometer2008].
+:::
 
 The motion of a particle in such a field can be expressed in the Hamiltonian formalism as follows:
 
@@ -117,12 +137,19 @@ Using data from the Wind mission, we compiled a dataset of 100,000 discontinuiti
 3D density plots of the azimuthal angle $θ$, in-plane rotation angle $ω_{in}$, and logarithm of the characteristic velocity $\log v_0$. The left panel corresponds to cases where the accuracy conditions are not satisfied, while the right panel represents cases where they are satisfied.
 :::
 
-For each magnetic field configuration, we initialize an ensemble of particles with different pitch angle $α_0$ and gyro phase $ψ_0$ that are far away from the current sheet center (i.e., $|z_0| > 6 L + 2 r_g$ where $r_g$ is the gyro radius). The particle motion is numerically integrated until the particle fully exits the current sheet (i.e., $|z(t)| > |z_0| + 2 r_g$). We track the final pitch angle $α_1$  for each particle and construct a transition matrix (TM), that describes the probability of pitch-angle change for a single interaction.
+For each magnetic field configuration, we initialize an ensemble of particles far away from the current sheet center (i.e., with an initial $z$ position satisfying $|z_0| > 6 L + 2 r_g$, where $r_g$ is the gyro radius). The particles are uniformly binned in pitch angle ($α_0$) from $0^{\circ}$ to $180^{\circ}$ in 180 bins of size $Δα = 1^{\circ}$, with gyro phase ($ψ_0$) uniformly sampled from $0^{\circ}$ to $360^\circ$ in 120 bins of size $Δψ = 3^{\circ}$. In this simulation, the current sheet is consistently configured with a positive $B_z$ component. Consequently, particles with an initial positive pitch-angle cosine $μ \equiv \cos\alpha$ ($α_0<90^\circ$; $μ_0>0$) are interpreted to originate below the current sheet (and move toward the current sheet), while those with a negative cosine ($α_0>90^\circ$; $μ_0<0$)  are considered to come from above it (and move toward the current sheet). The particle trajectories are then numerically integrated until each particle fully exits the current sheet ($|z(t)| > |z_0| + 2 r_g$). @fig-B_diagram_particle_trajectory shows three representative particle trajectories in a typical magnetic field configuration characterized by $\beta=75^\circ$ and $\theta=85^\circ$. All particles have the same initial pitch angle $\alpha_0 = 90^\circ$ and velocity $v_p=8v_B$, but differ slightly in their initial gyrophases: $\phi_0 = 163.3^\circ, 164.4^\circ$, and $165.6^\circ$.
+These cases illustrate distinct scattering behaviors: one particle exhibits a negligible change in pitch angle, another undergoes a finite pitch-angle deflection, and the third is reflected by the current sheet. For each trajectory, the final pitch angle $\alpha_1$ is recorded. These pitch angles are then organized into bins to construct a transition matrix (TM), also known as a stochastic matrix [@durrettEssentialsStochasticProcesses2016], which represents the probability distribution of pitch-angle changes resulting from a single particle interaction with the current sheet.
+
+::: {#fig-B_diagram_particle_trajectory}
+![](figures/fig-B_diagram_particle_trajectory.pdf)
+
+Three particle trajectories (T1, T2, T3) with identical initial pitch angles ($\alpha_0 = 90^\circ$) and velocity $v_p=8v_B$, but slightly different initial gyrophases ($\phi_0 = 163.3^\circ, 164.4^\circ, 165.6^\circ$) in a representative magnetic field profile ($\beta = 75^\circ, \theta = 85^\circ$). The orange star marks the initial particle position. The black and gray lines represent the magnetic field lines to which the reflected particle (T3) is initially and finally attached, respectively, before and after interaction with the current sheet.
+:::
 
 @fig-tm-example illustrates the transition matrix for 100 keV particles (velocity $v_p \approx 4000$ km/s) under four magnetic field configurations: (i) $v_0 = 500$ km/s, $θ = 85°$, $β = 50°$; (ii) $v_0 = 500$ km/s, $θ = 85°$, $β = 75°$; (iii) $v_0 = 500$ km/s, $θ = 60°$, $β = 50°$; and (iv) $v_0 = 4000$ km/s, $θ = 85°$, $β = 50°$. Enhanced probability along the diagonal corresponds to weakly scattered particles ($∆α = α_1 - α_0 = 0$), while spreading around the diagonal reflects diffusive scattering. Large pitch-angle jumps are represented by non-diagonal elements. 
 
 ::: {#fig-tm-example}
-![](figures/tm/example_subset)
+![](figures/example_subset)
 
 Transition matrix for 100 keV protons under four distinct magnetic field configurations: (i) $v_p = 8 v_0$, $θ = 85°$, $β = 50°$; (ii) $v_p = 8 v_0$, $θ = 85°$, $β = 75°$; (iii) $v_p = 8 v_0$, $θ = 60°$, $β = 50°$; and (iv) $v_p = v_0$, $θ = 85°$, $β = 50°$.
 :::
@@ -191,4 +218,4 @@ These findings have significant implications for the dynamics of energetic parti
 
 # Data availability
 
-The code and data used for the findings and figures in this study are available at \url{https://github.com/Beforerr/ion_scattering_by_SWD}.
+The code and data used for the findings and figures in this study are available at [https://github.com/Beforerr/ion_scattering_by_SWD](https://github.com/Beforerr/ion_scattering_by_SWD). ARTEMIS and Wind data are available at NASA's Space Physics Data Facility (SPDF) [https://spdf.gsfc.nasa.gov](https://spdf.gsfc.nasa.gov).

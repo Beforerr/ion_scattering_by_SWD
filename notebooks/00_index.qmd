@@ -12,7 +12,6 @@ engine: julia
 using Speasy
 spz = speasy()
 
-using SpaceTools
 using DimensionalData
 using DimensionalData: dims
 using CairoMakie

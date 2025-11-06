@@ -10,7 +10,7 @@ ensure-env: install-julia-deps clone-overleaf
 install-julia-deps:
     #!/usr/bin/env julia --threads=auto --project=.
     using Pkg
-    Pkg.develop([(;name="Speasy"), (;name="SpaceTools")])
+    Pkg.develop([(;name="Speasy")])
     Pkg.resolve()
     Pkg.instantiate()
 

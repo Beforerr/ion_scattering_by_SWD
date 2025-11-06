@@ -29,3 +29,5 @@ Manifest.toml
 
 # Ignore files in the presentations folder starting with an underscore
 presentations/_*
+
+**/*.quarto_ipynb

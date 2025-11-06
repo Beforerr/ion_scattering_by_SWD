@@ -1,5 +1,5 @@
 project:
-  type: website
+  type: manuscript
 
 website:
   navbar:
@@ -17,6 +17,7 @@ website:
     - title: Presentations
       id: presentations
       contents: "presentations/**"
+  repo-actions: [edit, issue]
 
 manuscript:
   article: index.qmd
@@ -26,9 +27,15 @@ format:
   html: default
   # pdf: default
   # jats: default
+  pdf:
+    cite-method: natbib
+    keep-tex: true
+    latex-clean: false
 
 execute:
   freeze: auto
+
+wrap: preserve
 
 affiliations:
   - id: ucla
